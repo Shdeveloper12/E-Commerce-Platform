@@ -1,9 +1,31 @@
+
+import { IoMdSearch } from "react-icons/io";
 export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen gap-8 p-4">
-      <div className="relative w-24 h-24 md:w-32 md:h-32">
-        <menubar.tsx />
-       <h1>StarTech BD</h1>
+    <div className="bg-black text-white ">
+      <div className="flex justify-between items-center mx-auto max-w-8xl p-4">
+       <div>
+        <img src="/logo.png" className="w-20 h-12" alt="StarTech BD Logo" />
+       </div>
+       <div>
+        <input className="w-xl bg-white p-2 placeholder:text-gray-400" placeholder="search..." type="text"  />
+       
+       </div>
+       <div>
+        <h4>offers</h4>
+        <p className="text-gray-400">Latest offers</p>
+       </div>
+       <div>
+        <h4>Happy Hour</h4>
+       <p className="text-gray-400">Speacial Deals</p>
+       </div>
+       <div>
+        <h4>Account</h4>
+        <p className="text-gray-400">Register/Login</p>
+       </div>
+       <div>
+        <button className="text-white p-3 text-xl bg-blue-700">PC Builder</button>
+       </div>
       </div>
     </div>
   )
