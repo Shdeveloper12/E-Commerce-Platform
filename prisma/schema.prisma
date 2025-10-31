@@ -1,0 +1,317 @@
+// This is your Prisma schema file for Star Tech Bangladesh E-commerce Platform
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directURL = env("DIRECT_URL")
+}
+
+// User Management
+model User {
+  id            String   @id @default(uuid()) @db.Uuid
+  email         String   @unique
+  passwordHash  String   @map("password_hash")
+  firstName     String?  @map("first_name")
+  lastName      String?  @map("last_name")
+  phone         String?
+  avatarUrl     String?  @map("avatar_url")
+  role          UserRole @default(CUSTOMER)
+  isActive      Boolean  @default(true) @map("is_active")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  cartItems     CartItem[]
+  orders        Order[]
+  addresses     UserAddress[]
+  wishlistItems WishlistItem[]
+  reviews       ProductReview[]
+  pcBuilds      PCBuild[]
+
+  @@map("users")
+}
+
+enum UserRole {
+  CUSTOMER
+  ADMIN
+  MODERATOR
+}
+
+// Product Categories
+model Category {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  parentId    String?  @map("parent_id") @db.Uuid
+  imageUrl    String?  @map("image_url")
+  sortOrder   Int      @default(0) @map("sort_order")
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  parent   Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children Category[] @relation("CategoryHierarchy")
+  products Product[]
+
+  @@map("categories")
+}
+
+// Products
+model Product {
+  id              String           @id @default(uuid()) @db.Uuid
+  name            String
+  slug            String           @unique
+  description     String?
+  shortDescription String?         @map("short_description")
+  price           Decimal          @db.Decimal(10, 2)
+  discountPrice   Decimal?         @db.Decimal(10, 2) @map("discount_price")
+  sku             String?          @unique
+  brand           String?
+  categoryId      String           @map("category_id") @db.Uuid
+  stockQuantity   Int              @default(0) @map("stock_quantity")
+  isActive        Boolean          @default(true) @map("is_active")
+  isFeatured      Boolean          @default(false) @map("is_featured")
+  metaTitle       String?          @map("meta_title")
+  metaDescription String?          @map("meta_description")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+
+  // Relations
+  category      Category           @relation(fields: [categoryId], references: [id])
+  images        ProductImage[]
+  specifications ProductSpecification[]
+  cartItems     CartItem[]
+  orderItems    OrderItem[]
+  reviews       ProductReview[]
+  wishlistItems WishlistItem[]
+  pcBuildComponents PCBuildComponent[]
+
+  @@map("products")
+}
+
+// Product Images
+model ProductImage {
+  id        String   @id @default(uuid()) @db.Uuid
+  productId String   @map("product_id") @db.Uuid
+  imageUrl  String   @map("image_url")
+  altText   String?  @map("alt_text")
+  isPrimary Boolean  @default(false) @map("is_primary")
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_images")
+}
+
+// Product Specifications
+model ProductSpecification {
+  id        String   @id @default(uuid()) @db.Uuid
+  productId String   @map("product_id") @db.Uuid
+  key       String
+  value     String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_specifications")
+  @@unique([productId, key])
+}
+
+// Shopping Cart
+model CartItem {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  productId String   @map("product_id") @db.Uuid
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@unique([userId, productId])
+  @@map("cart_items")
+}
+
+// Orders
+model Order {
+  id              String        @id @default(uuid()) @db.Uuid
+  userId          String?       @map("user_id") @db.Uuid
+  orderNumber     String        @unique @map("order_number")
+  status          OrderStatus   @default(PENDING)
+  totalAmount     Decimal       @db.Decimal(10, 2) @map("total_amount")
+  discountAmount  Decimal       @default(0) @db.Decimal(10, 2) @map("discount_amount")
+  shippingAmount  Decimal       @default(0) @db.Decimal(10, 2) @map("shipping_amount")
+  paymentMethod   String?       @map("payment_method")
+  paymentStatus   PaymentStatus @default(PENDING) @map("payment_status")
+  shippingAddress Json?         @map("shipping_address")
+  billingAddress  Json?         @map("billing_address")
+  notes           String?
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  // Relations
+  user     User         @relation(fields: [userId], references: [id])
+  items    OrderItem[]
+  payments PaymentTransaction[]
+
+  @@map("orders")
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+// Order Items
+model OrderItem {
+  id         String   @id @default(uuid()) @db.Uuid
+  orderId    String   @map("order_id") @db.Uuid
+  productId  String   @map("product_id") @db.Uuid
+  quantity   Int
+  unitPrice  Decimal  @db.Decimal(10, 2) @map("unit_price")
+  totalPrice Decimal  @db.Decimal(10, 2) @map("total_price")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  // Relations
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
+
+// User Addresses
+model UserAddress {
+  id            String      @id @default(uuid()) @db.Uuid
+  userId        String      @map("user_id") @db.Uuid
+  addressType   AddressType @default(SHIPPING) @map("address_type")
+  firstName     String?     @map("first_name")
+  lastName      String?     @map("last_name")
+  phone         String?
+  addressLine1  String      @map("address_line1")
+  addressLine2  String?     @map("address_line2")
+  city          String?
+  state         String?
+  postalCode    String?     @map("postal_code")
+  country       String      @default("Bangladesh")
+  isDefault     Boolean     @default(false) @map("is_default")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_addresses")
+}
+
+enum AddressType {
+  SHIPPING
+  BILLING
+}
+
+// Wishlist
+model WishlistItem {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  productId String   @map("product_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@unique([userId, productId])
+  @@map("wishlist_items")
+}
+
+// Product Reviews
+model ProductReview {
+  id          String   @id @default(uuid()) @db.Uuid
+  productId   String   @map("product_id") @db.Uuid
+  userId      String   @map("user_id") @db.Uuid
+  rating      Int
+  reviewText  String?  @map("review_text")
+  isApproved  Boolean  @default(false) @map("is_approved")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@map("product_reviews")
+}
+
+// PC Builds
+model PCBuild {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String?  @map("user_id") @db.Uuid
+  name        String
+  description String?
+  totalPrice  Decimal? @db.Decimal(10, 2) @map("total_price")
+  isPublic    Boolean  @default(false) @map("is_public")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  user       User                @relation(fields: [userId], references: [id])
+  components PCBuildComponent[]
+
+  @@map("pc_builds")
+}
+
+// PC Build Components
+model PCBuildComponent {
+  id             String   @id @default(uuid()) @db.Uuid
+  buildId        String   @map("build_id") @db.Uuid
+  componentType  String   @map("component_type")
+  productId      String   @map("product_id") @db.Uuid
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  // Relations
+  build   PCBuild  @relation(fields: [buildId], references: [id], onDelete: Cascade)
+  product Product  @relation(fields: [productId], references: [id])
+
+  @@unique([buildId, componentType])
+  @@map("pc_build_components")
+}
+
+// Payment Transactions
+model PaymentTransaction {
+  id            String   @id @default(uuid()) @db.Uuid
+  orderId       String   @map("order_id") @db.Uuid
+  transactionId String?  @map("transaction_id")
+  paymentMethod String   @map("payment_method")
+  amount        Decimal  @db.Decimal(10, 2)
+  status        String
+  responseData  Json?    @map("response_data")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  // Relations
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@map("payment_transactions")
+}
