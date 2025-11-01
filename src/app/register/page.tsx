@@ -16,17 +16,17 @@ export default function register() {
                 </div>
                 <div>
                     <label className='text-md font-bold mb-5' htmlFor="lastName">Last Name:</label>
-                <input className='border-gray-400 border-1 p-2' placeholder='Last Name' type="text" id="lastName" name="lastName" required />
+                <input className='border-gray-400 border-1 p-2 w-full rounded' placeholder='Last Name' type="text" id="lastName" name="lastName" required />
                 </div>
                 
             </div>
             <div className='mb-5'>
                 <label className='text-md font-bold  block' htmlFor="email">Email:</label>
-                <input className='border-gray-400 border-1 p-2' placeholder='Email' type="email" id="email" name="email" required />
+                <input className='border-gray-400 border-1 p-2 w-full rounded' placeholder='Email' type="email" id="email" name="email" required />
             </div>
             <div className='mb-5'>
                 <label className='text-md font-bold block' htmlFor="password">Password:</label>
-                <input className='border-gray-400 border-1 p-2' placeholder='Password' type="password" id="password" name="password" required />
+                <input className='border-gray-400 border-1 p-2 w-full rounded' placeholder='Password' type="password" id="password" name="password" required />
             </div>
             <button className='bg-blue-500 mb-2 hover:bg-blue-600 w-full text-white p-2 rounded' type="submit">Register</button>
         </form>
