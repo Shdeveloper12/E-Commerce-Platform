@@ -5,15 +5,15 @@ import { db } from "@/lib/db"
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { name, email, password } = body
+    const { firstName, lastName, email, password } = body
 
-    console.log("📝 Registration attempt:", { email, name })
+    console.log("📝 Registration attempt:", { email, firstName, lastName, password })
 
     // Validation
-    if (!email || !password || !name) {
+    if (!email || !password || !firstName || !lastName) {
       console.error("❌ Validation failed: Missing required fields")
       return NextResponse.json(
-        { error: "Name, email and password are required" },
+        { error: "First name, last name, email and password are required" },
         { status: 400 }
       )
     }
@@ -48,30 +48,21 @@ export async function POST(request: NextRequest) {
     console.log("👤 Creating user...")
     const user = await db.user.create({
       data: {
-        name,
+        firstName,
+        lastName,
         email,
-        password: hashedPassword,
+        passwordHash: hashedPassword,
       }
     })
     console.log("✅ User created:", user.id)
-
-    // Create free subscription for user
-    console.log("💳 Creating subscription...")
-    await db.subscription.create({
-      data: {
-        userId: user.id,
-        planType: "FREE",
-        status: "ACTIVE",
-      }
-    })
-    console.log("✅ Subscription created")
 
     console.log("🎉 Registration successful:", user.email)
     return NextResponse.json({
       message: "User created successfully",
       user: {
         id: user.id,
-        name: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
       }
     })

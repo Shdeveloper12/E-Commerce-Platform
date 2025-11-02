@@ -9,10 +9,11 @@ import { IoHome } from "react-icons/io5";
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
-    confirmPassword: "",
+    
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -39,7 +40,8 @@ export default function RegisterPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: formData.name,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
           email: formData.email,
           password: formData.password,
         }),
@@ -149,11 +151,11 @@ export default function RegisterPage() {
           >
             {isLoading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Creating account...
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin inline-block" />
+                  Registering...
                 </>
               ) : (
-                "register"
+                "Register"
               )}
           </button>
         </form>

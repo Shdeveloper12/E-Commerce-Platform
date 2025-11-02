@@ -8,7 +8,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  directURL = env("DIRECT_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // User Management
@@ -162,7 +162,7 @@ model Order {
   updatedAt       DateTime      @updatedAt @map("updated_at")
 
   // Relations
-  user     User         @relation(fields: [userId], references: [id])
+  user     User?        @relation(fields: [userId], references: [id])
   items    OrderItem[]
   payments PaymentTransaction[]
 
@@ -277,7 +277,7 @@ model PCBuild {
   updatedAt   DateTime @updatedAt @map("updated_at")
 
   // Relations
-  user       User                @relation(fields: [userId], references: [id])
+  user       User?               @relation(fields: [userId], references: [id])
   components PCBuildComponent[]
 
   @@map("pc_builds")
