@@ -3,18 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
 import { IoHome } from "react-icons/io5";
@@ -43,12 +31,6 @@ export default function RegisterPage() {
     setIsLoading(true);
     setError("");
     setSuccess("");
-
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
-      setIsLoading(false);
-      return;
-    }
 
     try {
       const response = await fetch("/api/auth/register", {
@@ -89,6 +71,16 @@ export default function RegisterPage() {
       <div className=" my-20 mx-auto max-w-md">
         <h1 className="text-2xl font-bold mb-5">Register Account</h1>
         <form onSubmit={handleSubmit} className="">
+             {error && (
+              <Alert variant="destructive">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+            {success && (
+              <Alert className="border-green-200 bg-green-50 text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-200">
+                <AlertDescription>{success}</AlertDescription>
+              </Alert>
+            )}
           <div className="flex gap-4 mb-5">
             <div>
               <label className="text-md font-bold mb-5" htmlFor="firstName">
@@ -100,7 +92,7 @@ export default function RegisterPage() {
                 type="text"
                 id="firstName"
                 name="firstName"
-                value={formData.name}
+                value={formData.firstName}
                 onChange={handleChange}
                 required
               />
@@ -115,7 +107,7 @@ export default function RegisterPage() {
                 type="text"
                 id="lastName"
                 name="lastName"
-                value={formData.name}
+                value={formData.lastName}
                 onChange={handleChange}
                 required
               />
@@ -153,9 +145,16 @@ export default function RegisterPage() {
           </div>
           <button
             className="bg-blue-500 mb-2 hover:bg-blue-600 w-full text-white p-2 rounded"
-            type="submit"
+            type="submit" disabled={isLoading}
           >
-            Register
+            {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Creating account...
+                </>
+              ) : (
+                "register"
+              )}
           </button>
         </form>
         <div>
