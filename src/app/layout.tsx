@@ -17,8 +17,17 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Z.ai Code Scaffold - AI-Powered Development",
-  description: "Modern E-commerce platform. Built with TypeScript, Tailwind CSS, and shadcn/ui.",
-  keywords: ["React.js", "Next.js", "TypeScript", "Tailwind CSS", "shadcn/ui", "AI development", "React"],
+  description:
+    "Modern E-commerce platform. Built with TypeScript, Tailwind CSS, and shadcn/ui.",
+  keywords: [
+    "React.js",
+    "Next.js",
+    "TypeScript",
+    "Tailwind CSS",
+    "shadcn/ui",
+    "AI development",
+    "React",
+  ],
   authors: [{ name: "SH Team" }],
   icons: {
     icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
@@ -44,14 +53,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
         <div className="flex flex-col min-h-screen">
           <Navber />
-          <main className="flex-grow">
-            {children}
-          </main>
+          <main className="flex-grow bg-blue-100">{children}</main>
           <Footer />
         </div>
         <Toaster />
