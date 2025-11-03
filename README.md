@@ -1,10 +1,8 @@
-# 🚀 Welcome to Z.ai Code Scaffold
+# 🚀 Welcome to my E-commerce website 
 
-A modern, production-ready web application scaffold powered by cutting-edge technologies, designed to accelerate your development with [Z.ai](https://chat.z.ai)'s AI-powered coding assistance.
+A modern E-commerce website.
 
 ## ✨ Technology Stack
-
-This scaffold provides a robust foundation built with:
 
 ### 🎯 Core Framework
 - **⚡ Next.js 15** - The React framework for production with App Router
@@ -68,21 +66,6 @@ npm run build
 
 # Start production server
 npm start
-```
-
-Open [http://localhost:3000](http://localhost:3000) to see your application running.
-
-## 🤖 Powered by Z.ai
-
-This scaffold is optimized for use with [Z.ai](https://chat.z.ai) - your AI assistant for:
-
-- **💻 Code Generation** - Generate components, pages, and features instantly
-- **🎨 UI Development** - Create beautiful interfaces with AI assistance  
-- **🔧 Bug Fixing** - Identify and resolve issues with intelligent suggestions
-- **📝 Documentation** - Auto-generate comprehensive documentation
-- **🚀 Optimization** - Performance improvements and best practices
-
-Ready to build something amazing? Start chatting with Z.ai at [chat.z.ai](https://chat.z.ai) and experience the future of AI-powered development!
 
 ## 📁 Project Structure
 
@@ -134,8 +117,4 @@ This scaffold includes a comprehensive set of modern web development tools:
 1. **Clone this scaffold** to jumpstart your project
 2. **Visit [chat.z.ai](https://chat.z.ai)** to access your AI coding assistant
 3. **Start building** with intelligent code generation and assistance
-4. **Deploy with confidence** using the production-ready setup
-
----
-
-Built with ❤️ for the developer community. Supercharged by [Z.ai](https://chat.z.ai) 🚀
+4. **Deploy with confidence** using the production-ready setup.
