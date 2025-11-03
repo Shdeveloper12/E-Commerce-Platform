@@ -45,7 +45,7 @@ export default function Login() {
           <IoHome />
         </Link>
       </h1>
-      <div className=" my-20 mx-auto max-w-md">
+      <div className=" my-30 mx-auto max-w-md ">
         <h1 className="text-2xl font-bold mb-5">Login to Your Account</h1>
         <form onSubmit={handleSubmit} className="">
              {error && (

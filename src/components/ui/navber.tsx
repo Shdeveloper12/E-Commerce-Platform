@@ -6,10 +6,10 @@ export default function Navber() {
     <div className="bg-black text-white ">
       <div className="flex justify-between items-center mx-auto max-w-8xl p-4">
       <div>
-        <img src={logo.src} className="w-20 h-12" alt="StarTech BD Logo" />
+        <Link href="/"><img src={logo.src} className="w-20 h-12" alt="StarTech BD Logo" /></Link>
       </div>
        <div>
-        <input className="w-xl bg-white p-2 placeholder:text-gray-400" placeholder="search..." type="text"  />
+        <input className="w-xl p-2 placeholder:text-gray-400 text-black bg-gray-100" placeholder="search..." type="text"  />
        
        </div>
        <div>
