@@ -4,6 +4,7 @@ import { MdReportProblem } from "react-icons/md";
 import { MdHomeRepairService } from "react-icons/md";
 import { MdBuild } from "react-icons/md";
 import Carousel from "@/components/ui/carousel";
+import Category from "@/components/ui/category";
 
 export default function Home() {
 
@@ -11,6 +12,9 @@ export default function Home() {
     <div>
       {/* Hero Carousel */}
       <Carousel />
+
+     {/* <Category /> */}
+     <Category />
      
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-6">Welcome to Our Service</h1>
