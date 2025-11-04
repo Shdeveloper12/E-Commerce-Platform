@@ -1,15 +1,18 @@
+
 import { MdLaptopChromebook } from "react-icons/md";
 import { MdReportProblem } from "react-icons/md";
 import { MdHomeRepairService } from "react-icons/md";
 import { MdBuild } from "react-icons/md";
+import { Card, CardContent } from "@/components/ui/card";
+import Carousel from "@/components/ui/carousel";
 
 export default function Home() {
+
   return (
+    <div>
+      <Carousel />
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-4">Welcome to StarTech BD</h1>
-      <p className="text-gray-600 mb-8">
-        Your trusted e-commerce platform for technology and electronics.
-      </p>
+      <h1 className="text-2xl font-bold mb-6">Welcome to Our Service</h1>
 
       {/* Your home page content goes here */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -50,6 +53,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }
