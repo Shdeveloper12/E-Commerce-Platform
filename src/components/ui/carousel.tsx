@@ -30,7 +30,7 @@ export default function Carousel() {
     
       <div className="max-w-7xl mx-auto my-8">
         <div className="grid grid-cols-1 md:grid-cols-2 p-5 gap-50 lg:gap-10 lg:grid-cols-2 ">
-          <div className="relative w-full max-w-6xl mx-auto rounded-lg  shadow-md shadow-blue-300 hover:shadow-lg transition-shadow duration-300">
+          <div className="w-full max-w-6xl mx-auto rounded-lg  shadow-md shadow-blue-300 hover:shadow-lg transition-shadow duration-300">
             <div className="relative h-auto w-auto">
               {images.map((img, index) => (
                 <div
