@@ -12,7 +12,7 @@ import { BsLightningCharge } from "react-icons/bs";
 export default function Category() {
   return (
     <div>
-      <div className="container text-center mx-auto px-4 py-8">
+      <div className="container text-center mx-auto mt-4 px-4">
         <h1 className="text-2xl font-bold">Featured Categories</h1>
         <p className="">Explore our wide range of categories tailored to your needs.</p>
       </div>
