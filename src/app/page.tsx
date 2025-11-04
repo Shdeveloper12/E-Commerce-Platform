@@ -3,14 +3,15 @@ import { MdLaptopChromebook } from "react-icons/md";
 import { MdReportProblem } from "react-icons/md";
 import { MdHomeRepairService } from "react-icons/md";
 import { MdBuild } from "react-icons/md";
-import { Card, CardContent } from "@/components/ui/card";
 import Carousel from "@/components/ui/carousel";
 
 export default function Home() {
 
   return (
     <div>
+      {/* Hero Carousel */}
       <Carousel />
+     
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-6">Welcome to Our Service</h1>
 
