@@ -1,6 +1,8 @@
 import React from 'react'
 import logo from "../../assets/logo.png";
 import Link from "next/link";
+import { BiSolidOffer } from "react-icons/bi";
+import { BsLightningCharge, BsPerson } from "react-icons/bs";
 export default function Navber() {
   return (
     <div className="bg-black text-white ">
@@ -12,18 +14,34 @@ export default function Navber() {
         <input className="w-xl p-2 placeholder:text-gray-400 text-black bg-gray-100" placeholder="search..." type="text"  />
        
        </div>
-       <div>
-        <h4>offers</h4>
+       <div className="flex gap-4 items-center">
+        <div className='text-3xl text-orange-400'>
+          <BiSolidOffer />
+        </div>
+        <div>
+          <h4>offers</h4>
         <p className="text-gray-400">Latest offers</p>
+        </div>
+        
        </div>
-       <div>
-        <h4>Happy Hour</h4>
-       <p className="text-gray-400">Speacial Deals</p>
+       <div className="flex gap-4 items-center">
+        <div className='text-3xl text-orange-400'>
+          <BsLightningCharge />
+        </div>
+        <div>
+          <h4>Happy Hour</h4>
+        <p className="text-gray-400">Speacial Deals</p>
        </div>
-       <div>
-        <h4>Account</h4>
+        </div>
+       <div className="flex gap-4 items-center">
+        <div className='text-3xl text-orange-400'>
+          <BsPerson />
+        </div>
+        <div>
+          <h4>Account</h4>
         <p className="text-gray-400"><Link href="/register">Register/</Link><Link href="/login">Login</Link></p>
        </div>
+        </div>
        <div>
         <button className="text-white p-3 text-xl bg-blue-700">PC Builder</button>
        </div>
