@@ -1,8 +1,11 @@
+"use client"
+
 import React from 'react'
 import logo from "../../assets/logo.png";
 import Link from "next/link";
 import { BiSolidOffer } from "react-icons/bi";
 import { BsLightningCharge, BsPerson } from "react-icons/bs";
+import { motion } from "motion/react"
 export default function Navber() {
   return (
     <div className="bg-black text-white ">
@@ -19,15 +22,21 @@ export default function Navber() {
           <BiSolidOffer />
         </div>
         <div>
-          <h4>offers</h4>
+          <h4>Offers</h4>
         <p className="text-gray-400">Latest offers</p>
         </div>
         
        </div>
        <div className="flex gap-4 items-center">
-        <div className='text-3xl text-orange-400'>
+        <motion.div
+        animate={{ 
+          opacity: [1, 0, 1],
+          color: ['rgba(255, 255, 255, 1)', 'rgba(251, 146, 60, 1)', 'rgba(255, 255, 255, 1)']
+        }}
+        transition={{duration: 2, repeat: Infinity, }}
+        className='text-3xl'>
           <BsLightningCharge />
-        </div>
+        </motion.div>
         <div>
           <h4>Happy Hour</h4>
         <p className="text-gray-400">Speacial Deals</p>
