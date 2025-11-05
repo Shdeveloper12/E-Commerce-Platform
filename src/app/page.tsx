@@ -5,21 +5,25 @@ import Product from "@/components/ui/product";
 import Service from "@/components/ui/service";
 
 export default function Home() {
-
   return (
     <div>
       {/* Hero Carousel */}
-        <Carousel />
+      <Carousel />
+
+      <div className="overflow-hidden bg-gray-100 py-2 container mx-auto rounded-2xl">
+        <div className="animate-marquee whitespace-nowrap">
+          Welcome to StarTech BD - Your one-stop shop for all tech needs!
+        </div>
+      </div>
 
       {/* <Service /> */}
-         <Service />
+      <Service />
 
-     {/* <Category /> */}
-         <Category />
+      {/* <Category /> */}
+      <Category />
 
-     {/* Featured Products */}
-         <Product />
-
+      {/* Featured Products */}
+      <Product />
     </div>
   );
 }
