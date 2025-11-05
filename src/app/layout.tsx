@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Z.ai Code Scaffold - AI-Powered Development",
+  title: "E-commerce Platform Scaffold",
   description:
     "Modern E-commerce platform. Built with TypeScript, Tailwind CSS, and shadcn/ui.",
   keywords: [
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "SH Team" }],
   icons: {
-    icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
+    icon: "../assets/images.png",
   },
   openGraph: {
     title: "E-commerce Platform Scaffold",
