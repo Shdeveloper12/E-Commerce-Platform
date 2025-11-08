@@ -1,12 +1,34 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import logo from "../../assets/logo.png";
 import Link from "next/link";
 import { BiSolidOffer } from "react-icons/bi";
-import { BsLightningCharge, BsPerson } from "react-icons/bs";
+import { BsLightningCharge, BsPerson, BsX } from "react-icons/bs";
 import { motion } from "motion/react";
 export default function Navber() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const categories = [
+    { name: "Desktop", href: "/desktop" },
+    { name: "Laptop", href: "/laptop" },
+    { name: "Component", href: "/component" },
+    { name: "Monitor", href: "/monitor" },
+    { name: "Power", href: "/power" },
+    { name: "Phone", href: "/phone" },
+    { name: "Tablet", href: "/tablet" },
+    { name: "Office Equipment", href: "/office-equipment" },
+    { name: "Camera", href: "/camera" },
+    { name: "Security", href: "/security" },
+    { name: "Networking", href: "/networking" },
+    { name: "Software", href: "/software" },
+    { name: "Server & Storage", href: "/server" },
+    { name: "Accessories", href: "/accessories" },
+    { name: "Gadget", href: "/gadget" },
+    { name: "Gaming", href: "/gaming" },
+    { name: "TV", href: "/tv" },
+    { name: "Appliance", href: "/appliance" },
+  ];
   {/*
     <div className="navbar bg-base-100 shadow-sm">
       <div className="navbar-start">
@@ -63,24 +85,31 @@ export default function Navber() {
   return (
     <>
       {/* Mobile Top Bar */}
-      <div className="lg:hidden bg-[#1a2332] text-white">
+      <div className="lg:hidden bg-[#1a2332] text-white relative z-50">
         <div className="flex items-center justify-between px-4 py-3">
           {/* Mobile Menu Button */}
-          <button className="text-white p-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
+          <button 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="text-white p-2 hover:bg-gray-700 rounded transition-colors"
+          >
+            {mobileMenuOpen ? (
+              <BsX className="h-7 w-7" />
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            )}
           </button>
 
           {/* Mobile Logo */}
@@ -94,19 +123,65 @@ export default function Navber() {
 
           {/* Mobile Search & Cart */}
           <div className="flex gap-3 items-center">
-            <button className="text-white">
+            <button className="text-white p-2 hover:bg-gray-700 rounded transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </button>
-            <button className="text-white relative">
+            <button className="text-white relative p-2 hover:bg-gray-700 rounded transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">0</span>
+              <span className="absolute top-1 right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">0</span>
             </button>
           </div>
         </div>
+
+        {/* Mobile Menu Sidebar */}
+        <motion.div
+          initial={{ x: "-100%" }}
+          animate={{ x: mobileMenuOpen ? 0 : "-100%" }}
+          transition={{ type: "tween", duration: 0.3 }}
+          className="fixed top-0 left-0 h-full w-[280px] bg-white shadow-2xl z-50 overflow-y-auto"
+        >
+          <div className="p-4">
+            {/* Close Button */}
+            <div className="flex justify-between items-center mb-6 pb-4 border-b">
+              <h2 className="text-xl font-bold text-gray-800">Categories</h2>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-gray-600 hover:text-red-500 p-2"
+              >
+                <BsX className="h-7 w-7" />
+              </button>
+            </div>
+
+            {/* Category List */}
+            <nav className="space-y-1">
+              {categories.map((category, index) => (
+                <Link
+                  key={index}
+                  href={category.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 rounded-md transition-colors font-medium"
+                >
+                  {category.name}
+                </Link>
+              ))}
+            </nav>
+          </div>
+        </motion.div>
+
+        {/* Overlay */}
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setMobileMenuOpen(false)}
+            className="fixed inset-0 bg-gray-400 bg-opacity-50 z-40"
+          />
+        )}
       </div>
 
       {/* Desktop Navigation */}
@@ -190,7 +265,7 @@ export default function Navber() {
         {/* Category Navigation */}
         <div className="bg-gray-100 border-b shadow-sm">
           <div className="container mx-auto max-w-[1400px] px-4">
-            <ul className="flex gap-3 py-3 text-sm font-medium text-gray-700 overflow-x-auto">
+            <ul className="flex gap-3 py-3 text-sm font-medium text-gray-700 overflow-x-auto justify-between">
               <li><Link href="/desktop" className="hover:text-orange-500 transition-colors whitespace-nowrap">Desktop</Link></li>
               <li><Link href="/laptop" className="hover:text-orange-500 transition-colors whitespace-nowrap">Laptop</Link></li>
               <li><Link href="/component" className="hover:text-orange-500 transition-colors whitespace-nowrap">Component</Link></li>
