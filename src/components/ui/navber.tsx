@@ -8,8 +8,10 @@ import { BsLightningCharge, BsPerson } from "react-icons/bs";
 import { motion } from "motion/react"
 export default function Navber() {
   return (
-    <div className="bg-black text-white ">
-      <div className="flex justify-between items-center mx-auto max-w-8xl p-4">
+    <div className="">
+      <div className="bg-black text-white mx-auto max-w-8xl p-4">
+      <div className="flex justify-between items-center">
+
       <div>
         <Link href="/"><img src={logo.src} className="w-20 h-12" alt="StarTech BD Logo" /></Link>
       </div>
@@ -52,8 +54,35 @@ export default function Navber() {
        </div>
         </div>
        <div>
-        <button className="text-white p-3 text-xl bg-blue-700">PC Builder</button>
+        <button className="text-white p-3 text-xl bg-blue-700 hover:bg-blue-600 rounded-md">PC Builder</button>
        </div>
+      </div>
+      </div>
+      <div className='bg-white text-black'>
+        <nav>
+          <div>
+            <ul className='flex justify-between gap-3 p-4'>
+              <li><Link href="/">Desktop</Link></li>
+              <li><Link href="/about">Laptop</Link></li>
+              <li><Link href="/services">Component</Link></li>
+              <li><Link href="/contact">Monitor</Link></li>
+              <li><Link href="/contact">Power</Link></li>
+              <li><Link href="/contact">Phone</Link></li>
+              <li><Link href="/contact">Tablet</Link></li>
+              <li><Link href="/contact">Office Equipment</Link></li>
+              <li><Link href="/contact">Camera</Link></li>
+              <li><Link href="/contact">Security</Link></li>
+              <li><Link href="/contact">Networking</Link></li>
+              <li><Link href="/contact">Software</Link></li>
+              <li><Link href="/contact">Server & Storage</Link></li>
+              <li><Link href="/contact">Accessories</Link></li>
+              <li><Link href="/contact">Gadget</Link></li>
+              <li><Link href="/contact">Gaming</Link></li>
+              <li><Link href="/contact">TV</Link></li>
+              <li><Link href="/contact">Appliances</Link></li>
+            </ul>
+          </div>
+        </nav>
       </div>
     </div>
   )
