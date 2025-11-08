@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/tech-bazar.png";
 import Link from "next/link";
 import { BiSolidOffer } from "react-icons/bi";
 import { BsLightningCharge, BsPerson, BsX } from "react-icons/bs";
@@ -116,7 +116,7 @@ export default function Navber() {
           <Link href="/">
             <img
               src={logo.src}
-              className="h-8"
+              className="h-12"
               alt="StarTech BD Logo"
             />
           </Link>
@@ -179,7 +179,7 @@ export default function Navber() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setMobileMenuOpen(false)}
-            className="fixed inset-0 bg-gray-400 bg-opacity-50 z-40"
+            className="fixed inset-0 bg-gray-400 bg-opacity-100 z-40"
           />
         )}
       </div>
