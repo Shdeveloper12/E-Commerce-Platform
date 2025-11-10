@@ -130,3 +130,12 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom cursor styles for zoom */
+.cursor-zoom-in {
+  cursor: zoom-in;
+}
+
+.cursor-zoom-out {
+  cursor: zoom-out;
+}

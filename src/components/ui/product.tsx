@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { BsCart3, BsHeart, BsHeartFill, BsStar, BsStarFill, BsEye } from 'react-icons/bs'
+import { BsCart3, BsHeart, BsHeartFill, BsStar, BsStarFill, BsEye, BsX } from 'react-icons/bs'
 import { motion } from 'framer-motion'
 
 // Sample featured products data
@@ -124,6 +124,8 @@ const featuredProducts = [
 
 export default function Product() {
   const [wishlist, setWishlist] = useState<string[]>([])
+  const [quickViewProduct, setQuickViewProduct] = useState<any>(null)
+  const [isZoomed, setIsZoomed] = useState(false)
 
   const toggleWishlist = (productId: string) => {
     setWishlist(prev => 
@@ -137,6 +139,22 @@ export default function Product() {
     // TODO: Implement add to cart functionality
     console.log('Added to cart:', productId)
     alert('Product added to cart!')
+  }
+
+  const openQuickView = (e: React.MouseEvent, product: any) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setQuickViewProduct(product)
+    setIsZoomed(false)
+  }
+
+  const closeQuickView = () => {
+    setQuickViewProduct(null)
+    setIsZoomed(false)
+  }
+
+  const toggleZoom = () => {
+    setIsZoomed(!isZoomed)
   }
 
   const renderStars = (rating: number) => {
@@ -201,23 +219,25 @@ export default function Product() {
               </button>
 
               {/* Product Image */}
-              <Link href={`/products/${product.slug}`}>
-                <div className="relative h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
+              <div className="relative h-56 bg-gray-100 overflow-hidden">
+                <Link href={`/products/${product.slug}`}>
                   <img
                     src={product.imageUrl}
                     alt={product.name}
-                    className="object-contain mask-auto p-4 group-hover:scale-105 transition-transform duration-300"
-                   
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
-                  
-                  {/* Quick View Overlay */}
-                  <div className="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300 flex items-center justify-center">
-                    <button className="opacity-0 group-hover:opacity-100 transition-opacity bg-white px-4 py-2 rounded-md flex items-center gap-2">
-                      <BsEye /> Quick View
-                    </button>
-                  </div>
+                </Link>
+                
+                {/* Quick View Overlay */}
+                <div className="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
+                  <button 
+                    onClick={(e) => openQuickView(e, product)}
+                    className="opacity-0 group-hover:opacity-100 transition-opacity bg-white hover:bg-orange-500 hover:text-white px-6 py-3 rounded-md flex items-center gap-2 font-medium shadow-lg"
+                  >
+                    <BsEye size={20} /> Quick View
+                  </button>
                 </div>
-              </Link>
+              </div>
 
               {/* Product Info */}
               <div className="p-4">
@@ -292,6 +312,155 @@ export default function Product() {
           View All Products
         </Link>
       </div>
+
+      {/* Quick View Modal */}
+      {quickViewProduct && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-gray-300 bg-opacity-75 p-4"
+          onClick={closeQuickView}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={closeQuickView}
+              className="absolute top-4 right-4 z-50 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition-colors"
+            >
+              <BsX size={28} />
+            </button>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+              {/* Left Side - Image with Zoom */}
+              <div className="relative">
+                <div 
+                  className={`relative bg-gray-100 rounded-lg overflow-hidden cursor-zoom-${isZoomed ? 'out' : 'in'}`}
+                  onClick={toggleZoom}
+                >
+                  <img
+                    src={quickViewProduct.imageUrl}
+                    alt={quickViewProduct.name}
+                    className={`w-full object-cover transition-transform duration-300 ${
+                      isZoomed ? 'scale-150' : 'scale-100'
+                    }`}
+                    style={{ minHeight: '400px' }}
+                  />
+                </div>
+                <p className="text-center text-xs text-gray-500 mt-2">
+                  {isZoomed ? 'Click to zoom out' : 'Click to zoom in'}
+                </p>
+              </div>
+
+              {/* Right Side - Product Details */}
+              <div className="flex flex-col">
+                {/* Brand */}
+                <p className="text-sm text-gray-500 mb-2">{quickViewProduct.brand}</p>
+
+                {/* Product Name */}
+                <h2 className="text-2xl font-bold text-gray-800 mb-3">
+                  {quickViewProduct.name}
+                </h2>
+
+                {/* Rating */}
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="flex gap-0.5">
+                    {renderStars(quickViewProduct.rating)}
+                  </div>
+                  <span className="text-sm text-gray-600">
+                    ({quickViewProduct.reviews} reviews)
+                  </span>
+                </div>
+
+                {/* Price */}
+                <div className="mb-6 pb-6 border-b">
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl font-bold text-orange-500">
+                      ৳{quickViewProduct.discountPrice?.toLocaleString()}
+                    </span>
+                    {quickViewProduct.discountPrice && (
+                      <>
+                        <span className="text-xl text-gray-400 line-through">
+                          ৳{quickViewProduct.price.toLocaleString()}
+                        </span>
+                        <span className="bg-orange-500 text-white px-2 py-1 rounded text-sm font-bold">
+                          {Math.round(
+                            ((quickViewProduct.price - quickViewProduct.discountPrice) /
+                              quickViewProduct.price) *
+                              100
+                          )}% OFF
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                {/* Stock Status */}
+                <div className="mb-6">
+                  {quickViewProduct.isInStock ? (
+                    <div className="flex items-center gap-2 text-green-600">
+                      <span className="w-3 h-3 bg-green-600 rounded-full"></span>
+                      <span className="font-medium">
+                        In Stock ({quickViewProduct.stockQuantity} available)
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2 text-red-600">
+                      <span className="w-3 h-3 bg-red-600 rounded-full"></span>
+                      <span className="font-medium">Out of Stock</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-3 mb-4">
+                  <button
+                    onClick={() => {
+                      addToCart(quickViewProduct.id)
+                      closeQuickView()
+                    }}
+                    disabled={!quickViewProduct.isInStock}
+                    className="flex-1 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white py-3 rounded-md flex items-center justify-center gap-2 font-medium transition-colors"
+                  >
+                    <BsCart3 size={20} />
+                    Add to Cart
+                  </button>
+                  <button
+                    onClick={() => toggleWishlist(quickViewProduct.id)}
+                    className={`px-4 py-3 rounded-md border-2 transition-colors ${
+                      wishlist.includes(quickViewProduct.id)
+                        ? 'border-red-500 bg-red-50'
+                        : 'border-gray-300 hover:border-red-500 hover:bg-red-50'
+                    }`}
+                  >
+                    {wishlist.includes(quickViewProduct.id) ? (
+                      <BsHeartFill className="text-red-500" size={22} />
+                    ) : (
+                      <BsHeart className="text-gray-600" size={22} />
+                    )}
+                  </button>
+                </div>
+
+                {/* View Full Details Link */}
+                <Link
+                  href={`/products/${quickViewProduct.slug}`}
+                  className="text-center py-3 border-2 border-gray-300 rounded-md hover:border-orange-500 hover:text-orange-500 font-medium transition-colors"
+                  onClick={closeQuickView}
+                >
+                  View Full Details
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
     </div>
   )
 }
