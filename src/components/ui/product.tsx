@@ -15,7 +15,7 @@ const featuredProducts = [
     price: 55000,
     discountPrice: 52000,
     brand: 'MSI',
-    imageUrl: '/products/laptop1.jpg',
+    imageUrl: '/msi.png',
     rating: 4.5,
     reviews: 42,
     stockQuantity: 15,
@@ -29,7 +29,7 @@ const featuredProducts = [
     price: 125000,
     discountPrice: 118000,
     brand: 'Apple',
-    imageUrl: '/products/laptop2.jpg',
+    imageUrl: '/apple.png',
     rating: 5,
     reviews: 128,
     stockQuantity: 8,
@@ -43,7 +43,7 @@ const featuredProducts = [
     price: 165000,
     discountPrice: 155000,
     brand: 'ASUS',
-    imageUrl: '/products/laptop3.jpg',
+    imageUrl: '/asus.png',
     rating: 4.8,
     reviews: 89,
     stockQuantity: 5,
@@ -57,7 +57,7 @@ const featuredProducts = [
     price: 68000,
     discountPrice: 64500,
     brand: 'HP',
-    imageUrl: '/products/laptop4.jpg',
+    imageUrl: '/hp.png',
     rating: 4.2,
     reviews: 67,
     stockQuantity: 20,
@@ -71,7 +71,7 @@ const featuredProducts = [
     price: 58000,
     discountPrice: 55000,
     brand: 'Lenovo',
-    imageUrl: '/products/laptop5.jpg',
+    imageUrl: '/lenovo.png',
     rating: 4.3,
     reviews: 54,
     stockQuantity: 12,
@@ -85,7 +85,7 @@ const featuredProducts = [
     price: 52000,
     discountPrice: 49500,
     brand: 'Dell',
-    imageUrl: '/products/laptop6.jpg',
+    imageUrl: '/dell.png',
     rating: 4.1,
     reviews: 38,
     stockQuantity: 18,
@@ -99,7 +99,7 @@ const featuredProducts = [
     price: 62000,
     discountPrice: 58500,
     brand: 'Acer',
-    imageUrl: '/products/laptop7.jpg',
+    imageUrl: '/acer.png',
     rating: 4.4,
     reviews: 71,
     stockQuantity: 10,
@@ -113,7 +113,7 @@ const featuredProducts = [
     price: 145000,
     discountPrice: 138000,
     brand: 'Microsoft',
-    imageUrl: '/products/laptop8.jpg',
+    imageUrl: '/microsoft.png',
     rating: 4.7,
     reviews: 95,
     stockQuantity: 6,
@@ -203,19 +203,15 @@ export default function Product() {
               {/* Product Image */}
               <Link href={`/products/${product.slug}`}>
                 <div className="relative h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
-                  <Image
+                  <img
                     src={product.imageUrl}
                     alt={product.name}
-                    fill
-                    className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement
-                      target.src = '/placeholder-product.png'
-                    }}
+                    className="object-contain mask-auto p-4 group-hover:scale-105 transition-transform duration-300"
+                   
                   />
                   
                   {/* Quick View Overlay */}
-                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300 flex items-center justify-center">
                     <button className="opacity-0 group-hover:opacity-100 transition-opacity bg-white px-4 py-2 rounded-md flex items-center gap-2">
                       <BsEye /> Quick View
                     </button>

@@ -48,12 +48,28 @@ export default function ChangePasswordPage() {
     }
 
     try {
-      // TODO: Implement API call to change password
-      await new Promise(resolve => setTimeout(resolve, 1000)) // Simulate API call
-      setMessage({ type: 'success', text: 'Password changed successfully!' })
-      setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' })
+      const response = await fetch('/api/auth/change-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          currentPassword: formData.currentPassword,
+          newPassword: formData.newPassword,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        setMessage({ type: 'error', text: data.error || 'Failed to change password.' })
+      } else {
+        setMessage({ type: 'success', text: data.message || 'Password changed successfully!' })
+        setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' })
+      }
     } catch (error) {
-      setMessage({ type: 'error', text: 'Failed to change password. Please try again.' })
+      console.error('Password change error:', error)
+      setMessage({ type: 'error', text: 'An error occurred. Please try again.' })
     } finally {
       setLoading(false)
     }

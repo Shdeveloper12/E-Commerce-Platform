@@ -7,6 +7,16 @@ const nextConfig: NextConfig = {
   },
 
   reactStrictMode: false,
+  
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+    ],
+  },
+
   webpack: (config, { dev }) => {
     if (dev) {
      
