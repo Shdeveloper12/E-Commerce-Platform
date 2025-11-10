@@ -4,13 +4,20 @@ import React, { useState } from "react";
 import logo from "../../assets/tech-bazar.png";
 import Link from "next/link";
 import { BiSolidOffer, BiChevronDown, BiChevronRight } from "react-icons/bi";
-import { BsLightningCharge, BsPerson, BsX } from "react-icons/bs";
+import { BsLightningCharge, BsPerson, BsX, BsBoxArrowRight } from "react-icons/bs";
 import { motion } from "motion/react";
+import { useSession, signOut } from "next-auth/react";
 
 export default function Navber() {
+  const { data: session, status } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+  const [showAccountDropdown, setShowAccountDropdown] = useState(false);
+
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: '/' });
+  };
 
   const categories = [
     { 
@@ -410,17 +417,77 @@ export default function Navber() {
               </Link>
 
               {/* Account */}
-              <Link href="/login" className="flex gap-2 items-center hover:text-orange-400 transition-colors">
-                <BsPerson className="text-3xl text-orange-500" />
-                <div>
-                  <h4 className="font-semibold text-sm leading-tight">Account</h4>
-                  <p className="text-xs text-gray-400">
-                    <span className="hover:underline">Register</span>
-                    {" "}<span>or</span>{" "}
-                    <span className="hover:underline">Login</span>
-                  </p>
-                </div>
-              </Link>
+              <div 
+                className="relative"
+                onMouseEnter={() => setShowAccountDropdown(true)}
+                onMouseLeave={() => setShowAccountDropdown(false)}
+              >
+                {status === "loading" ? (
+                  <div className="flex gap-2 items-center">
+                    <BsPerson className="text-3xl text-orange-500 animate-pulse" />
+                    <div>
+                      <h4 className="font-semibold text-sm leading-tight">Account</h4>
+                      <p className="text-xs text-gray-400">Loading...</p>
+                    </div>
+                  </div>
+                ) : session ? (
+                  <>
+                    <Link href="/account" className="flex gap-2 items-center hover:text-orange-400 transition-colors cursor-pointer">
+                      <BsPerson className="text-3xl text-orange-500" />
+                      <div>
+                        <h4 className="font-semibold text-sm leading-tight">Account</h4>
+                        <p className="text-xs text-gray-400 truncate max-w-[120px]">
+                          {session.user?.name || session.user?.email}
+                        </p>
+                      </div>
+                    </Link>
+
+                    {/* Dropdown Menu */}
+                    {showAccountDropdown && (
+                      <div className="absolute top-full right-0 mt-2 bg-white shadow-2xl rounded-md py-2 min-w-[200px] z-[100] border border-gray-200">
+                        <Link
+                          href="/account"
+                          className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors"
+                        >
+                          My Profile
+                        </Link>
+                        <Link
+                          href="/account/orders"
+                          className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors"
+                        >
+                          My Orders
+                        </Link>
+                        <Link
+                          href="/account/wishlist"
+                          className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors"
+                        >
+                          Wish List
+                        </Link>
+                        <div className="border-t border-gray-200 my-1"></div>
+                        <button
+                          onClick={handleLogout}
+                          className="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center gap-2"
+                        >
+                          <BsBoxArrowRight />
+                          Logout
+                        </button>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <Link href="/login" className="flex gap-2 items-center hover:text-orange-400 transition-colors">
+                    <BsPerson className="text-3xl text-orange-500" />
+                    <div>
+                      <h4 className="font-semibold text-sm leading-tight">Account</h4>
+                      <p className="text-xs text-gray-400">
+                        <span className="hover:underline">Register</span>
+                        {" "}<span>or</span>{" "}
+                        <span className="hover:underline">Login</span>
+                      </p>
+                    </div>
+                  </Link>
+                )}
+              </div>
 
               {/* PC Builder Button */}
               <Link href="/pc-builder">
@@ -512,10 +579,17 @@ export default function Navber() {
           </Link>
 
           {/* Account */}
-          <Link href="/login" className="flex flex-col items-center py-2 px-3 hover:text-orange-400 transition-colors">
-            <BsPerson className="text-2xl mb-1" />
-            <span className="text-[10px] font-medium">Account</span>
-          </Link>
+          {session ? (
+            <Link href="/account" className="flex flex-col items-center py-2 px-3 hover:text-orange-400 transition-colors">
+              <BsPerson className="text-2xl mb-1" />
+              <span className="text-[10px] font-medium">Profile</span>
+            </Link>
+          ) : (
+            <Link href="/login" className="flex flex-col items-center py-2 px-3 hover:text-orange-400 transition-colors">
+              <BsPerson className="text-2xl mb-1" />
+              <span className="text-[10px] font-medium">Account</span>
+            </Link>
+          )}
         </div>
       </div>
 
