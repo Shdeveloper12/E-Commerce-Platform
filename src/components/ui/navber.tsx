@@ -3,85 +3,216 @@
 import React, { useState } from "react";
 import logo from "../../assets/tech-bazar.png";
 import Link from "next/link";
-import { BiSolidOffer } from "react-icons/bi";
+import { BiSolidOffer, BiChevronDown, BiChevronRight } from "react-icons/bi";
 import { BsLightningCharge, BsPerson, BsX } from "react-icons/bs";
 import { motion } from "motion/react";
+
 export default function Navber() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
+  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
 
   const categories = [
-    { name: "Desktop", href: "/desktop" },
-    { name: "Laptop", href: "/laptop" },
-    { name: "Component", href: "/component" },
-    { name: "Monitor", href: "/monitor" },
-    { name: "Power", href: "/power" },
-    { name: "Phone", href: "/phone" },
-    { name: "Tablet", href: "/tablet" },
-    { name: "Office Equipment", href: "/office-equipment" },
-    { name: "Camera", href: "/camera" },
-    { name: "Security", href: "/security" },
-    { name: "Networking", href: "/networking" },
-    { name: "Software", href: "/software" },
-    { name: "Server & Storage", href: "/server" },
-    { name: "Accessories", href: "/accessories" },
-    { name: "Gadget", href: "/gadget" },
-    { name: "Gaming", href: "/gaming" },
-    { name: "TV", href: "/tv" },
-    { name: "Appliance", href: "/appliance" },
+    { 
+      name: "Desktop", 
+      href: "/desktop",
+      subcategories: [
+        { name: "Brand PC", href: "/desktop/brand-pc" },
+        { name: "Gaming PC", href: "/desktop/gaming-pc" },
+        { name: "Custom PC", href: "/desktop/custom-pc" },
+        { name: "All-in-One PC", href: "/desktop/all-in-one" },
+        { name: "Portable Mini PC", href: "/desktop/mini-pc" },
+      ]
+    },
+    { 
+      name: "Laptop", 
+      href: "/laptop",
+      subcategories: [
+        { name: "All Laptop", href: "/laptop/all" },
+        { name: "Gaming Laptop", href: "/laptop/gaming" },
+        { name: "Ultrabook", href: "/laptop/ultrabook" },
+        { name: "MacBook", href: "/laptop/macbook" },
+        { name: "Traditional Laptop", href: "/laptop/traditional" },
+      ]
+    },
+    { 
+      name: "Component", 
+      href: "/component",
+      subcategories: [
+        { name: "Processor", href: "/component/processor" },
+        { name: "Motherboard", href: "/component/motherboard" },
+        { name: "RAM", href: "/component/ram" },
+        { name: "Graphics Card", href: "/component/graphics-card" },
+        { name: "SSD", href: "/component/ssd" },
+        { name: "HDD", href: "/component/hdd" },
+        { name: "Casing", href: "/component/casing" },
+        { name: "Cooler", href: "/component/cooler" },
+        { name: "Power Supply", href: "/component/power-supply" },
+      ]
+    },
+    { 
+      name: "Monitor", 
+      href: "/monitor",
+      subcategories: [
+        { name: "Gaming Monitor", href: "/monitor/gaming" },
+        { name: "Professional Monitor", href: "/monitor/professional" },
+        { name: "Regular Monitor", href: "/monitor/regular" },
+      ]
+    },
+    { 
+      name: "UPS", 
+      href: "/ups",
+      subcategories: [
+        { name: "Online UPS", href: "/ups/online" },
+        { name: "Offline UPS", href: "/ups/offline" },
+        { name: "IPS", href: "/ups/ips" },
+      ]
+    },
+    { 
+      name: "Phone", 
+      href: "/phone",
+      subcategories: [
+        { name: "Samsung", href: "/phone/samsung" },
+        { name: "iPhone", href: "/phone/iphone" },
+        { name: "Xiaomi", href: "/phone/xiaomi" },
+        { name: "Realme", href: "/phone/realme" },
+        { name: "OPPO", href: "/phone/oppo" },
+        { name: "Vivo", href: "/phone/vivo" },
+        { name: "OnePlus", href: "/phone/oneplus" },
+        { name: "Infinix", href: "/phone/infinix" },
+        { name: "Feature Phone", href: "/phone/feature" },
+      ]
+    },
+    { 
+      name: "Tablet", 
+      href: "/tablet",
+      subcategories: [
+        { name: "iPad", href: "/tablet/ipad" },
+        { name: "Samsung Tab", href: "/tablet/samsung" },
+        { name: "Android Tablet", href: "/tablet/android" },
+      ]
+    },
+    { 
+      name: "Office Equipment", 
+      href: "/office-equipment",
+      subcategories: [
+        { name: "Printer", href: "/office/printer" },
+        { name: "Scanner", href: "/office/scanner" },
+        { name: "Photocopier", href: "/office/photocopier" },
+        { name: "Attendance Machine", href: "/office/attendance" },
+        { name: "Projector", href: "/office/projector" },
+      ]
+    },
+    { 
+      name: "Camera", 
+      href: "/camera",
+      subcategories: [
+        { name: "DSLR Camera", href: "/camera/dslr" },
+        { name: "Action Camera", href: "/camera/action" },
+        { name: "Mirrorless Camera", href: "/camera/mirrorless" },
+        { name: "Webcam", href: "/camera/webcam" },
+        { name: "IP Camera", href: "/camera/ip" },
+      ]
+    },
+    { 
+      name: "Security", 
+      href: "/security",
+      subcategories: [
+        { name: "CC Camera", href: "/security/cc-camera" },
+        { name: "CCTV Camera", href: "/security/cctv" },
+        { name: "IP Camera", href: "/security/ip-camera" },
+        { name: "DVR", href: "/security/dvr" },
+        { name: "NVR", href: "/security/nvr" },
+      ]
+    },
+    { 
+      name: "Networking", 
+      href: "/networking",
+      subcategories: [
+        { name: "Router", href: "/networking/router" },
+        { name: "Switch", href: "/networking/switch" },
+        { name: "Access Point", href: "/networking/access-point" },
+        { name: "Network Adapter", href: "/networking/adapter" },
+        { name: "Modem", href: "/networking/modem" },
+      ]
+    },
+    { 
+      name: "Software", 
+      href: "/software",
+      subcategories: [
+        { name: "Antivirus", href: "/software/antivirus" },
+        { name: "Operating System", href: "/software/os" },
+        { name: "Office Software", href: "/software/office" },
+        { name: "Design Software", href: "/software/design" },
+      ]
+    },
+    { 
+      name: "Server & Storage", 
+      href: "/server",
+      subcategories: [
+        { name: "Server", href: "/server/server" },
+        { name: "NAS", href: "/server/nas" },
+        { name: "Storage", href: "/server/storage" },
+      ]
+    },
+    { 
+      name: "Accessories", 
+      href: "/accessories",
+      subcategories: [
+        { name: "Keyboard", href: "/accessories/keyboard" },
+        { name: "Mouse", href: "/accessories/mouse" },
+        { name: "Headphone", href: "/accessories/headphone" },
+        { name: "Speaker", href: "/accessories/speaker" },
+        { name: "Webcam", href: "/accessories/webcam" },
+        { name: "Microphone", href: "/accessories/microphone" },
+        { name: "USB Hub", href: "/accessories/usb-hub" },
+        { name: "Cable & Adapter", href: "/accessories/cable" },
+      ]
+    },
+    { 
+      name: "Gadget", 
+      href: "/gadget",
+      subcategories: [
+        { name: "Smart Watch", href: "/gadget/smart-watch" },
+        { name: "Earbuds", href: "/gadget/earbuds" },
+        { name: "Power Bank", href: "/gadget/power-bank" },
+        { name: "Trimmer", href: "/gadget/trimmer" },
+        { name: "Drone", href: "/gadget/drone" },
+        { name: "Gimbal", href: "/gadget/gimbal" },
+      ]
+    },
+    { 
+      name: "Gaming", 
+      href: "/gaming",
+      subcategories: [
+        { name: "Gaming Console", href: "/gaming/console" },
+        { name: "Gaming Chair", href: "/gaming/chair" },
+        { name: "Gaming Desk", href: "/gaming/desk" },
+        { name: "Gaming Accessories", href: "/gaming/accessories" },
+      ]
+    },
+    { 
+      name: "TV", 
+      href: "/tv",
+      subcategories: [
+        { name: "Smart TV", href: "/tv/smart" },
+        { name: "Android TV", href: "/tv/android" },
+        { name: "LED TV", href: "/tv/led" },
+      ]
+    },
+    { 
+      name: "Appliance", 
+      href: "/appliance",
+      subcategories: [
+        { name: "Air Conditioner", href: "/appliance/ac" },
+        { name: "Refrigerator", href: "/appliance/refrigerator" },
+        { name: "Washing Machine", href: "/appliance/washing-machine" },
+        { name: "Microwave Oven", href: "/appliance/oven" },
+        { name: "Water Heater", href: "/appliance/water-heater" },
+      ]
+    },
   ];
-  {/*
-    <div className="navbar bg-base-100 shadow-sm">
-      <div className="navbar-start">
-        <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              {" "}
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h8m-8 6h16"
-              />{" "}
-            </svg>
-          </div>
-          <ul
-            tabIndex="-1"
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow" >
-            <li>
-              <a>Item 1</a>
-            </li>
-            <li>
-              <a>Parent</a>
-              <ul className="p-2">
-                <li>
-                  <a>Submenu 1</a>
-                </li>
-                <li>
-                  <a>Submenu 2</a>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <a>Item 3</a>
-            </li>
-          </ul>
-        </div>
-        <a className="btn btn-ghost text-xl">daisyUI</a>
-      </div>
-      <div className="navbar-center hidden lg:flex">
-        
-      </div>
-      <div className="navbar-end">
-        <a className="btn">Button</a>
-      </div>
-    </div>;
-  */}
+  
   return (
     <>
       {/* Mobile Top Bar */}
@@ -159,14 +290,53 @@ export default function Navber() {
             {/* Category List */}
             <nav className="space-y-1">
               {categories.map((category, index) => (
-                <Link
-                  key={index}
-                  href={category.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 rounded-md transition-colors font-medium"
-                >
-                  {category.name}
-                </Link>
+                <div key={index}>
+                  <div
+                    className="flex items-center justify-between px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 rounded-md transition-colors font-medium cursor-pointer"
+                    onClick={() => {
+                      if (category.subcategories) {
+                        setOpenSubmenu(openSubmenu === category.name ? null : category.name);
+                      } else {
+                        setMobileMenuOpen(false);
+                      }
+                    }}
+                  >
+                    <Link 
+                      href={category.href}
+                      onClick={(e) => {
+                        if (category.subcategories) {
+                          e.preventDefault();
+                        } else {
+                          setMobileMenuOpen(false);
+                        }
+                      }}
+                      className="flex-1"
+                    >
+                      {category.name}
+                    </Link>
+                    {category.subcategories && (
+                      <BiChevronRight
+                        className={`text-xl transition-transform ${
+                          openSubmenu === category.name ? "rotate-90" : ""
+                        }`}
+                      />
+                    )}
+                  </div>
+                  {category.subcategories && openSubmenu === category.name && (
+                    <div className="ml-4 space-y-1 border-l-2 border-orange-200">
+                      {category.subcategories.map((sub, subIndex) => (
+                        <Link
+                          key={subIndex}
+                          href={sub.href}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className="block px-4 py-2 text-sm text-gray-600 hover:bg-orange-50 hover:text-orange-600 rounded-md transition-colors"
+                        >
+                          {sub.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
               ))}
             </nav>
           </div>
@@ -179,7 +349,7 @@ export default function Navber() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setMobileMenuOpen(false)}
-            className="fixed inset-0 bg-gray-400 bg-opacity-100 z-40"
+            className="fixed inset-0 z-40"
           />
         )}
       </div>
@@ -263,27 +433,40 @@ export default function Navber() {
         </div>
 
         {/* Category Navigation */}
-        <div className="bg-gray-100 border-b shadow-sm">
+        <div className="bg-gray-100 border-b shadow-sm relative z-50">
           <div className="container mx-auto max-w-[1400px] px-4">
-            <ul className="flex gap-3 py-3 text-sm font-medium text-gray-700 overflow-x-auto justify-between">
-              <li><Link href="/desktop" className="hover:text-orange-500 transition-colors whitespace-nowrap">Desktop</Link></li>
-              <li><Link href="/laptop" className="hover:text-orange-500 transition-colors whitespace-nowrap">Laptop</Link></li>
-              <li><Link href="/component" className="hover:text-orange-500 transition-colors whitespace-nowrap">Component</Link></li>
-              <li><Link href="/monitor" className="hover:text-orange-500 transition-colors whitespace-nowrap">Monitor</Link></li>
-              <li><Link href="/power" className="hover:text-orange-500 transition-colors whitespace-nowrap">Power</Link></li>
-              <li><Link href="/phone" className="hover:text-orange-500 transition-colors whitespace-nowrap">Phone</Link></li>
-              <li><Link href="/tablet" className="hover:text-orange-500 transition-colors whitespace-nowrap">Tablet</Link></li>
-              <li><Link href="/office-equipment" className="hover:text-orange-500 transition-colors whitespace-nowrap">Office Equipment</Link></li>
-              <li><Link href="/camera" className="hover:text-orange-500 transition-colors whitespace-nowrap">Camera</Link></li>
-              <li><Link href="/security" className="hover:text-orange-500 transition-colors whitespace-nowrap">Security</Link></li>
-              <li><Link href="/networking" className="hover:text-orange-500 transition-colors whitespace-nowrap">Networking</Link></li>
-              <li><Link href="/software" className="hover:text-orange-500 transition-colors whitespace-nowrap">Software</Link></li>
-              <li><Link href="/server" className="hover:text-orange-500 transition-colors whitespace-nowrap">Server & Storage</Link></li>
-              <li><Link href="/accessories" className="hover:text-orange-500 transition-colors whitespace-nowrap">Accessories</Link></li>
-              <li><Link href="/gadget" className="hover:text-orange-500 transition-colors whitespace-nowrap">Gadget</Link></li>
-              <li><Link href="/gaming" className="hover:text-orange-500 transition-colors whitespace-nowrap">Gaming</Link></li>
-              <li><Link href="/tv" className="hover:text-orange-500 transition-colors whitespace-nowrap">TV</Link></li>
-              <li><Link href="/appliance" className="hover:text-orange-500 transition-colors whitespace-nowrap">Appliance</Link></li>
+            <ul className="flex gap-3 py-3 text-sm font-medium text-gray-700 flex-wrap justify-center">
+              {categories.map((category, index) => (
+                <li
+                  key={index}
+                  className="relative group"
+                  onMouseEnter={() => setHoveredCategory(category.name)}
+                  onMouseLeave={() => setHoveredCategory(null)}
+                >
+                  <Link
+                    href={category.href}
+                    className="hover:text-orange-500 transition-colors whitespace-nowrap flex justify-between gap-1 py-1"
+                  >
+                    {category.name}
+                    {category.subcategories && <BiChevronDown className="text-sm" />}
+                  </Link>
+                  
+                  {/* Dropdown Menu */}
+                  {category.subcategories && hoveredCategory === category.name && (
+                    <div className="absolute top-full left-0 mt-1 bg-white shadow-2xl rounded-md py-2 min-w-[220px] z-[50] border border-gray-200 max-h-[400px] overflow-y-auto">
+                      {category.subcategories.map((sub, subIndex) => (
+                        <Link
+                          key={subIndex}
+                          href={sub.href}
+                          className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors whitespace-nowrap"
+                        >
+                          {sub.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </li>
+              ))}
             </ul>
           </div>
         </div>
