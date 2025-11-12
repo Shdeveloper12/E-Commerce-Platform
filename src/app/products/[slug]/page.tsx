@@ -7,14 +7,15 @@ export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 interface ProductPageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 export async function generateMetadata({ params }: ProductPageProps) {
+  const { slug } = await params
   const product = await db.product.findUnique({
-    where: { slug: params.slug },
+    where: { slug },
     select: {
       name: true,
       metaTitle: true,
@@ -36,8 +37,9 @@ export async function generateMetadata({ params }: ProductPageProps) {
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
+  const { slug } = await params
   const product = await db.product.findUnique({
-    where: { slug: params.slug },
+    where: { slug },
     include: {
       category: true,
       images: {

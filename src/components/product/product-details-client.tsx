@@ -21,8 +21,11 @@ import {
   BsShield,
   BsArrowRepeat,
 } from "react-icons/bs"
+import { TbScale } from "react-icons/tb"
 import { FiMinus, FiPlus } from "react-icons/fi"
 import Swal from "sweetalert2"
+import { useCartStore } from "@/store/cart-store"
+import { useCompareStore } from "@/store/compare-store"
 
 interface Product {
   id: string
@@ -84,6 +87,9 @@ export default function ProductDetailsClient({
   const [selectedImage, setSelectedImage] = useState(product.images[0]?.imageUrl || "/placeholder.png")
   const [quantity, setQuantity] = useState(1)
   const [isWishlisted, setIsWishlisted] = useState(false)
+  
+  const { addItem: addToCartStore } = useCartStore()
+  const { addItem: addToCompare, isInCompare, removeItem: removeFromCompare, items: compareItems } = useCompareStore()
 
   const discount = product.discountPrice
     ? Math.round(((product.price - product.discountPrice) / product.price) * 100)
@@ -94,6 +100,8 @@ export default function ProductDetailsClient({
     ? product.reviews.reduce((acc, review) => acc + review.rating, 0) / product.reviews.length
     : 0
 
+  const isProductInCompare = isInCompare(product.id)
+
   const handleQuantityChange = (type: "increment" | "decrement") => {
     if (type === "increment" && quantity < product.stockQuantity) {
       setQuantity(quantity + 1)
@@ -103,7 +111,19 @@ export default function ProductDetailsClient({
   }
 
   const handleAddToCart = () => {
-    // TODO: Implement cart functionality
+    for (let i = 0; i < quantity; i++) {
+      addToCartStore({
+        id: product.id,
+        name: product.name,
+        slug: product.slug,
+        price: product.price,
+        discountPrice: product.discountPrice,
+        imageUrl: product.images[0]?.imageUrl || "/placeholder.png",
+        stockQuantity: product.stockQuantity,
+        brand: product.brand,
+      })
+    }
+    
     Swal.fire({
       icon: "success",
       title: "Added to Cart!",
@@ -115,13 +135,52 @@ export default function ProductDetailsClient({
   }
 
   const handleBuyNow = () => {
-    // TODO: Implement buy now functionality
-    Swal.fire({
-      icon: "info",
-      title: "Proceeding to Checkout",
-      text: "This feature will be implemented soon",
-      confirmButtonColor: "#f97316",
-    })
+    handleAddToCart()
+    setTimeout(() => {
+      window.location.href = "/checkout"
+    }, 1600)
+  }
+
+  const handleCompare = () => {
+    if (isProductInCompare) {
+      removeFromCompare(product.id)
+      Swal.fire({
+        icon: "success",
+        title: "Removed from Compare",
+        showConfirmButton: false,
+        timer: 1000,
+      })
+    } else {
+      if (compareItems.length >= 4) {
+        Swal.fire({
+          icon: "warning",
+          title: "Compare Limit Reached",
+          text: "You can compare up to 4 products at a time",
+          confirmButtonColor: "#f97316",
+        })
+        return
+      }
+      
+      addToCompare({
+        id: product.id,
+        name: product.name,
+        slug: product.slug,
+        price: product.price,
+        discountPrice: product.discountPrice,
+        imageUrl: product.images[0]?.imageUrl || "/placeholder.png",
+        brand: product.brand,
+        category: product.category.name,
+        stockQuantity: product.stockQuantity,
+        specifications: product.specifications,
+      })
+      
+      Swal.fire({
+        icon: "success",
+        title: "Added to Compare",
+        showConfirmButton: false,
+        timer: 1000,
+      })
+    }
   }
 
   const handleWishlist = () => {
@@ -158,7 +217,7 @@ export default function ProductDetailsClient({
   }
 
   const renderStars = (rating: number, size: string = "text-base") => {
-    const stars = []
+    const stars: React.ReactElement[] = []
     const fullStars = Math.floor(rating)
     const hasHalfStar = rating % 1 >= 0.5
 
@@ -349,6 +408,14 @@ export default function ProductDetailsClient({
                 <BsHeart className="mr-2" />
               )}
               Wishlist
+            </Button>
+            <Button 
+              onClick={handleCompare} 
+              variant="outline" 
+              className={`flex-1 ${isProductInCompare ? 'bg-orange-50 border-orange-500' : ''}`}
+            >
+              <TbScale className={`mr-2 ${isProductInCompare ? 'text-orange-600' : ''}`} />
+              {isProductInCompare ? 'In Compare' : 'Compare'}
             </Button>
             <Button onClick={handleShare} variant="outline" className="flex-1">
               <BsShare className="mr-2" />

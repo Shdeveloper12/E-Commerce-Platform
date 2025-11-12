@@ -4,7 +4,11 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { BsCart3, BsHeart, BsHeartFill, BsStar, BsStarFill, BsEye, BsX } from 'react-icons/bs'
+import { TbScale } from 'react-icons/tb'
 import { motion } from 'framer-motion'
+import { useCartStore } from '@/store/cart-store'
+import { useCompareStore } from '@/store/compare-store'
+import Swal from 'sweetalert2'
 
 interface ProductProps {
   products: any[]
@@ -14,6 +18,9 @@ export default function Product({ products }: ProductProps) {
   const [wishlist, setWishlist] = useState<string[]>([])
   const [quickViewProduct, setQuickViewProduct] = useState<any>(null)
   const [isZoomed, setIsZoomed] = useState(false)
+
+  const { addItem: addToCartStore } = useCartStore()
+  const { addItem: addToCompare, isInCompare, items: compareItems } = useCompareStore()
 
   // Use only real products from database
   const displayProducts = products || []
@@ -26,10 +33,65 @@ export default function Product({ products }: ProductProps) {
     )
   }
 
-  const addToCart = (productId: string) => {
-    // TODO: Implement add to cart functionality
-    console.log('Added to cart:', productId)
-    alert('Product added to cart!')
+  const addToCart = (product: any) => {
+    addToCartStore({
+      id: product.id,
+      name: product.name,
+      slug: product.slug,
+      price: product.price,
+      discountPrice: product.discountPrice,
+      imageUrl: product.imageUrl,
+      stockQuantity: product.stockQuantity,
+      brand: product.brand || 'No Brand',
+    })
+    
+    Swal.fire({
+      icon: "success",
+      title: "Added to Cart!",
+      text: `${product.name} added to your cart`,
+      showConfirmButton: false,
+      timer: 1500,
+      timerProgressBar: true,
+    })
+  }
+
+  const handleCompare = (product: any, e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
+    if (isInCompare(product.id)) {
+      return
+    }
+    
+    if (compareItems.length >= 4) {
+      Swal.fire({
+        icon: "warning",
+        title: "Compare Limit Reached",
+        text: "You can compare up to 4 products at a time",
+        confirmButtonColor: "#f97316",
+      })
+      return
+    }
+    
+    addToCompare({
+      id: product.id,
+      name: product.name,
+      slug: product.slug,
+      price: product.price,
+      discountPrice: product.discountPrice,
+      imageUrl: product.imageUrl,
+      brand: product.brand || 'No Brand',
+      category: product.category,
+      stockQuantity: product.stockQuantity,
+      specifications: [],
+    })
+    
+    Swal.fire({
+      icon: "success",
+      title: "Added to Compare",
+      showConfirmButton: false,
+      timer: 1000,
+    })
   }
 
   const openQuickView = (e: React.MouseEvent, product: any) => {

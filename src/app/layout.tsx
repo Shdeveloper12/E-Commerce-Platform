@@ -6,6 +6,7 @@ import Navber from "@/components/ui/navber";
 import Footer from "@/components/ui/footer";
 import Carousel from "@/components/ui/carousel";
 import { SessionProvider } from "@/components/providers/session-provider";
+import FloatingCartCompare from "@/components/cart";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -68,6 +69,7 @@ export default function RootLayout({
             <main className="flex-grow bg-gray-100">{children}</main>
             <Footer />
           </div>
+          <FloatingCartCompare />
           <Toaster />
         </SessionProvider>
       </body>
