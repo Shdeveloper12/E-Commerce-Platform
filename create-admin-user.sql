@@ -1,33 +1,82 @@
--- Script to create or update an admin user
--- Run this in your PostgreSQL database after registering a user normally
+-- ====================================
+-- SQL Scripts to Manage User Roles
+-- ====================================
+-- After updating user role, the user MUST log out and log back in
+-- The system will automatically fetch the latest role from database
 
--- Option 1: Update an existing user to admin role
--- Replace 'admin@example.com' with your email
+-- 1. VIEW ALL USERS WITH THEIR ROLES
+SELECT 
+    id,
+    email,
+    first_name,
+    last_name,
+    role,
+    is_active,
+    created_at
+FROM users
+ORDER BY created_at DESC;
+
+-- ====================================
+-- 2. MAKE A USER AN ADMIN BY EMAIL
+-- ====================================
+-- Replace 'user@example.com' with the actual email
 UPDATE users 
 SET role = 'ADMIN' 
-WHERE email = 'admin@example.com';
+WHERE email = 'user@example.com';
 
--- Option 2: Update by user ID
--- Replace 'user-uuid-here' with the actual user UUID
+-- IMPORTANT: User must LOG OUT and LOG BACK IN for changes to take effect!
+
+-- ====================================
+-- 3. MAKE A USER AN ADMIN BY ID
+-- ====================================
 UPDATE users 
 SET role = 'ADMIN' 
-WHERE id = 'user-uuid-here';
+WHERE id = 'user-id-here';
 
--- Option 3: View all users to find the one you want to make admin
-SELECT id, email, "first_name", "last_name", role, "is_active" 
+-- ====================================
+-- 4. MAKE A USER A MODERATOR
+-- ====================================
+UPDATE users 
+SET role = 'MODERATOR' 
+WHERE email = 'moderator@example.com';
+
+-- ====================================
+-- 5. CHANGE USER BACK TO CUSTOMER
+-- ====================================
+UPDATE users 
+SET role = 'CUSTOMER' 
+WHERE email = 'user@example.com';
+
+-- ====================================
+-- 6. VERIFY ROLE UPDATE
+-- ====================================
+SELECT email, role, is_active, updated_at 
 FROM users 
-ORDER BY "created_at" DESC;
+WHERE email = 'user@example.com';
 
--- Option 4: Make the first user an admin (useful for initial setup)
-UPDATE users 
-SET role = 'ADMIN' 
-WHERE id = (
-  SELECT id FROM users 
-  ORDER BY "created_at" ASC 
-  LIMIT 1
-);
-
--- Verify the changes
-SELECT id, email, role, "is_active" 
+-- ====================================
+-- 7. LIST ALL ADMINS
+-- ====================================
+SELECT id, email, first_name, last_name, role, created_at 
 FROM users 
-WHERE role IN ('ADMIN', 'MODERATOR');
+WHERE role = 'ADMIN' 
+ORDER BY created_at DESC;
+
+-- ====================================
+-- 8. COUNT USERS BY ROLE
+-- ====================================
+SELECT 
+    role,
+    COUNT(*) as user_count
+FROM users
+GROUP BY role;
+
+-- ====================================
+-- QUICK SETUP STEPS:
+-- ====================================
+-- 1. Register user at /register
+-- 2. Run: UPDATE users SET role = 'ADMIN' WHERE email = 'your@email.com';
+-- 3. User must LOG OUT completely
+-- 4. User must LOG BACK IN
+-- 5. Navigate to /admin
+-- ====================================

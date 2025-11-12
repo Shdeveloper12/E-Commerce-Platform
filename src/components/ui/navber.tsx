@@ -294,6 +294,95 @@ export default function Navber() {
               </button>
             </div>
 
+            {/* User Section - Mobile */}
+            {session && (
+              <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <div className="flex items-center gap-3 mb-3">
+                  <BsPerson className="text-3xl text-orange-500" />
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <p className="font-semibold text-gray-800 text-sm">
+                        {session.user?.name || session.user?.email}
+                      </p>
+                      {(session.user?.role === 'ADMIN' || session.user?.role === 'MODERATOR') && (
+                        <span className={`px-2 py-0.5 text-[10px] font-bold rounded ${
+                          session.user?.role === 'ADMIN' 
+                            ? 'bg-purple-500 text-white' 
+                            : 'bg-blue-500 text-white'
+                        }`}>
+                          {session.user?.role}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs text-gray-500">{session.user?.email}</p>
+                  </div>
+                </div>
+                
+                {/* Admin Dashboard Link - Mobile */}
+                {(session.user?.role === 'ADMIN' || session.user?.role === 'MODERATOR') && (
+                  <Link
+                    href="/admin"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-2 w-full px-3 py-2 mb-2 text-sm font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 rounded-md transition-colors border-l-4 border-purple-500"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    Admin Dashboard
+                  </Link>
+                )}
+
+                <div className="flex flex-col gap-1">
+                  <Link
+                    href="/account"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="px-3 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 rounded-md transition-colors"
+                  >
+                    My Profile
+                  </Link>
+                  <Link
+                    href="/account/orders"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="px-3 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 rounded-md transition-colors"
+                  >
+                    My Orders
+                  </Link>
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="flex items-center gap-2 w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                  >
+                    <BsBoxArrowRight />
+                    Logout
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Login/Register - Mobile */}
+            {!session && status !== "loading" && (
+              <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <div className="flex gap-2">
+                  <Link
+                    href="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex-1 px-4 py-2 text-sm font-semibold text-center text-white bg-orange-500 hover:bg-orange-600 rounded-md transition-colors"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    href="/register"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex-1 px-4 py-2 text-sm font-semibold text-center text-orange-500 border border-orange-500 hover:bg-orange-50 rounded-md transition-colors"
+                  >
+                    Register
+                  </Link>
+                </div>
+              </div>
+            )}
+
             {/* Category List */}
             <nav className="space-y-1">
               {categories.map((category, index) => (
@@ -435,7 +524,18 @@ export default function Navber() {
                     <Link href="/account" className="flex gap-2 items-center hover:text-orange-400 transition-colors cursor-pointer">
                       <BsPerson className="text-3xl text-orange-500" />
                       <div>
-                        <h4 className="font-semibold text-sm leading-tight">Account</h4>
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-semibold text-sm leading-tight">Account</h4>
+                          {(session.user?.role === 'ADMIN' || session.user?.role === 'MODERATOR') && (
+                            <span className={`px-2 py-0.5 text-[10px] font-bold rounded ${
+                              session.user?.role === 'ADMIN' 
+                                ? 'bg-purple-500 text-white' 
+                                : 'bg-blue-500 text-white'
+                            }`}>
+                              {session.user?.role}
+                            </span>
+                          )}
+                        </div>
                         <p className="text-xs text-gray-400 truncate max-w-[120px]">
                           {session.user?.name || session.user?.email}
                         </p>
@@ -445,6 +545,24 @@ export default function Navber() {
                     {/* Dropdown Menu */}
                     {showAccountDropdown && (
                       <div className="absolute top-full right-0 mt-2 bg-white shadow-2xl rounded-md py-2 min-w-[200px] z-[100] border border-gray-200">
+                        {/* Admin Dashboard Link - Only for ADMIN and MODERATOR */}
+                        {(session.user?.role === 'ADMIN' || session.user?.role === 'MODERATOR') && (
+                          <>
+                            <Link
+                              href="/admin"
+                              className="block px-4 py-2.5 text-sm font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 transition-colors border-l-4 border-purple-500"
+                            >
+                              <div className="flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                                Admin Dashboard
+                              </div>
+                            </Link>
+                            <div className="border-t border-gray-200 my-1"></div>
+                          </>
+                        )}
+                        
                         <Link
                           href="/account"
                           className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors"

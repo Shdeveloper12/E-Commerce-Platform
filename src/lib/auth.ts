@@ -53,13 +53,26 @@ export const authOptions: NextAuthOptions = {
     })
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
+      // On sign in, set initial role
       if (user) {
-        return {
-          ...token,
-          role: (user as any).role,
+        token.role = (user as any).role
+      }
+      
+      // Always fetch fresh user data from database to get latest role
+      // This ensures role changes are reflected immediately
+      if (token.sub) {
+        const dbUser = await db.user.findUnique({
+          where: { id: token.sub },
+          select: { role: true, isActive: true }
+        })
+        
+        if (dbUser) {
+          token.role = dbUser.role
+          token.isActive = dbUser.isActive
         }
       }
+      
       return token
     },
     async session({ session, token }) {
@@ -69,6 +82,7 @@ export const authOptions: NextAuthOptions = {
           ...session.user,
           id: token.sub,
           role: token.role,
+          isActive: token.isActive,
         },
       }
     },
