@@ -141,17 +141,40 @@ export async function PUT(
       },
     })
 
-    return NextResponse.json(product)
-  } catch (error) {
+    return NextResponse.json({
+      message: "Product updated successfully",
+      product,
+    })
+  } catch (error: any) {
     console.error("Error updating product:", error)
+    
+    let errorMessage = "Failed to update product"
+    
+    if (error.code === 'P2002') {
+      const target = error.meta?.target
+      if (target?.includes('slug')) {
+        errorMessage = "A product with this slug already exists"
+      } else if (target?.includes('sku')) {
+        errorMessage = "A product with this SKU already exists"
+      } else {
+        errorMessage = "Duplicate value detected"
+      }
+    } else if (error.code === 'P2003') {
+      errorMessage = "Invalid category selected or category does not exist"
+    } else if (error.code === 'P2025') {
+      errorMessage = "Product not found"
+    } else if (error.message) {
+      errorMessage = error.message
+    }
+    
     return NextResponse.json(
-      { error: "Failed to update product" },
+      { error: errorMessage, details: error.message },
       { status: 500 }
     )
   }
 }
 
-// DELETE product
+// DELETE product (Soft Delete - Logical Deletion)
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -166,6 +189,12 @@ export async function DELETE(
     // Check if product exists
     const product = await db.product.findUnique({
       where: { id: params.id },
+      include: {
+        orderItems: true,
+        cartItems: true,
+        reviews: true,
+        wishlistItems: true,
+      },
     })
 
     if (!product) {
@@ -175,16 +204,66 @@ export async function DELETE(
       )
     }
 
-    // Delete product (cascade will delete images and specifications)
-    await db.product.delete({
-      where: { id: params.id },
-    })
+    // Check if product is associated with any orders
+    const hasOrders = product.orderItems.length > 0
 
-    return NextResponse.json({ message: "Product deleted successfully" })
-  } catch (error) {
+    if (hasOrders) {
+      // Soft delete - set isActive to false instead of deleting
+      const updatedProduct = await db.product.update({
+        where: { id: params.id },
+        data: {
+          isActive: false,
+          isFeatured: false, // Also remove from featured if it was featured
+        },
+      })
+
+      return NextResponse.json({
+        message: "Product deactivated successfully (soft delete)",
+        type: "soft_delete",
+        product: {
+          id: updatedProduct.id,
+          name: updatedProduct.name,
+          isActive: updatedProduct.isActive,
+        },
+        reason: "Product has associated orders and cannot be permanently deleted",
+      })
+    } else {
+      // Hard delete - completely remove the product if no orders exist
+      // First remove from cart and wishlist
+      await db.cartItem.deleteMany({
+        where: { productId: params.id },
+      })
+
+      await db.wishlistItem.deleteMany({
+        where: { productId: params.id },
+      })
+
+      // Delete reviews
+      await db.productReview.deleteMany({
+        where: { productId: params.id },
+      })
+
+      // Delete product (cascade will delete images and specifications)
+      await db.product.delete({
+        where: { id: params.id },
+      })
+
+      return NextResponse.json({
+        message: "Product permanently deleted successfully",
+        type: "hard_delete",
+        productId: params.id,
+      })
+    }
+  } catch (error: any) {
     console.error("Error deleting product:", error)
+    
+    let errorMessage = "Failed to delete product"
+    if (error.code === 'P2003') {
+      errorMessage = "Cannot delete product due to existing references. Product will be deactivated instead."
+    }
+    
     return NextResponse.json(
-      { error: "Failed to delete product" },
+      { error: errorMessage, details: error.message },
       { status: 500 }
     )
   }

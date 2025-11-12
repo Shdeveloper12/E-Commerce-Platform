@@ -12,7 +12,13 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'images.unsplash.com',
+        hostname: 'i.ibb.co',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'hbzcmldbsbphlecnhldb.supabase.co',
+        pathname: '/storage/v1/**',
       },
     ],
   },

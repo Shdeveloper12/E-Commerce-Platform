@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { Plus, X, Upload } from "lucide-react"
+import Swal from "sweetalert2"
 
 interface Category {
   id: string
@@ -37,35 +38,63 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
     
     // Validate category selection
     if (!selectedCategory) {
-      alert("Please select a category")
+      Swal.fire({
+        icon: "warning",
+        title: "Missing Category",
+        text: "Please select a category for the product",
+        confirmButtonColor: "#f97316",
+      })
+      return
+    }
+
+    // Validate required fields
+    const formData = new FormData(e.currentTarget)
+    const name = formData.get("name") as string
+    const slug = formData.get("slug") as string
+    const price = formData.get("price") as string
+    const stockQuantity = formData.get("stockQuantity") as string
+
+    if (!name || !slug || !price) {
+      Swal.fire({
+        icon: "warning",
+        title: "Missing Information",
+        text: "Please fill in all required fields (Name, Slug, Price)",
+        confirmButtonColor: "#f97316",
+      })
       return
     }
     
     setLoading(true)
 
-    const formData = new FormData(e.currentTarget)
+    // Filter out empty specifications
+    const validSpecifications = specifications.filter(
+      (spec) => spec.key.trim() !== "" && spec.value.trim() !== ""
+    )
+
     const data = {
-      name: formData.get("name"),
-      slug: formData.get("slug"),
-      description: formData.get("description"),
-      shortDescription: formData.get("shortDescription"),
-      price: parseFloat(formData.get("price") as string),
+      name,
+      slug,
+      description: formData.get("description") || null,
+      shortDescription: formData.get("shortDescription") || null,
+      price: parseFloat(price),
       discountPrice: formData.get("discountPrice") ? parseFloat(formData.get("discountPrice") as string) : null,
-      sku: formData.get("sku"),
-      brand: formData.get("brand"),
+      sku: formData.get("sku") || null,
+      brand: formData.get("brand") || null,
       categoryId: selectedCategory,
-      stockQuantity: parseInt(formData.get("stockQuantity") as string),
+      stockQuantity: parseInt(stockQuantity) || 0,
       isActive: isActive,
       isFeatured: isFeatured,
-      metaTitle: formData.get("metaTitle"),
-      metaDescription: formData.get("metaDescription"),
+      metaTitle: formData.get("metaTitle") || null,
+      metaDescription: formData.get("metaDescription") || null,
       images,
-      specifications,
+      specifications: validSpecifications,
     }
 
     try {
       const url = product ? `/api/admin/products/${product.id}` : "/api/admin/products"
       const method = product ? "PUT" : "POST"
+
+      console.log("Submitting product data:", data)
 
       const response = await fetch(url, {
         method,
@@ -73,13 +102,36 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
         body: JSON.stringify(data),
       })
 
-      if (!response.ok) throw new Error("Failed to save product")
+      const responseData = await response.json()
+      console.log("API Response:", responseData)
+
+      if (!response.ok) {
+        throw new Error(responseData.error || `Failed to save product: ${response.status}`)
+      }
+
+      // Show success animation
+      await Swal.fire({
+        icon: "success",
+        title: product ? "Product Updated!" : "Product Created!",
+        text: product 
+          ? `${name} has been updated successfully` 
+          : `${name} has been added to your inventory`,
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      })
 
       router.push("/admin/products")
       router.refresh()
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error saving product:", error)
-      alert("Failed to save product")
+      
+      Swal.fire({
+        icon: "error",
+        title: "Failed to Save",
+        text: error.message || "An error occurred while saving the product",
+        confirmButtonColor: "#f97316",
+      })
     } finally {
       setLoading(false)
     }
@@ -87,16 +139,106 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
-    if (!files) return
+    if (!files || files.length === 0) return
 
-    // In production, upload to cloud storage (e.g., Cloudinary, S3)
-    // For now, we'll use placeholder URLs
-    const newImages = Array.from(files).map((file) => URL.createObjectURL(file))
-    setImages([...images, ...newImages])
+    // Validate file types
+    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+    const filesArray = Array.from(files)
+    const invalidFiles = filesArray.filter(file => !validTypes.includes(file.type))
+
+    if (invalidFiles.length > 0) {
+      Swal.fire({
+        icon: "warning",
+        title: "Invalid File Type",
+        text: "Please upload only images (JPEG, PNG, GIF, WebP)",
+        confirmButtonColor: "#f97316",
+      })
+      return
+    }
+
+    // Validate file size (max 32MB per file)
+    const maxSize = 32 * 1024 * 1024 // 32MB in bytes
+    const oversizedFiles = filesArray.filter(file => file.size > maxSize)
+
+    if (oversizedFiles.length > 0) {
+      Swal.fire({
+        icon: "warning",
+        title: "File Too Large",
+        text: "Each image must be less than 32MB",
+        confirmButtonColor: "#f97316",
+      })
+      return
+    }
+
+    try {
+      setLoading(true)
+      
+      // Show uploading message
+      Swal.fire({
+        title: "Uploading Images...",
+        text: `Uploading ${filesArray.length} image(s) to ImgBB`,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen: () => {
+          Swal.showLoading()
+        },
+      })
+      
+      // Import the upload function
+      const { uploadMultipleToImgBB } = await import('@/lib/imgbb')
+      
+      // Upload all images to ImgBB
+      const uploadedUrls = await uploadMultipleToImgBB(filesArray)
+      
+      // Add uploaded URLs to images array
+      setImages([...images, ...uploadedUrls])
+      
+      // Show success message
+      Swal.fire({
+        icon: "success",
+        title: "Upload Successful!",
+        text: `Successfully uploaded ${uploadedUrls.length} image(s)`,
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+      })
+    } catch (error: any) {
+      console.error('Image upload error:', error)
+      Swal.fire({
+        icon: "error",
+        title: "Upload Failed",
+        text: error.message || "Failed to upload images. Please check your ImgBB API key and try again.",
+        confirmButtonColor: "#f97316",
+      })
+    } finally {
+      setLoading(false)
+      // Reset file input
+      e.target.value = ""
+    }
   }
 
-  const removeImage = (index: number) => {
-    setImages(images.filter((_, i) => i !== index))
+  const removeImage = async (index: number) => {
+    const result = await Swal.fire({
+      title: "Remove Image?",
+      text: "Are you sure you want to remove this image?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#ef4444",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, remove it",
+      cancelButtonText: "Cancel",
+    })
+
+    if (result.isConfirmed) {
+      setImages(images.filter((_, i) => i !== index))
+      Swal.fire({
+        icon: "success",
+        title: "Removed!",
+        text: "Image has been removed",
+        showConfirmButton: false,
+        timer: 1000,
+      })
+    }
   }
 
   const addSpecification = () => {
@@ -252,27 +394,41 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
                     <button
                       type="button"
                       onClick={() => removeImage(index)}
-                      className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
+                      disabled={loading}
+                      className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 disabled:opacity-50"
                     >
                       <X className="w-4 h-4" />
                     </button>
                   </div>
                 ))}
 
-                <label className="aspect-square border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer hover:border-gray-400 transition-colors">
+                <label className={`aspect-square border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center ${loading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:border-gray-400'} transition-colors`}>
                   <div className="text-center">
-                    <Upload className="w-8 h-8 mx-auto text-gray-400" />
-                    <span className="text-sm text-gray-500 mt-2 block">Upload</span>
+                    {loading ? (
+                      <>
+                        <div className="w-8 h-8 mx-auto border-4 border-gray-300 border-t-orange-500 rounded-full animate-spin"></div>
+                        <span className="text-sm text-gray-500 mt-2 block">Uploading...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-8 h-8 mx-auto text-gray-400" />
+                        <span className="text-sm text-gray-500 mt-2 block">Upload</span>
+                      </>
+                    )}
                   </div>
                   <input
                     type="file"
                     accept="image/*"
                     multiple
                     onChange={handleImageUpload}
+                    disabled={loading}
                     className="hidden"
                   />
                 </label>
               </div>
+              <p className="text-xs text-gray-500">
+                Images will be uploaded to ImgBB. Supported formats: JPG, PNG, GIF. Max 32MB per image.
+              </p>
             </CardContent>
           </Card>
 

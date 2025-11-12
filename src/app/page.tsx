@@ -4,9 +4,13 @@ import Product from "@/components/ui/product";
 import Service from "@/components/ui/service";
 import { db } from "@/lib/db";
 
+// Disable caching to always fetch fresh data
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function Home() {
   // Fetch featured products from database
-  const featuredProducts = await db.product.findMany({
+  let featuredProducts = await db.product.findMany({
     where: {
       isFeatured: true,
       isActive: true,
@@ -19,15 +23,44 @@ export default async function Home() {
         },
       },
       images: {
-        where: { isPrimary: true },
+        orderBy: {
+          sortOrder: 'asc',
+        },
         take: 1,
       },
     },
     orderBy: {
       createdAt: 'desc',
     },
-    take: 12, // Show up to 12 featured products
+    take: 12,
   });
+
+  // If no featured products, show all active products as fallback
+  if (featuredProducts.length === 0) {
+    featuredProducts = await db.product.findMany({
+      where: {
+        isActive: true,
+      },
+      include: {
+        category: {
+          select: {
+            name: true,
+            slug: true,
+          },
+        },
+        images: {
+          orderBy: {
+            sortOrder: 'asc',
+          },
+          take: 1,
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: 12,
+    });
+  }
 
   // Transform database products to match the component's expected format
   const formattedProducts = featuredProducts.map((product) => ({
@@ -38,13 +71,13 @@ export default async function Home() {
     discountPrice: product.discountPrice ? Number(product.discountPrice) : null,
     brand: product.brand || 'No Brand',
     imageUrl: product.images[0]?.imageUrl || '/placeholder.png',
-    rating: 0, // You can add rating system later
-    reviews: 0, // You can add reviews later
+    rating: 0,
+    reviews: 0,
     stockQuantity: product.stockQuantity,
     isFeatured: product.isFeatured,
     isInStock: product.stockQuantity > 0,
     category: product.category.name,
-  }));
+  }))
 
   return (
     <div>

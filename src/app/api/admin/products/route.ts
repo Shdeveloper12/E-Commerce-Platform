@@ -105,10 +105,22 @@ export async function POST(request: NextRequest) {
     })
 
     return NextResponse.json(product, { status: 201 })
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error creating product:", error)
+    
+    // Provide more specific error messages
+    let errorMessage = "Failed to create product"
+    
+    if (error.code === 'P2002') {
+      errorMessage = "A product with this slug or SKU already exists"
+    } else if (error.code === 'P2003') {
+      errorMessage = "Invalid category selected"
+    } else if (error.message) {
+      errorMessage = error.message
+    }
+    
     return NextResponse.json(
-      { error: "Failed to create product" },
+      { error: errorMessage, details: error.message },
       { status: 500 }
     )
   }

@@ -6,124 +6,8 @@ import Link from 'next/link'
 import { BsCart3, BsHeart, BsHeartFill, BsStar, BsStarFill, BsEye, BsX } from 'react-icons/bs'
 import { motion } from 'framer-motion'
 
-// Sample featured products data
-const featuredProducts = [
-  {
-    id: '1',
-    name: 'MSI Modern 14 C13M Core i3 13th Gen 14" FHD Laptop',
-    slug: 'msi-modern-14-c13m-laptop',
-    price: 55000,
-    discountPrice: 52000,
-    brand: 'MSI',
-    imageUrl: '/msi.png',
-    rating: 4.5,
-    reviews: 42,
-    stockQuantity: 15,
-    isFeatured: true,
-    isInStock: true,
-  },
-  {
-    id: '2',
-    name: 'Apple MacBook Air 13.6" M2 Chip 8GB RAM 256GB SSD',
-    slug: 'apple-macbook-air-m2',
-    price: 125000,
-    discountPrice: 118000,
-    brand: 'Apple',
-    imageUrl: '/apple.png',
-    rating: 5,
-    reviews: 128,
-    stockQuantity: 8,
-    isFeatured: true,
-    isInStock: true,
-  },
-  {
-    id: '3',
-    name: 'ASUS ROG Strix G16 Core i7 13th Gen RTX 4060',
-    slug: 'asus-rog-strix-g16',
-    price: 165000,
-    discountPrice: 155000,
-    brand: 'ASUS',
-    imageUrl: '/asus.png',
-    rating: 4.8,
-    reviews: 89,
-    stockQuantity: 5,
-    isFeatured: true,
-    isInStock: true,
-  },
-  {
-    id: '4',
-    name: 'HP Pavilion 15 Core i5 12th Gen 15.6" FHD Laptop',
-    slug: 'hp-pavilion-15-i5',
-    price: 68000,
-    discountPrice: 64500,
-    brand: 'HP',
-    imageUrl: '/hp.png',
-    rating: 4.2,
-    reviews: 67,
-    stockQuantity: 20,
-    isFeatured: true,
-    isInStock: true,
-  },
-  {
-    id: '5',
-    name: 'Lenovo IdeaPad Slim 3 Ryzen 5 7th Gen 15.6" Laptop',
-    slug: 'lenovo-ideapad-slim-3',
-    price: 58000,
-    discountPrice: 55000,
-    brand: 'Lenovo',
-    imageUrl: '/lenovo.png',
-    rating: 4.3,
-    reviews: 54,
-    stockQuantity: 12,
-    isFeatured: true,
-    isInStock: true,
-  },
-  {
-    id: '6',
-    name: 'Dell Inspiron 15 3520 Core i3 12th Gen Laptop',
-    slug: 'dell-inspiron-15-3520',
-    price: 52000,
-    discountPrice: 49500,
-    brand: 'Dell',
-    imageUrl: '/dell.png',
-    rating: 4.1,
-    reviews: 38,
-    stockQuantity: 18,
-    isFeatured: true,
-    isInStock: true,
-  },
-  {
-    id: '7',
-    name: 'Acer Aspire 5 Core i5 12th Gen 15.6" FHD Laptop',
-    slug: 'acer-aspire-5-i5',
-    price: 62000,
-    discountPrice: 58500,
-    brand: 'Acer',
-    imageUrl: '/acer.png',
-    rating: 4.4,
-    reviews: 71,
-    stockQuantity: 10,
-    isFeatured: true,
-    isInStock: true,
-  },
-  {
-    id: '8',
-    name: 'Microsoft Surface Laptop 5 Core i7 13.5" Touchscreen',
-    slug: 'microsoft-surface-laptop-5',
-    price: 145000,
-    discountPrice: 138000,
-    brand: 'Microsoft',
-    imageUrl: '/microsoft.png',
-    rating: 4.7,
-    reviews: 95,
-    stockQuantity: 6,
-    isFeatured: true,
-    isInStock: true,
-  },
-]
-
 interface ProductProps {
-  products?: any[]
+  products: any[]
 }
 
 export default function Product({ products }: ProductProps) {
@@ -131,8 +15,8 @@ export default function Product({ products }: ProductProps) {
   const [quickViewProduct, setQuickViewProduct] = useState<any>(null)
   const [isZoomed, setIsZoomed] = useState(false)
 
-  // Use provided products or fall back to sample data
-  const displayProducts = products && products.length > 0 ? products : featuredProducts
+  // Use only real products from database
+  const displayProducts = products || []
 
   const toggleWishlist = (productId: string) => {
     setWishlist(prev => 
@@ -190,9 +74,7 @@ export default function Product({ products }: ProductProps) {
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-center mb-2">Featured Products</h1>
         <p className="text-center text-gray-600">
-          {displayProducts.length > 0 
-            ? 'Explore our exclusive range of products designed to meet your needs.' 
-            : 'No featured products available yet.'}
+          Explore our exclusive range of products designed to meet your needs.
         </p>
       </div>
 
@@ -203,9 +85,9 @@ export default function Product({ products }: ProductProps) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
             </svg>
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">No Featured Products</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">No Products Available</h3>
           <p className="text-gray-600 mb-4">
-            Mark products as featured in the admin panel to display them here.
+            Products will appear here once added to the store.
           </p>
         </div>
       ) : (
