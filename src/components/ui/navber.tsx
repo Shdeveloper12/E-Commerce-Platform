@@ -475,17 +475,17 @@ export default function Navber() {
                     )}
                   </>
                 ) : (
-                  <Link href="/login" className="flex gap-2 items-center hover:text-orange-400 transition-colors">
+                  <div className="flex gap-2 items-center hover:text-orange-400 transition-colors">
                     <BsPerson className="text-3xl text-orange-500" />
                     <div>
                       <h4 className="font-semibold text-sm leading-tight">Account</h4>
                       <p className="text-xs text-gray-400">
-                        <span className="hover:underline">Register</span>
+                        <Link href="/register" className="hover:underline">Register</Link>
                         {" "}<span>or</span>{" "}
-                        <span className="hover:underline">Login</span>
+                        <Link href="/login" className="hover:underline">Login</Link>
                       </p>
                     </div>
-                  </Link>
+                  </div>
                 )}
               </div>
 
