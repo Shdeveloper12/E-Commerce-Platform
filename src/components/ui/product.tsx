@@ -122,10 +122,17 @@ const featuredProducts = [
   },
 ]
 
-export default function Product() {
+interface ProductProps {
+  products?: any[]
+}
+
+export default function Product({ products }: ProductProps) {
   const [wishlist, setWishlist] = useState<string[]>([])
   const [quickViewProduct, setQuickViewProduct] = useState<any>(null)
   const [isZoomed, setIsZoomed] = useState(false)
+
+  // Use provided products or fall back to sample data
+  const displayProducts = products && products.length > 0 ? products : featuredProducts
 
   const toggleWishlist = (productId: string) => {
     setWishlist(prev => 
@@ -182,11 +189,28 @@ export default function Product() {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-center mb-2">Featured Products</h1>
-        <p className="text-center text-gray-600">Explore our exclusive range of products designed to meet your needs.</p>
+        <p className="text-center text-gray-600">
+          {displayProducts.length > 0 
+            ? 'Explore our exclusive range of products designed to meet your needs.' 
+            : 'No featured products available yet.'}
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {featuredProducts.map((product) => {
+      {displayProducts.length === 0 ? (
+        <div className="text-center py-12">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+            </svg>
+          </div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">No Featured Products</h3>
+          <p className="text-gray-600 mb-4">
+            Mark products as featured in the admin panel to display them here.
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {displayProducts.map((product) => {
           const discount = product.discountPrice 
             ? Math.round(((product.price - product.discountPrice) / product.price) * 100)
             : 0
@@ -301,17 +325,20 @@ export default function Product() {
             </motion.div>
           )
         })}
-      </div>
+        </div>
+      )}
 
       {/* View All Products Link */}
-      <div className="text-center mt-8">
-        <Link 
-          href="/products"
-          className="inline-block bg-[#1a2332] hover:bg-[#2a3342] text-white px-8 py-3 rounded-md font-medium transition-colors"
-        >
-          View All Products
-        </Link>
-      </div>
+      {displayProducts.length > 0 && (
+        <div className="text-center mt-8">
+          <Link 
+            href="/products"
+            className="inline-block bg-[#1a2332] hover:bg-[#2a3342] text-white px-8 py-3 rounded-md font-medium transition-colors"
+          >
+            View All Products
+          </Link>
+        </div>
+      )}
 
       {/* Quick View Modal */}
       {quickViewProduct && (

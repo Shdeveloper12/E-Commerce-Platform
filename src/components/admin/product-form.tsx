@@ -28,9 +28,19 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
   const [specifications, setSpecifications] = useState<{ key: string; value: string }[]>(
     product?.specifications || []
   )
+  const [selectedCategory, setSelectedCategory] = useState<string>(product?.categoryId || "")
+  const [isActive, setIsActive] = useState<boolean>(product?.isActive !== false)
+  const [isFeatured, setIsFeatured] = useState<boolean>(product?.isFeatured || false)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    
+    // Validate category selection
+    if (!selectedCategory) {
+      alert("Please select a category")
+      return
+    }
+    
     setLoading(true)
 
     const formData = new FormData(e.currentTarget)
@@ -43,10 +53,10 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
       discountPrice: formData.get("discountPrice") ? parseFloat(formData.get("discountPrice") as string) : null,
       sku: formData.get("sku"),
       brand: formData.get("brand"),
-      categoryId: formData.get("categoryId"),
+      categoryId: selectedCategory,
       stockQuantity: parseInt(formData.get("stockQuantity") as string),
-      isActive: formData.get("isActive") === "on",
-      isFeatured: formData.get("isFeatured") === "on",
+      isActive: isActive,
+      isFeatured: isFeatured,
       metaTitle: formData.get("metaTitle"),
       metaDescription: formData.get("metaDescription"),
       images,
@@ -341,7 +351,11 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
             </CardHeader>
             <CardContent>
               <Label htmlFor="categoryId">Category *</Label>
-              <Select name="categoryId" defaultValue={product?.categoryId} required>
+              <Select 
+                value={selectedCategory} 
+                onValueChange={setSelectedCategory}
+                required
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
@@ -353,6 +367,9 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
                   ))}
                 </SelectContent>
               </Select>
+              {!selectedCategory && (
+                <p className="text-xs text-red-500 mt-1">Please select a category</p>
+              )}
             </CardContent>
           </Card>
 
@@ -367,7 +384,8 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
                 <Switch
                   id="isActive"
                   name="isActive"
-                  defaultChecked={product?.isActive !== false}
+                  checked={isActive}
+                  onCheckedChange={setIsActive}
                 />
               </div>
 
@@ -376,7 +394,8 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
                 <Switch
                   id="isFeatured"
                   name="isFeatured"
-                  defaultChecked={product?.isFeatured}
+                  checked={isFeatured}
+                  onCheckedChange={setIsFeatured}
                 />
               </div>
             </CardContent>

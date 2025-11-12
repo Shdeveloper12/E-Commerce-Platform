@@ -21,13 +21,41 @@ export default async function CategoriesPage() {
           <h1 className="text-3xl font-bold">Categories</h1>
           <p className="text-gray-600 mt-2">Manage product categories</p>
         </div>
-        <Link href="/admin/categories/new">
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            Add Category
-          </Button>
-        </Link>
+        <div className="flex gap-3">
+          {categories.length === 0 && (
+            <form action="/api/admin/categories/seed" method="POST">
+              <Button type="submit" variant="outline">
+                Create Default Categories
+              </Button>
+            </form>
+          )}
+          <Link href="/admin/categories/new">
+            <Button>
+              <Plus className="w-4 h-4 mr-2" />
+              Add Category
+            </Button>
+          </Link>
+        </div>
       </div>
+
+      {categories.length === 0 && (
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+          <div className="flex items-start gap-4">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div>
+              <h3 className="font-semibold text-blue-900 mb-2">No Categories Yet</h3>
+              <p className="text-blue-800 mb-3">
+                Categories help organize your products. You can create default categories or add your own.
+              </p>
+              <form action="/api/admin/categories/seed" method="POST">
+                <Button type="submit">Create Default Categories</Button>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Card>
         <CardHeader>
