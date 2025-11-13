@@ -91,7 +91,7 @@ export default function FloatingCartCompare() {
       {isCartOpen && (
         <>
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-40"
+            className="fixed inset-0 bg-opacity-50 z-40"
             onClick={() => setIsCartOpen(false)}
           />
           <div className="fixed right-0 top-0 h-full w-full md:w-96 bg-white shadow-2xl z-50 flex flex-col">
@@ -195,7 +195,7 @@ export default function FloatingCartCompare() {
       {isCompareOpen && (
         <>
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-40"
+            className="fixed inset-0 bg-opacity-50 z-40"
             onClick={() => setIsCompareOpen(false)}
           />
           <div className="fixed right-0 top-0 h-full w-full md:w-96 bg-white shadow-2xl z-50 flex flex-col">
