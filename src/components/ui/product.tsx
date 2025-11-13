@@ -395,7 +395,7 @@ export default function Product({ products }: ProductProps) {
                   <button
                     onClick={() => {
                       addToCart(quickViewProduct.id)
-                      closeQuickView()
+                      
                     }}
                     disabled={!quickViewProduct.isInStock}
                     className="flex-1 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white py-3 rounded-md flex items-center justify-center gap-2 font-medium transition-colors"
@@ -418,15 +418,6 @@ export default function Product({ products }: ProductProps) {
                     )}
                   </button>
                 </div>
-
-                {/* View Full Details Link */}
-                <Link
-                  href={`/products/${quickViewProduct.slug}`}
-                  className="text-center py-3 border-2 border-gray-300 rounded-md hover:border-orange-500 hover:text-orange-500 font-medium transition-colors"
-                  onClick={closeQuickView}
-                >
-                  View Full Details
-                </Link>
               </div>
             </div>
           </motion.div>
