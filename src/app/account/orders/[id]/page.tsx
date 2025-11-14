@@ -254,10 +254,16 @@ export default function OrderDetailsPage() {
               {/* Action Buttons */}
               {dueAmount > 0 && (
                 <div className="flex flex-col sm:flex-row gap-4 justify-end mt-6 pt-6 border-t">
-                  <button className="px-8 py-3 border-2 border-[#4a5fc4] text-[#4a5fc4] rounded font-semibold hover:bg-[#4a5fc4] hover:text-white transition-colors">
+                  <button
+                    onClick={() => router.push("/account/orders")}
+                    className="px-8 py-3 border-2 border-[#4a5fc4] text-[#4a5fc4] rounded font-semibold hover:bg-[#4a5fc4] hover:text-white transition-colors"
+                  >
                     Continue
                   </button>
-                  <button className="px-8 py-3 bg-[#4a5fc4] text-white rounded font-semibold hover:bg-[#3d4fb3] transition-colors">
+                  <button
+                    onClick={() => router.push(`/payment?orderId=${order.id}`)}
+                    className="px-8 py-3 bg-[#4a5fc4] text-white rounded font-semibold hover:bg-[#3d4fb3] transition-colors"
+                  >
                     Pay Now
                   </button>
                 </div>

@@ -48,14 +48,16 @@ export default function OrderSuccessPage() {
   }, [searchParams, router]);
 
   const handlePayNow = () => {
-    // Implement payment gateway integration
-    alert("Payment gateway will be integrated here");
+    const orderId = searchParams.get("orderId");
+    if (orderId) {
+      router.push(`/payment?orderId=${orderId}`);
+    }
   };
 
   const handlePayLater = () => {
-    // Clear last order and redirect to home
+    // Clear last order and redirect to orders page
     localStorage.removeItem("lastOrder");
-    router.push("/");
+    router.push("/account/orders");
   };
 
   if (loading) {
