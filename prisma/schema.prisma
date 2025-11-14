@@ -146,24 +146,40 @@ model CartItem {
 
 // Orders
 model Order {
-  id              String        @id @default(uuid()) @db.Uuid
-  userId          String?       @map("user_id") @db.Uuid
-  orderNumber     String        @unique @map("order_number")
-  status          OrderStatus   @default(PENDING)
-  totalAmount     Decimal       @db.Decimal(10, 2) @map("total_amount")
-  discountAmount  Decimal       @default(0) @db.Decimal(10, 2) @map("discount_amount")
-  shippingAmount  Decimal       @default(0) @db.Decimal(10, 2) @map("shipping_amount")
-  paymentMethod   String?       @map("payment_method")
-  paymentStatus   PaymentStatus @default(PENDING) @map("payment_status")
-  shippingAddress Json?         @map("shipping_address")
-  billingAddress  Json?         @map("billing_address")
-  notes           String?
-  createdAt       DateTime      @default(now()) @map("created_at")
-  updatedAt       DateTime      @updatedAt @map("updated_at")
+  id                  String        @id @default(uuid()) @db.Uuid
+  userId              String?       @map("user_id") @db.Uuid
+  orderId             String        @unique @map("order_id")
+  orderNumber         String        @unique @map("order_number")
+  status              OrderStatus   @default(PENDING)
+  customerFirstName   String        @map("customer_first_name")
+  customerLastName    String        @map("customer_last_name")
+  customerEmail       String        @map("customer_email")
+  customerMobile      String        @map("customer_mobile")
+  customerAddress     String        @map("customer_address")
+  customerUpazilla    String?       @map("customer_upazilla")
+  customerDistrict    String        @map("customer_district")
+  paymentMethod       String        @map("payment_method")
+  paymentStatus       PaymentStatus @default(PENDING) @map("payment_status")
+  deliveryMethod      String        @map("delivery_method")
+  deliveryCharge      Decimal       @default(0) @db.Decimal(10, 2) @map("delivery_charge")
+  subtotal            Decimal       @db.Decimal(10, 2)
+  total               Decimal       @db.Decimal(10, 2)
+  totalAmount         Decimal       @db.Decimal(10, 2) @map("total_amount")
+  discountAmount      Decimal       @default(0) @db.Decimal(10, 2) @map("discount_amount")
+  shippingAmount      Decimal       @default(0) @db.Decimal(10, 2) @map("shipping_amount")
+  comment             String?
+  giftVoucher         String?       @map("gift_voucher")
+  promoCoupon         String?       @map("promo_coupon")
+  starPoints          Int           @default(0) @map("star_points")
+  shippingAddress     Json?         @map("shipping_address")
+  billingAddress      Json?         @map("billing_address")
+  notes               String?
+  createdAt           DateTime      @default(now()) @map("created_at")
+  updatedAt           DateTime      @updatedAt @map("updated_at")
 
   // Relations
   user     User?        @relation(fields: [userId], references: [id])
-  items    OrderItem[]
+  orderItems    OrderItem[]
   payments PaymentTransaction[]
 
   @@map("orders")
@@ -188,13 +204,17 @@ enum PaymentStatus {
 
 // Order Items
 model OrderItem {
-  id         String   @id @default(uuid()) @db.Uuid
-  orderId    String   @map("order_id") @db.Uuid
-  productId  String   @map("product_id") @db.Uuid
-  quantity   Int
-  unitPrice  Decimal  @db.Decimal(10, 2) @map("unit_price")
-  totalPrice Decimal  @db.Decimal(10, 2) @map("total_price")
-  createdAt  DateTime @default(now()) @map("created_at")
+  id          String   @id @default(uuid()) @db.Uuid
+  orderId     String   @map("order_id") @db.Uuid
+  productId   String   @map("product_id") @db.Uuid
+  productName String   @map("product_name")
+  productSlug String   @map("product_slug")
+  quantity    Int
+  price       Decimal  @db.Decimal(10, 2)
+  unitPrice   Decimal  @db.Decimal(10, 2) @map("unit_price")
+  total       Decimal  @db.Decimal(10, 2)
+  totalPrice  Decimal  @db.Decimal(10, 2) @map("total_price")
+  createdAt   DateTime @default(now()) @map("created_at")
 
   // Relations
   order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)

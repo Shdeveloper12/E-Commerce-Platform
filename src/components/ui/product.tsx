@@ -255,32 +255,10 @@ export default function Product({ products }: ProductProps) {
                     </span>
                   )}
                 </div>
-
-                {/* Add to Cart Button */}
-                <button
-                  onClick={() => addToCart(product.id)}
-                  disabled={!product.isInStock}
-                  className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white py-2 rounded-md flex items-center justify-center gap-2 transition-colors font-medium"
-                >
-                  <BsCart3 size={18} />
-                  Add to Cart
-                </button>
               </div>
             </motion.div>
           )
         })}
-        </div>
-      )}
-
-      {/* View All Products Link */}
-      {displayProducts.length > 0 && (
-        <div className="text-center mt-8">
-          <Link 
-            href="/products"
-            className="inline-block bg-[#1a2332] hover:bg-[#2a3342] text-white px-8 py-3 rounded-md font-medium transition-colors"
-          >
-            View All Products
-          </Link>
         </div>
       )}
 
