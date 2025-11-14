@@ -171,19 +171,31 @@ export default function CheckoutPage() {
       if (response.ok) {
         const result = await response.json();
         
+        // Store order details for success page
+        const orderSuccessData = {
+          orderId: result.order.id,
+          orderNumber: result.order.orderNumber,
+          subtotal: calculateSubtotal(),
+          deliveryCharge: deliveryCharges[deliveryMethod as keyof typeof deliveryCharges],
+          total: calculateTotal(),
+          amountPaid: 0,
+          due: calculateTotal(),
+          customerName: `${formData.firstName} ${formData.lastName}`,
+          customerAddress: formData.address,
+          customerDistrict: formData.district,
+          customerUpazilla: formData.upazillaThana,
+          customerMobile: formData.mobile,
+          deliveryMethod: deliveryMethod,
+          paymentMethod: paymentMethod,
+        };
+        
+        localStorage.setItem("lastOrder", JSON.stringify(orderSuccessData));
+        
         // Clear cart from Zustand store
         clearCart();
 
-        // Show success message
-        await Swal.fire({
-          icon: "success",
-          title: "Order Placed Successfully!",
-          text: `Your order #${result.orderId} has been placed successfully.`,
-          confirmButtonColor: "#ef4a23",
-        });
-
-        // Redirect to order confirmation or orders page
-        router.push(`/account/orders`);
+        // Redirect to order success page
+        router.push(`/order-success?orderId=${result.order.id}`);
       } else {
         const error = await response.json();
         toast.error(error.message || "Failed to place order");
