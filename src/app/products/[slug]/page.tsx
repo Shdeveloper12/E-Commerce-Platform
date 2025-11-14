@@ -107,24 +107,30 @@ export default async function ProductPage({ params }: ProductPageProps) {
       name: product.category.name,
       slug: product.category.slug,
     },
-    images: product.images.map((img) => ({
-      id: img.id,
-      imageUrl: img.imageUrl,
-      isPrimary: img.isPrimary,
-      sortOrder: img.sortOrder,
-    })),
-    specifications: product.specifications.map((spec) => ({
-      id: spec.id,
-      key: spec.key,
-      value: spec.value,
-    })),
-    reviews: product.reviews.map((review) => ({
-      id: review.id,
-      rating: review.rating,
-      comment: review.comment || '',
-      userName: `${review.user.firstName || ''} ${review.user.lastName || ''}`.trim() || review.user.email,
-      createdAt: review.createdAt.toISOString(),
-    })),
+    images: product.images && product.images.length > 0 
+      ? product.images.map((img) => ({
+          id: img.id,
+          imageUrl: img.imageUrl,
+          isPrimary: img.isPrimary,
+          sortOrder: img.sortOrder,
+        }))
+      : [],
+    specifications: product.specifications && product.specifications.length > 0
+      ? product.specifications.map((spec) => ({
+          id: spec.id,
+          key: spec.key,
+          value: spec.value,
+        }))
+      : [],
+    reviews: product.reviews && product.reviews.length > 0
+      ? product.reviews.map((review) => ({
+          id: review.id,
+          rating: review.rating,
+          comment: review.comment || '',
+          userName: `${review.user.firstName || ''} ${review.user.lastName || ''}`.trim() || review.user.email,
+          createdAt: review.createdAt.toISOString(),
+        }))
+      : [],
   }
 
   const relatedProductsData = relatedProducts.map((p) => ({

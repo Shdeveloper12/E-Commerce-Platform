@@ -84,7 +84,12 @@ export default function ProductDetailsClient({
   product,
   relatedProducts,
 }: ProductDetailsClientProps) {
-  const [selectedImage, setSelectedImage] = useState(product.images[0]?.imageUrl || "/placeholder.png")
+  // Handle cases where images array might be empty
+  const defaultImage = product.images && product.images.length > 0 
+    ? product.images[0].imageUrl 
+    : "/placeholder.png"
+    
+  const [selectedImage, setSelectedImage] = useState(defaultImage)
   const [quantity, setQuantity] = useState(1)
   const [isWishlisted, setIsWishlisted] = useState(false)
   
@@ -118,7 +123,7 @@ export default function ProductDetailsClient({
         slug: product.slug,
         price: product.price,
         discountPrice: product.discountPrice,
-        imageUrl: product.images[0]?.imageUrl || "/placeholder.png",
+        imageUrl: defaultImage,
         stockQuantity: product.stockQuantity,
         brand: product.brand,
       })
@@ -167,7 +172,7 @@ export default function ProductDetailsClient({
         slug: product.slug,
         price: product.price,
         discountPrice: product.discountPrice,
-        imageUrl: product.images[0]?.imageUrl || "/placeholder.png",
+        imageUrl: defaultImage,
         brand: product.brand,
         category: product.category.name,
         stockQuantity: product.stockQuantity,
