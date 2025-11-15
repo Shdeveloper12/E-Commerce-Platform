@@ -8,7 +8,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div>
-            <h3 className="text-lg font-bold mb-4">StarTech BD</h3>
+            <h3 className="text-lg font-bold mb-4">TechBazar BD</h3>
             <p className="text-gray-400 text-sm">
               Your trusted e-commerce platform for technology and electronics.
             </p>

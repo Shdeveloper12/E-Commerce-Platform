@@ -24,6 +24,7 @@ interface CompareStore {
   addItem: (item: CompareItem) => void
   removeItem: (id: string) => void
   clearCompare: () => void
+  clearAll: () => void
   isInCompare: (id: string) => boolean
 }
 
@@ -52,6 +53,10 @@ export const useCompareStore = create<CompareStore>()(
       },
       
       clearCompare: () => {
+        set({ items: [] })
+      },
+      
+      clearAll: () => {
         set({ items: [] })
       },
       
