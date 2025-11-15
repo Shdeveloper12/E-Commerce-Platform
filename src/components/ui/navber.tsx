@@ -4,24 +4,28 @@ import React, { useState, useEffect } from "react";
 import logo from "../../assets/tech-bazar.png";
 import Link from "next/link";
 import { BiSolidOffer, BiChevronDown, BiChevronRight } from "react-icons/bi";
-import { BsLightningCharge, BsPerson, BsX, BsBoxArrowRight } from "react-icons/bs";
+import { BsLightningCharge, BsPerson, BsX, BsBoxArrowRight, BsHeart } from "react-icons/bs";
 import { motion } from "motion/react";
 import { useSession, signOut } from "next-auth/react";
 import { useCartStore } from "@/store/cart-store";
+import { useWishlistStore } from "@/store/wishlist-store";
 
 export default function Navber() {
   const { data: session, status } = useSession();
   const { getTotalItems } = useCartStore();
+  const { getTotalItems: getWishlistCount } = useWishlistStore();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [showAccountDropdown, setShowAccountDropdown] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+  const [wishlistCount, setWishlistCount] = useState(0);
 
-  // Update cart count on client side to prevent hydration mismatch
+  // Update cart and wishlist count on client side to prevent hydration mismatch
   useEffect(() => {
     setCartCount(getTotalItems());
-  }, [getTotalItems]);
+    setWishlistCount(getWishlistCount());
+  }, [getTotalItems, getWishlistCount]);
 
   const handleLogout = async () => {
     await signOut({ callbackUrl: '/' });
@@ -348,7 +352,7 @@ export default function Navber() {
             />
           </Link>
 
-          {/* Mobile Search, Compare & Cart */}
+          {/* Mobile Search, Compare, Wishlist & Cart */}
           <div className="flex gap-3 items-center">
             <button className="text-white p-2 hover:bg-gray-700 rounded transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -359,6 +363,14 @@ export default function Navber() {
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
               </svg>
+            </Link>
+            <Link href="/account/wishlist" className="text-white relative p-2 hover:bg-gray-700 rounded transition-colors block">
+              <BsHeart className="h-6 w-6" />
+              {wishlistCount > 0 && (
+                <span className="absolute top-1 right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                  {wishlistCount}
+                </span>
+              )}
             </Link>
             <Link href="/cart" className="text-white relative p-2 hover:bg-gray-700 rounded transition-colors block">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -792,6 +804,17 @@ export default function Navber() {
             </svg>
             <span className="text-[10px] font-medium">Compare</span>
             <span className="absolute top-1 right-2 bg-orange-500 text-white text-[9px] rounded-full h-4 w-4 flex items-center justify-center font-bold">0</span>
+          </Link>
+
+          {/* Wishlist */}
+          <Link href="/account/wishlist" className="flex flex-col items-center py-2 px-3 hover:text-orange-400 transition-colors relative">
+            <BsHeart className="text-2xl mb-1" />
+            <span className="text-[10px] font-medium">Wishlist</span>
+            {wishlistCount > 0 && (
+              <span className="absolute top-1 right-2 bg-red-500 text-white text-[9px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
+                {wishlistCount}
+              </span>
+            )}
           </Link>
 
           {/* Account */}

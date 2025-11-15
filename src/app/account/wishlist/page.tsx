@@ -1,14 +1,25 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { BsArrowLeft, BsHeart, BsTrash, BsCart3 } from 'react-icons/bs'
+import { useWishlistStore } from '@/store/wishlist-store'
+import { useCartStore } from '@/store/cart-store'
+import { toast } from 'sonner'
 
 export default function WishlistPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const { items: wishlistItems, removeItem } = useWishlistStore()
+  const { addItem: addToCart } = useCartStore()
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   React.useEffect(() => {
     if (status === 'unauthenticated') {
@@ -16,20 +27,35 @@ export default function WishlistPage() {
     }
   }, [status, router])
 
-  if (status === 'loading') {
+  const handleRemoveFromWishlist = (id: string) => {
+    removeItem(id)
+    toast.success('Removed from wishlist')
+  }
+
+  const handleAddToCart = (item: any) => {
+    addToCart({
+      id: item.id,
+      name: item.name,
+      slug: item.slug,
+      price: item.price,
+      discountPrice: item.discountPrice,
+      quantity: 1,
+      imageUrl: item.imageUrl,
+      stockQuantity: item.stockQuantity,
+      brand: item.brand,
+    })
+    toast.success('Added to cart')
+  }
+
+  if (status === 'loading' || !isClient) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#ef4a23]"></div>
       </div>
     )
   }
 
   if (!session) return null
-
-  // Sample wishlist data - replace with actual data from API/database
-  const wishlistItems = [
-    // You can add sample items here or fetch from API
-  ]
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -65,10 +91,91 @@ export default function WishlistPage() {
         {/* Wishlist Items */}
         <div className="bg-white rounded-lg shadow-md p-6">
           {wishlistItems.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {wishlistItems.map((item: any, index: number) => (
-                <div key={index} className="border border-gray-200 rounded-lg p-4 relative">
-                  {/* Wishlist item details will go here */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {wishlistItems.map((item) => (
+                <div key={item.id} className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow relative group">
+                  {/* Discount Badge */}
+                  {item.discountPrice && (
+                    <div className="absolute top-2 left-2 z-10 bg-[#ef4a23] text-white px-2 py-1 rounded text-xs font-semibold">
+                      {Math.round(((item.price - item.discountPrice) / item.price) * 100)}% OFF
+                    </div>
+                  )}
+
+                  {/* Remove Button */}
+                  <button
+                    onClick={() => handleRemoveFromWishlist(item.id)}
+                    className="absolute top-2 right-2 z-10 bg-white p-2 rounded-full shadow-md hover:bg-red-50 transition-colors"
+                  >
+                    <BsTrash className="text-red-500" size={16} />
+                  </button>
+
+                  {/* Product Image */}
+                  <Link href={`/products/${item.slug}`}>
+                    <div className="aspect-square bg-gray-50 p-4 flex items-center justify-center">
+                      {item.imageUrl ? (
+                        <Image
+                          src={item.imageUrl}
+                          alt={item.name}
+                          width={200}
+                          height={200}
+                          className="object-contain w-full h-full"
+                        />
+                      ) : (
+                        <div className="text-gray-300 text-4xl">📦</div>
+                      )}
+                    </div>
+                  </Link>
+
+                  {/* Product Info */}
+                  <div className="p-4">
+                    <Link href={`/products/${item.slug}`}>
+                      <h3 className="text-sm font-medium text-gray-900 hover:text-[#ef4a23] line-clamp-2 mb-2">
+                        {item.name}
+                      </h3>
+                    </Link>
+
+                    {/* Brand */}
+                    {item.brand && (
+                      <p className="text-xs text-gray-500 mb-2">{item.brand}</p>
+                    )}
+
+                    {/* Price */}
+                    <div className="mb-3">
+                      {item.discountPrice ? (
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg font-bold text-[#ef4a23]">
+                            {item.discountPrice.toLocaleString()}৳
+                          </span>
+                          <span className="text-sm text-gray-500 line-through">
+                            {item.price.toLocaleString()}৳
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="text-lg font-bold text-[#ef4a23]">
+                          {item.price.toLocaleString()}৳
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Stock Status */}
+                    <div className="mb-3">
+                      {item.stockQuantity > 0 ? (
+                        <span className="text-xs text-green-600 font-medium">In Stock</span>
+                      ) : (
+                        <span className="text-xs text-red-600 font-medium">Out of Stock</span>
+                      )}
+                    </div>
+
+                    {/* Add to Cart Button */}
+                    <button
+                      onClick={() => handleAddToCart(item)}
+                      disabled={item.stockQuantity === 0}
+                      className="w-full bg-[#ef4a23] hover:bg-[#d43f1e] text-white py-2 rounded font-semibold transition-colors flex items-center justify-center gap-2 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                    >
+                      <BsCart3 size={18} />
+                      Add to Cart
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -78,8 +185,8 @@ export default function WishlistPage() {
               <h3 className="text-xl font-semibold text-gray-700 mb-2">Your Wish List is Empty</h3>
               <p className="text-gray-500 mb-6">Save your favorite products to your wish list.</p>
               <Link
-                href="/products"
-                className="inline-block bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-md font-medium transition-colors"
+                href="/"
+                className="inline-block bg-[#ef4a23] hover:bg-[#d43f1e] text-white px-6 py-3 rounded-md font-medium transition-colors"
               >
                 Browse Products
               </Link>

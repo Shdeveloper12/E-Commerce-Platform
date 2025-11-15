@@ -31,6 +31,34 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Check order limit - 5 orders per day for logged-in users
+    if (session?.user?.id) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+
+      const todayOrdersCount = await prisma.order.count({
+        where: {
+          userId: session.user.id,
+          createdAt: {
+            gte: today,
+            lt: tomorrow,
+          },
+        },
+      });
+
+      if (todayOrdersCount >= 5) {
+        return NextResponse.json(
+          { 
+            message: "Daily order limit reached. You can place maximum 5 orders per day.",
+            limitReached: true 
+          },
+          { status: 429 }
+        );
+      }
+    }
+
     // Generate order ID and number
     const timestamp = Date.now();
     const orderId = `ORD-${timestamp}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;

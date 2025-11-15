@@ -5,6 +5,8 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { BsBoxSeam, BsHouseDoor, BsListUl } from "react-icons/bs";
+import { toast } from "sonner";
+import Swal from "sweetalert2";
 
 interface OrderItem {
   id: string;
@@ -42,6 +44,8 @@ export default function OrderDetailsPage() {
   const { data: session, status } = useSession();
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
+  const [cancelling, setCancelling] = useState(false);
+  const [canCancel, setCanCancel] = useState(false);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -61,6 +65,18 @@ export default function OrderDetailsPage() {
       if (response.ok) {
         const data = await response.json();
         setOrder(data.order);
+        
+        // Check if order can be cancelled (within 30 minutes and not already cancelled/delivered/shipped)
+        const orderTime = new Date(data.order.createdAt).getTime();
+        const currentTime = new Date().getTime();
+        const timeDifference = currentTime - orderTime;
+        const thirtyMinutesInMs = 30 * 60 * 1000;
+        
+        const isCancellable = 
+          timeDifference <= thirtyMinutesInMs && 
+          !["CANCELLED", "DELIVERED", "SHIPPED"].includes(data.order.status);
+        
+        setCanCancel(isCancellable);
       } else {
         router.push("/account/orders");
       }
@@ -69,6 +85,63 @@ export default function OrderDetailsPage() {
       router.push("/account/orders");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleCancelOrder = async () => {
+    const result = await Swal.fire({
+      title: "Cancel Order?",
+      text: "Are you sure you want to cancel this order? This action cannot be undone.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#ef4444",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, Cancel Order",
+      cancelButtonText: "No, Keep Order",
+    });
+
+    if (result.isConfirmed) {
+      setCancelling(true);
+      try {
+        const response = await fetch(`/api/orders/${params.id}/cancel`, {
+          method: "POST",
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          toast.success("Order cancelled successfully");
+          
+          await Swal.fire({
+            title: "Cancelled!",
+            text: "Your order has been cancelled and removed from your order history.",
+            icon: "success",
+            confirmButtonColor: "#ef4a23",
+          });
+          
+          // Redirect to orders page since order is deleted
+          router.push("/account/orders");
+        } else {
+          toast.error(data.error || "Failed to cancel order");
+          Swal.fire({
+            title: "Error!",
+            text: data.error || "Failed to cancel order",
+            icon: "error",
+            confirmButtonColor: "#ef4a23",
+          });
+        }
+      } catch (error) {
+        console.error("Error cancelling order:", error);
+        toast.error("Failed to cancel order");
+        Swal.fire({
+          title: "Error!",
+          text: "Failed to cancel order. Please try again.",
+          icon: "error",
+          confirmButtonColor: "#ef4a23",
+        });
+      } finally {
+        setCancelling(false);
+      }
     }
   };
 
@@ -252,22 +325,36 @@ export default function OrderDetailsPage() {
               </div>
 
               {/* Action Buttons */}
-              {dueAmount > 0 && (
-                <div className="flex flex-col sm:flex-row gap-4 justify-end mt-6 pt-6 border-t">
+              <div className="flex flex-col sm:flex-row gap-4 justify-between mt-6 pt-6 border-t">
+                {/* Cancel Order Button - Only shows within 30 minutes */}
+                {canCancel && (
                   <button
-                    onClick={() => router.push("/account/orders")}
-                    className="px-8 py-3 border-2 border-[#4a5fc4] text-[#4a5fc4] rounded font-semibold hover:bg-[#4a5fc4] hover:text-white transition-colors"
+                    onClick={handleCancelOrder}
+                    disabled={cancelling}
+                    className="px-8 py-3 border-2 border-red-500 text-red-500 rounded font-semibold hover:bg-red-500 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Continue
+                    {cancelling ? "Cancelling..." : "Cancel Order"}
                   </button>
-                  <button
-                    onClick={() => router.push(`/payment?orderId=${order.id}`)}
-                    className="px-8 py-3 bg-[#4a5fc4] text-white rounded font-semibold hover:bg-[#3d4fb3] transition-colors"
-                  >
-                    Pay Now
-                  </button>
-                </div>
-              )}
+                )}
+                
+                {/* Payment Buttons */}
+                {dueAmount > 0 && order.status !== "CANCELLED" && (
+                  <div className="flex flex-col sm:flex-row gap-4 sm:ml-auto">
+                    <button
+                      onClick={() => router.push("/account/orders")}
+                      className="px-8 py-3 border-2 border-[#4a5fc4] text-[#4a5fc4] rounded font-semibold hover:bg-[#4a5fc4] hover:text-white transition-colors"
+                    >
+                      Continue
+                    </button>
+                    <button
+                      onClick={() => router.push(`/payment?orderId=${order.id}`)}
+                      className="px-8 py-3 bg-[#4a5fc4] text-white rounded font-semibold hover:bg-[#3d4fb3] transition-colors"
+                    >
+                      Pay Now
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 

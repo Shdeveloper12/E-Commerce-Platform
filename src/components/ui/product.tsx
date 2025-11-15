@@ -8,29 +8,46 @@ import { TbScale } from 'react-icons/tb'
 import { motion } from 'framer-motion'
 import { useCartStore } from '@/store/cart-store'
 import { useCompareStore } from '@/store/compare-store'
+import { useWishlistStore } from '@/store/wishlist-store'
 import Swal from 'sweetalert2'
+import { toast } from 'sonner'
 
 interface ProductProps {
   products: any[]
 }
 
 export default function Product({ products }: ProductProps) {
-  const [wishlist, setWishlist] = useState<string[]>([])
   const [quickViewProduct, setQuickViewProduct] = useState<any>(null)
   const [isZoomed, setIsZoomed] = useState(false)
 
   const { addItem: addToCartStore } = useCartStore()
   const { addItem: addToCompare, isInCompare, items: compareItems } = useCompareStore()
+  const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlistStore()
 
   // Use only real products from database
   const displayProducts = products || []
 
-  const toggleWishlist = (productId: string) => {
-    setWishlist(prev => 
-      prev.includes(productId) 
-        ? prev.filter(id => id !== productId)
-        : [...prev, productId]
-    )
+  const toggleWishlist = (product: any, e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
+    if (isInWishlist(product.id)) {
+      removeFromWishlist(product.id)
+      toast.success('Removed from wishlist')
+    } else {
+      addToWishlist({
+        id: product.id,
+        name: product.name,
+        slug: product.slug,
+        price: product.price,
+        discountPrice: product.discountPrice,
+        imageUrl: product.imageUrl,
+        brand: product.brand || 'No Brand',
+        category: product.category,
+        stockQuantity: product.stockQuantity,
+      })
+      toast.success('Added to wishlist')
+    }
   }
 
   const addToCart = (product: any) => {
@@ -176,10 +193,10 @@ export default function Product({ products }: ProductProps) {
 
               {/* Wishlist Button */}
               <button
-                onClick={() => toggleWishlist(product.id)}
+                onClick={(e) => toggleWishlist(product, e)}
                 className="absolute top-2 right-2 z-10 bg-white p-2 rounded-full shadow-md hover:bg-orange-50 transition-colors"
               >
-                {wishlist.includes(product.id) ? (
+                {isInWishlist(product.id) ? (
                   <BsHeartFill className="text-red-500" size={18} />
                 ) : (
                   <BsHeart className="text-gray-600" size={18} />
@@ -382,14 +399,14 @@ export default function Product({ products }: ProductProps) {
                     Add to Cart
                   </button>
                   <button
-                    onClick={() => toggleWishlist(quickViewProduct.id)}
+                    onClick={(e) => toggleWishlist(quickViewProduct, e)}
                     className={`px-4 py-3 rounded-md border-2 transition-colors ${
-                      wishlist.includes(quickViewProduct.id)
+                      isInWishlist(quickViewProduct.id)
                         ? 'border-red-500 bg-red-50'
                         : 'border-gray-300 hover:border-red-500 hover:bg-red-50'
                     }`}
                   >
-                    {wishlist.includes(quickViewProduct.id) ? (
+                    {isInWishlist(quickViewProduct.id) ? (
                       <BsHeartFill className="text-red-500" size={22} />
                     ) : (
                       <BsHeart className="text-gray-600" size={22} />

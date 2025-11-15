@@ -198,7 +198,18 @@ export default function CheckoutPage() {
         router.push(`/order-success?orderId=${result.order.id}`);
       } else {
         const error = await response.json();
-        toast.error(error.message || "Failed to place order");
+        
+        // Handle daily order limit error
+        if (response.status === 429 && error.limitReached) {
+          Swal.fire({
+            title: "Order Limit Reached",
+            text: error.message || "You have reached the maximum limit of 5 orders per day. Please try again tomorrow.",
+            icon: "warning",
+            confirmButtonColor: "#ef4a23",
+          });
+        } else {
+          toast.error(error.message || "Failed to place order");
+        }
       }
     } catch (error) {
       console.error("Order error:", error);
