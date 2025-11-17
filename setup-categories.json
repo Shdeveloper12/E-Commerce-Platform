@@ -1,0 +1,8 @@
+{
+  "name": "setup-categories",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "seed": "tsx prisma/seed-categories.ts"
+  }
+}

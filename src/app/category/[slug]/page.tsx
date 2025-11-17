@@ -38,6 +38,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const category = await db.category.findUnique({
     where: { slug: params.slug },
     include: {
+      children: true, // Get subcategories
       products: {
         where: {
           isActive: true,
@@ -62,8 +63,43 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     notFound()
   }
 
+  // Check if this is a main category (has children/subcategories)
+  const isMainCategory = category.children && category.children.length > 0
+
+  // If it's a main category, get all products from this category AND all its subcategories
+  let allProducts = [...category.products]
+
+  if (isMainCategory) {
+    // Get subcategory IDs
+    const subcategoryIds = category.children.map(child => child.id)
+    
+    // Fetch products from all subcategories
+    const subcategoryProducts = await db.product.findMany({
+      where: {
+        categoryId: {
+          in: subcategoryIds
+        },
+        isActive: true,
+      },
+      include: {
+        category: true,
+        images: {
+          orderBy: {
+            sortOrder: 'asc',
+          },
+          take: 1,
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
+
+    allProducts = [...allProducts, ...subcategoryProducts]
+  }
+
   // Transform products for the Product component
-  const formattedProducts = category.products.map((product) => ({
+  const formattedProducts = allProducts.map((product) => ({
     id: product.id,
     name: product.name,
     slug: product.slug,
@@ -99,7 +135,34 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           )}
           <div className="mt-4 flex items-center gap-4 text-sm text-gray-500">
             <span>{formattedProducts.length} {formattedProducts.length === 1 ? 'Product' : 'Products'} Found</span>
+            {isMainCategory && (
+              <span className="text-orange-600">• Including all subcategories</span>
+            )}
           </div>
+          
+          {/* Subcategories Filter - Show if main category */}
+          {isMainCategory && category.children.length > 0 && (
+            <div className="mt-6 p-4 bg-white rounded-lg shadow-sm">
+              <h3 className="text-sm font-semibold text-gray-700 mb-3">Filter by Subcategory:</h3>
+              <div className="flex flex-wrap gap-2">
+                <Link 
+                  href={`/category/${category.slug}`}
+                  className="px-4 py-2 bg-orange-600 text-white rounded-md text-sm font-medium hover:bg-orange-700 transition-colors"
+                >
+                  All {category.name}
+                </Link>
+                {category.children.map((subcat) => (
+                  <Link
+                    key={subcat.id}
+                    href={`/category/${subcat.slug}`}
+                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md text-sm font-medium hover:bg-gray-200 transition-colors"
+                  >
+                    {subcat.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Products */}
