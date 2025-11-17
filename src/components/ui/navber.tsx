@@ -10,7 +10,9 @@ import { motion, AnimatePresence } from "motion/react";
 import { useSession, signOut } from "next-auth/react";
 import { useCartStore } from "@/store/cart-store";
 import { useWishlistStore } from "@/store/wishlist-store";
+import { useCompareStore } from "@/store/compare-store";
 import Image from "next/image";
+import { toast } from "sonner";
 
 interface SearchResult {
   id: string;
@@ -26,8 +28,9 @@ interface SearchResult {
 export default function Navber() {
   const router = useRouter();
   const { data: session, status } = useSession();
-  const { getTotalItems } = useCartStore();
+  const { getTotalItems, setUserId: setCartUserId } = useCartStore();
   const { getTotalItems: getWishlistCount } = useWishlistStore();
+  const { setUserId: setCompareUserId } = useCompareStore();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
@@ -43,11 +46,18 @@ export default function Navber() {
   const searchRef = useRef<HTMLDivElement>(null);
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Sync user ID with cart and compare stores
+  useEffect(() => {
+    const userId = session?.user?.id || null;
+    setCartUserId(userId);
+    setCompareUserId(userId);
+  }, [session, setCartUserId, setCompareUserId]);
+
   // Update cart and wishlist count on client side to prevent hydration mismatch
   useEffect(() => {
     setCartCount(getTotalItems());
     setWishlistCount(getWishlistCount());
-  }, [getTotalItems, getWishlistCount]);
+  }, [getTotalItems, getWishlistCount, session]);
 
   // Search functionality with debounce
   useEffect(() => {
@@ -114,6 +124,8 @@ export default function Navber() {
   };
 
   const handleLogout = async () => {
+    // User-specific cart and compare will be cleared automatically by setUserId(null)
+    toast.success("Logged out successfully");
     await signOut({ callbackUrl: '/' });
   };
 

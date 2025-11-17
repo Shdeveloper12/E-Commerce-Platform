@@ -17,38 +17,47 @@ export interface CartItem {
 
 interface CartStore {
   items: CartItem[]
+  userId: string | null
   addItem: (item: Omit<CartItem, 'quantity'>) => void
   removeItem: (id: string) => void
   updateQuantity: (id: string, quantity: number) => void
   clearCart: () => void
   getTotalItems: () => number
   getTotalPrice: () => number
+  setUserId: (userId: string | null) => void
+  loadUserCart: (userId: string | null) => void
+  saveUserCart: () => void
 }
 
 export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [] as CartItem[],
+      userId: null,
       
       addItem: (item) => {
         const items = get().items
         const existingItem = items.find((i) => i.id === item.id)
         
         if (existingItem) {
-          set({
-            items: items.map((i) =>
-              i.id === item.id
-                ? { ...i, quantity: Math.min(i.quantity + 1, item.stockQuantity) }
-                : i
-            ),
-          })
+          const newItems = items.map((i) =>
+            i.id === item.id
+              ? { ...i, quantity: Math.min(i.quantity + 1, item.stockQuantity) }
+              : i
+          )
+          set({ items: newItems })
+          get().saveUserCart()
         } else {
-          set({ items: [...items, { ...item, quantity: 1 }] })
+          const newItems = [...items, { ...item, quantity: 1 }]
+          set({ items: newItems })
+          get().saveUserCart()
         }
       },
       
       removeItem: (id) => {
-        set({ items: get().items.filter((i) => i.id !== id) })
+        const newItems = get().items.filter((i) => i.id !== id)
+        set({ items: newItems })
+        get().saveUserCart()
       },
       
       updateQuantity: (id, quantity) => {
@@ -57,17 +66,18 @@ export const useCartStore = create<CartStore>()(
           return
         }
         
-        set({
-          items: get().items.map((i) =>
-            i.id === id
-              ? { ...i, quantity: Math.min(quantity, i.stockQuantity) }
-              : i
-          ),
-        })
+        const newItems = get().items.map((i) =>
+          i.id === id
+            ? { ...i, quantity: Math.min(quantity, i.stockQuantity) }
+            : i
+        )
+        set({ items: newItems })
+        get().saveUserCart()
       },
       
       clearCart: () => {
         set({ items: [] })
+        get().saveUserCart()
       },
       
       getTotalItems: () => {
@@ -80,9 +90,49 @@ export const useCartStore = create<CartStore>()(
           return total + price * item.quantity
         }, 0)
       },
+
+      setUserId: (userId: string | null) => {
+        const currentUserId = get().userId
+        
+        // If userId changed, load the new user's cart
+        if (currentUserId !== userId) {
+          set({ userId })
+          get().loadUserCart(userId)
+        }
+      },
+
+      loadUserCart: (userId: string | null) => {
+        if (!userId) {
+          // User logged out - clear cart
+          set({ items: [], userId: null })
+        } else {
+          // User logged in - load their cart from storage
+          const storageKey = `cart-storage-${userId}`
+          const stored = localStorage.getItem(storageKey)
+          
+          if (stored) {
+            try {
+              const data = JSON.parse(stored)
+              set({ items: data.items || [], userId })
+            } catch (e) {
+              set({ items: [], userId })
+            }
+          } else {
+            set({ items: [], userId })
+          }
+        }
+      },
+
+      saveUserCart: () => {
+        const { userId, items } = get()
+        if (userId) {
+          const storageKey = `cart-storage-${userId}`
+          localStorage.setItem(storageKey, JSON.stringify({ items }))
+        }
+      },
     }),
     {
-      name: 'cart-storage',
+      name: 'cart-storage-guest',
       version: 1,
       migrate: (persistedState: any) => {
         // Validate and clean up persisted data

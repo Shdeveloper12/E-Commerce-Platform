@@ -3,11 +3,15 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { BsTrash, BsArrowLeft } from "react-icons/bs";
 import { toast } from "sonner";
 import { useCartStore } from "@/store/cart-store";
 
 export default function CartPage() {
+  const router = useRouter();
+  const { data: session, status } = useSession();
   const { items: cartItems, updateQuantity, removeItem, clearCart, getTotalPrice } = useCartStore();
   const [isClient, setIsClient] = useState(false);
 
@@ -25,6 +29,16 @@ export default function CartPage() {
     if (newQuantity < 1) return;
     updateQuantity(id, newQuantity);
     toast.success("Cart updated");
+  };
+
+  const handleCheckout = (e: React.MouseEvent) => {
+    if (status === "unauthenticated") {
+      e.preventDefault();
+      toast.error("Please login to continue checkout");
+      router.push("/login?redirect=/checkout");
+    } else {
+      router.push("/checkout");
+    }
   };
 
   const handleRemoveItem = (id: string) => {
@@ -214,12 +228,12 @@ export default function CartPage() {
                 </div>
               </div>
 
-              <Link
-                href="/checkout"
+              <button
+                onClick={handleCheckout}
                 className="block w-full mt-6 bg-[#ef4a23] text-white text-center py-3 rounded font-semibold hover:bg-[#d43f1e] transition"
               >
                 Proceed to Checkout
-              </Link>
+              </button>
 
               <Link
                 href="/"

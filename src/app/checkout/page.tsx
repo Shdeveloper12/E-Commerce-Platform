@@ -57,6 +57,14 @@ export default function CheckoutPage() {
     setIsClient(true);
   }, []);
 
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      toast.error("Please login to continue checkout");
+      router.push("/login?redirect=/checkout");
+    }
+  }, [status, router]);
+
   useEffect(() => {
     // Pre-fill user data if logged in
     if (session?.user) {
