@@ -37,6 +37,7 @@ export default function Navber() {
   const [showAccountDropdown, setShowAccountDropdown] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const [wishlistCount, setWishlistCount] = useState(0);
+  const accountButtonRef = useRef<HTMLDivElement>(null);
   
   // Search state
   const [searchQuery, setSearchQuery] = useState("");
@@ -802,6 +803,7 @@ export default function Navber() {
 
               {/* Account */}
               <div 
+                ref={accountButtonRef}
                 className="relative"
                 onMouseEnter={() => setShowAccountDropdown(true)}
                 onMouseLeave={() => setShowAccountDropdown(false)}
@@ -839,7 +841,7 @@ export default function Navber() {
 
                     {/* Dropdown Menu */}
                     {showAccountDropdown && (
-                      <div className="absolute top-full right-0 mt-2 bg-white shadow-2xl rounded-md py-2 min-w-[200px] z-[100] border border-gray-200">
+                      <div className="fixed top-12 right-8 bg-white shadow-2xl rounded-md py-2 min-w-[200px] z-[99] border border-gray-200 max-h-[400px] overflow-y-auto">
                         {/* Admin Dashboard Link - Only for ADMIN and MODERATOR */}
                         {(session.user?.role === 'ADMIN' || session.user?.role === 'MODERATOR') && (
                           <>
@@ -911,44 +913,44 @@ export default function Navber() {
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Category Navigation */}
-        <div className="bg-gray-100 border-b shadow-sm relative z-40">
-          <div className="container mx-auto max-w-[1400px] px-4">
-            <ul className="flex gap-3 py-3 text-sm font-medium text-gray-700 flex-wrap justify-center">
-              {categories.map((category, index) => (
-                <li
-                  key={index}
-                  className="relative group"
-                  onMouseEnter={() => setHoveredCategory(category.name)}
-                  onMouseLeave={() => setHoveredCategory(null)}
+      {/* Category Navigation - Sticky (Outside desktop wrapper) */}
+      <div className="hidden relative lg:block bg-gray-100 border-b shadow-md sticky top-0 z-[999] backdrop-blur-sm bg-opacity-95">
+        <div className="container mx-auto max-w-[1400px] px-4">
+          <ul className="flex gap-3 py-3 text-sm font-medium text-gray-700 flex-wrap justify-center">
+            {categories.map((category, index) => (
+              <li
+                key={index}
+                className="relative group"
+                onMouseEnter={() => setHoveredCategory(category.name)}
+                onMouseLeave={() => setHoveredCategory(null)}
+              >
+                <Link
+                  href={category.href}
+                  className="hover:text-orange-500 transition-colors whitespace-nowrap flex justify-between gap-1 py-1"
                 >
-                  <Link
-                    href={category.href}
-                    className="hover:text-orange-500 transition-colors whitespace-nowrap flex justify-between gap-1 py-1"
-                  >
-                    {category.name}
-                    {category.subcategories && <BiChevronDown className="text-sm" />}
-                  </Link>
-                  
-                  {/* Dropdown Menu */}
-                  {category.subcategories && hoveredCategory === category.name && (
-                    <div className="absolute top-full left-0 mt-1 bg-white shadow-2xl rounded-md py-2 min-w-[220px] z-[45] border border-gray-200 max-h-[400px] overflow-y-auto">
-                      {category.subcategories.map((sub, subIndex) => (
-                        <Link
-                          key={subIndex}
-                          href={sub.href}
-                          className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors whitespace-nowrap"
-                        >
-                          {sub.name}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
+                  {category.name}
+                  {category.subcategories && <BiChevronDown className="text-sm" />}
+                </Link>
+                
+                {/* Dropdown Menu */}
+                {category.subcategories && hoveredCategory === category.name && (
+                  <div className="absolute top-full left-0 mt-1 bg-white shadow-2xl rounded-md py-2 min-w-[220px] z-[1000] border border-gray-200 max-h-[400px] overflow-y-auto">
+                    {category.subcategories.map((sub, subIndex) => (
+                      <Link
+                        key={subIndex}
+                        href={sub.href}
+                        className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors whitespace-nowrap"
+                      >
+                        {sub.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
 

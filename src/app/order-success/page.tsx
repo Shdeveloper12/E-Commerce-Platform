@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { BsCheckCircleFill } from "react-icons/bs";
@@ -22,7 +22,7 @@ interface OrderDetails {
   paymentMethod: string;
 }
 
-export default function OrderSuccessPage() {
+function OrderSuccessPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
@@ -207,5 +207,13 @@ export default function OrderSuccessPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function OrderSuccessPage() {
+  return (
+    <Suspense fallback={<div className="flex justify-center items-center h-screen">Loading...</div>}>
+      <OrderSuccessPageContent />
+    </Suspense>
   );
 }

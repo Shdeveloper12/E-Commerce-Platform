@@ -40,7 +40,7 @@ export default function Footer() {
           <div>
             <h4 className="text-md font-semibold mb-4">Contact Us</h4>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li>Email: info@startech.com.bd</li>
+              <li>Email: info@techbazar.com.bd</li>
               <li>Phone: +880 1234-567890</li>
               <li>Address: Dhaka, Bangladesh</li>
             </ul>
@@ -48,7 +48,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-6 text-center text-sm text-gray-400">
-          <p>&copy; {new Date().getFullYear()} StarTech BD. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} TechBazar BD. All rights reserved.</p>
         </div>
       </div>
     </footer>
