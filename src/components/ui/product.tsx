@@ -19,6 +19,7 @@ interface ProductProps {
 export default function Product({ products }: ProductProps) {
   const [quickViewProduct, setQuickViewProduct] = useState<any>(null)
   const [isZoomed, setIsZoomed] = useState(false)
+  const [addedToCart, setAddedToCart] = useState(false)
 
   const { addItem: addToCartStore } = useCartStore()
   const { addItem: addToCompare, isInCompare, items: compareItems } = useCompareStore()
@@ -62,6 +63,8 @@ export default function Product({ products }: ProductProps) {
       brand: product.brand || 'No Brand',
     })
     
+    setAddedToCart(true)
+    
     Swal.fire({
       icon: "success",
       title: "Added to Cart!",
@@ -70,6 +73,10 @@ export default function Product({ products }: ProductProps) {
       timer: 1500,
       timerProgressBar: true,
     })
+    
+    setTimeout(() => {
+      setAddedToCart(false)
+    }, 2000)
   }
 
   const handleCompare = (product: any, e: React.MouseEvent) => {
@@ -391,11 +398,24 @@ export default function Product({ products }: ProductProps) {
                     onClick={() => {
                       addToCart(quickViewProduct)
                     }}
-                    disabled={!quickViewProduct.isInStock}
-                    className="flex-1 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white py-3 rounded-md flex items-center justify-center gap-2 font-medium transition-colors"
+                    disabled={!quickViewProduct.isInStock || addedToCart}
+                    className={`flex-1 py-3 rounded-md flex items-center justify-center gap-2 font-medium transition-colors ${
+                      addedToCart
+                        ? 'bg-green-500 hover:bg-green-600'
+                        : 'bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 disabled:cursor-not-allowed'
+                    } text-white`}
                   >
-                    <BsCart3 size={20} />
-                    Add to Cart
+                    {addedToCart ? (
+                      <>
+                        <BsCart3 size={20} />
+                        Added Successfully!
+                      </>
+                    ) : (
+                      <>
+                        <BsCart3 size={20} />
+                        Add to Cart
+                      </>
+                    )}
                   </button>
                   <button
                     onClick={(e) => toggleWishlist(quickViewProduct, e)}
