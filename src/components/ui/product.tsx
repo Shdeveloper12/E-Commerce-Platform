@@ -217,7 +217,7 @@ export default function Product({ products }: ProductProps) {
                 <div className="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
                   <button 
                     onClick={(e) => openQuickView(e, product)}
-                    className="opacity-0 group-hover:opacity-100 transition-opacity bg-white hover:bg-orange-500 hover:text-white px-6 py-3 rounded-md flex items-center gap-2 font-medium shadow-lg"
+                    className="opacity-0 hover:cursor-pointer group-hover:opacity-100 transition-opacity bg-white hover:bg-orange-500 hover:text-white px-6 py-3 rounded-md flex items-center gap-2 font-medium shadow-lg"
                   >
                     <BsEye size={20} /> Quick View
                   </button>
@@ -389,8 +389,7 @@ export default function Product({ products }: ProductProps) {
                 <div className="flex gap-3 mb-4">
                   <button
                     onClick={() => {
-                      addToCart(quickViewProduct.id)
-                      
+                      addToCart(quickViewProduct)
                     }}
                     disabled={!quickViewProduct.isInStock}
                     className="flex-1 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white py-3 rounded-md flex items-center justify-center gap-2 font-medium transition-colors"

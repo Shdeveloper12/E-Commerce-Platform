@@ -100,7 +100,7 @@ export default function FloatingCartCompare() {
               <h2 className="text-xl font-bold">Shopping Cart ({totalItems})</h2>
               <button
                 onClick={() => setIsCartOpen(false)}
-                className="p-2 hover:bg-gray-100 rounded-full"
+                className="p-2 hover:bg-gray-100 hover:cursor-pointer rounded-full"
               >
                 <BsX className="text-2xl" />
               </button>
@@ -204,7 +204,7 @@ export default function FloatingCartCompare() {
               <h2 className="text-xl font-bold">Compare ({compareItems.length}/4)</h2>
               <button
                 onClick={() => setIsCompareOpen(false)}
-                className="p-2 hover:bg-gray-100 rounded-full"
+                className="p-2 hover:bg-gray-100 hover:cursor-pointer rounded-full"
               >
                 <BsX className="text-2xl" />
               </button>

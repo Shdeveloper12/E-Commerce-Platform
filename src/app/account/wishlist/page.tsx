@@ -170,7 +170,7 @@ export default function WishlistPage() {
                     <button
                       onClick={() => handleAddToCart(item)}
                       disabled={item.stockQuantity === 0}
-                      className="w-full bg-[#ef4a23] hover:bg-[#d43f1e] text-white py-2 rounded font-semibold transition-colors flex items-center justify-center gap-2 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                      className="w-full bg-[#ef4a23] hover:cursor-pointer hover:bg-[#d43f1e] text-white py-2 rounded font-semibold transition-colors flex items-center justify-center gap-2 disabled:bg-gray-300 disabled:cursor-not-allowed"
                     >
                       <BsCart3 size={18} />
                       Add to Cart
