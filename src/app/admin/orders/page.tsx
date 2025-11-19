@@ -14,7 +14,7 @@ export default async function OrdersPage() {
           email: true,
         },
       },
-      items: {
+      orderItems: {
         include: {
           product: {
             select: {
@@ -76,7 +76,7 @@ export default async function OrdersPage() {
                           )}
                         </div>
                       </td>
-                      <td className="py-3 px-4">{order.items.length} items</td>
+                      <td className="py-3 px-4">{order.orderItems.length} items</td>
                       <td className="py-3 px-4 font-semibold">
                         ${order.totalAmount.toString()}
                       </td>

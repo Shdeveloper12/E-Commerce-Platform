@@ -63,7 +63,7 @@ export default function FloatingCartCompare() {
         {/* Compare Button */}
         <button
           onClick={() => setIsCompareOpen(!isCompareOpen)}
-          className="relative bg-white hover:bg-gray-50 text-gray-800 w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110 border-2 border-gray-200"
+          className="relative hover:cursor-pointer bg-white hover:bg-gray-50 text-gray-800 w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110 border-2 border-gray-200"
         >
           <TbScale className="text-2xl" />
           {compareItems.length > 0 && (
@@ -76,7 +76,7 @@ export default function FloatingCartCompare() {
         {/* Cart Button */}
         <button
           onClick={() => setIsCartOpen(!isCartOpen)}
-          className="relative bg-orange-600 hover:bg-orange-700 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110"
+          className="relative hover:cursor-pointer bg-orange-600 hover:bg-orange-700 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110"
         >
           <BsCart3 className="text-2xl" />
           {totalItems > 0 && (
@@ -91,10 +91,10 @@ export default function FloatingCartCompare() {
       {isCartOpen && (
         <>
           <div
-            className="fixed inset-0 bg-opacity-50 z-40"
+            className="fixed inset-0  bg-opacity-50 z-[9990]"
             onClick={() => setIsCartOpen(false)}
           />
-          <div className="fixed right-0 top-0 h-full w-full md:w-96 bg-white shadow-2xl z-50 flex flex-col">
+          <div className="fixed right-0 top-0 h-full w-full md:w-96 bg-white shadow-2xl z-[9991] flex flex-col">
             {/* Header */}
             <div className="p-4 border-b flex items-center justify-between">
               <h2 className="text-xl font-bold">Shopping Cart ({totalItems})</h2>
@@ -195,10 +195,10 @@ export default function FloatingCartCompare() {
       {isCompareOpen && (
         <>
           <div
-            className="fixed inset-0 bg-opacity-50 z-40"
+            className="fixed inset-0 bg-opacity-50 z-[9990]"
             onClick={() => setIsCompareOpen(false)}
           />
-          <div className="fixed right-0 top-0 h-full w-full md:w-96 bg-white shadow-2xl z-50 flex flex-col">
+          <div className="fixed right-0 top-0 h-full w-full md:w-96 bg-white shadow-2xl z-[9991] flex flex-col">
             {/* Header */}
             <div className="p-4 border-b flex items-center justify-between">
               <h2 className="text-xl font-bold">Compare ({compareItems.length}/4)</h2>

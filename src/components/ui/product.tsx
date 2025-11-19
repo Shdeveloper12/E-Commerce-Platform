@@ -194,7 +194,7 @@ export default function Product({ products }: ProductProps) {
               {/* Wishlist Button */}
               <button
                 onClick={(e) => toggleWishlist(product, e)}
-                className="absolute top-2 right-2 z-10 bg-white p-2 rounded-full shadow-md hover:bg-orange-50 transition-colors"
+                className="absolute hover:cursor-pointer top-2 right-2 z-10 bg-white p-2 rounded-full shadow-md hover:bg-orange-50 transition-colors"
               >
                 {isInWishlist(product.id) ? (
                   <BsHeartFill className="text-red-500" size={18} />
@@ -204,7 +204,7 @@ export default function Product({ products }: ProductProps) {
               </button>
 
               {/* Product Image */}
-              <div className="relative h-56 bg-gray-100 overflow-hidden">
+              <div className="relative hover:cursor-pointer h-56 bg-gray-100 overflow-hidden">
                 <Link href={`/products/${product.slug}`}>
                   <img
                     src={product.imageUrl}

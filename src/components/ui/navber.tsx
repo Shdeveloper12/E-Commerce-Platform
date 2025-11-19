@@ -841,7 +841,7 @@ export default function Navber() {
 
                     {/* Dropdown Menu */}
                     {showAccountDropdown && (
-                      <div className="fixed top-12 right-8 bg-white shadow-2xl rounded-md py-2 min-w-[200px] z-[99] border border-gray-200 max-h-[400px] overflow-y-auto">
+                      <div className="fixed top-[63px] right-5 bg-white shadow-2xl rounded-md min-w-[200px] z-[9999] border border-gray-200 max-h-[400px] overflow-y-auto">
                         {/* Admin Dashboard Link - Only for ADMIN and MODERATOR */}
                         {(session.user?.role === 'ADMIN' || session.user?.role === 'MODERATOR') && (
                           <>
@@ -906,7 +906,7 @@ export default function Navber() {
 
               {/* PC Builder Button */}
               <Link href="/pc-builder">
-                <button className="text-white px-5 py-2.5 text-sm font-semibold bg-blue-600 hover:bg-blue-700 rounded transition-colors whitespace-nowrap">
+                <button className="text-white hover:cursor-pointer px-5 py-2.5 text-sm font-semibold bg-blue-600 hover:bg-blue-700 rounded transition-colors whitespace-nowrap">
                   PC Builder
                 </button>
               </Link>
@@ -936,7 +936,7 @@ export default function Navber() {
                 
                 {/* Dropdown Menu */}
                 {category.subcategories && hoveredCategory === category.name && (
-                  <div className="absolute top-full left-0 mt-1 bg-white shadow-2xl rounded-md py-2 min-w-[220px] z-[1000] border border-gray-200 max-h-[400px] overflow-y-auto">
+                  <div className="absolute top-full left-0 bg-white shadow-2xl rounded-md py-2 min-w-[220px] z-[1000] border border-gray-200 max-h-[400px] overflow-y-auto">
                     {category.subcategories.map((sub, subIndex) => (
                       <Link
                         key={subIndex}
