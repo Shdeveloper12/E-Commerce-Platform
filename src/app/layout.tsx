@@ -19,33 +19,64 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "E-commerce Platform Scaffold",
+  title: {
+    default: "TechBazar - Best Tech Products in Bangladesh",
+    template: "%s | TechBazar"
+  },
   description:
-    "Modern E-commerce platform. Built with TypeScript, Tailwind CSS, and shadcn/ui.",
+    "Shop the latest laptops, desktops, computer components, gaming gear, and tech accessories at TechBazar. Best prices in Bangladesh with fast delivery.",
   keywords: [
-    "React.js",
-    "Next.js",
-    "TypeScript",
-    "Tailwind CSS",
-    "shadcn/ui",
-    "AI development",
-    "React",
+    "TechBazar",
+    "Computer Shop Bangladesh",
+    "Laptop Price Bangladesh",
+    "Gaming PC Bangladesh",
+    "Computer Components",
+    "Graphics Card",
+    "Processor",
+    "RAM",
+    "SSD",
+    "Gaming Laptop",
+    "Desktop PC",
+    "Tech Store Bangladesh",
+    "Online Computer Store",
   ],
-  authors: [{ name: "SH Team" }],
+  authors: [{ name: "TechBazar Team" }],
+  creator: "TechBazar",
+  publisher: "TechBazar",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'),
+  alternates: {
+    canonical: '/',
+  },
   icons: {
     icon: "../assets/images.png",
   },
   openGraph: {
-    title: "E-commerce Platform Scaffold",
-    description: "Web development with modern React stack",
-    url: "https://ecommerce-scaffold.example.com",
-    siteName: "e-commerce-scaffold",
+    title: "TechBazar - Best Tech Products in Bangladesh",
+    description: "Shop laptops, desktops, gaming gear, and computer components at the best prices in Bangladesh",
+    url: process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000',
+    siteName: "TechBazar",
     type: "website",
+    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "E-commerce Platform Scaffold",
-    description: "Web development with modern React stack",
+    title: "TechBazar - Best Tech Products in Bangladesh",
+    description: "Shop laptops, desktops, gaming gear, and computer components at the best prices",
+    creator: "@techbazar",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  verification: {
+    google: 'google19c4cb8233c169fd',
   },
 };
 
