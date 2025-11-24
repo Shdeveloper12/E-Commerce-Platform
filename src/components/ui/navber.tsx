@@ -57,7 +57,12 @@ export default function Navber() {
   // Update cart and wishlist count on client side to prevent hydration mismatch
   useEffect(() => {
     setCartCount(getTotalItems());
-    setWishlistCount(getWishlistCount());
+    // Only show wishlist count when user is logged in
+    if (session?.user) {
+      setWishlistCount(getWishlistCount());
+    } else {
+      setWishlistCount(0);
+    }
   }, [getTotalItems, getWishlistCount, session]);
 
   // Search functionality with debounce
@@ -494,9 +499,9 @@ export default function Navber() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
               </svg>
             </Link>
-            <Link href="/account/wishlist" className="text-white relative p-2 hover:bg-gray-700 rounded transition-colors block">
+            <Link href={session ? "/account/wishlist" : "/login?redirect=/account/wishlist"} className="text-white relative p-2 hover:bg-gray-700 rounded transition-colors block">
               <BsHeart className="h-6 w-6" />
-              {wishlistCount > 0 && (
+              {session && wishlistCount > 0 && (
                 <span className="absolute top-1 right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
                   {wishlistCount}
                 </span>
@@ -1038,10 +1043,10 @@ export default function Navber() {
           </Link>
 
           {/* Wishlist */}
-          <Link href="/account/wishlist" className="flex flex-col items-center py-2 px-3 hover:text-orange-400 transition-colors relative">
+          <Link href={session ? "/account/wishlist" : "/login?redirect=/account/wishlist"} className="flex flex-col items-center py-2 px-3 hover:text-orange-400 transition-colors relative">
             <BsHeart className="text-2xl mb-1" />
             <span className="text-[10px] font-medium">Wishlist</span>
-            {wishlistCount > 0 && (
+            {session && wishlistCount > 0 && (
               <span className="absolute top-1 right-2 bg-red-500 text-white text-[9px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
                 {wishlistCount}
               </span>

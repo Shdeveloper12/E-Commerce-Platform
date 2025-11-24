@@ -8,9 +8,24 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
   session: {
     strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
+  secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/login",
+  },
+  debug: process.env.NODE_ENV === 'development',
+  trustHost: true, // Critical for Vercel deployment
+  cookies: {
+    sessionToken: {
+      name: `${process.env.NODE_ENV === 'production' ? '__Secure-' : ''}next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+      },
+    },
   },
   providers: [
     CredentialsProvider({
@@ -56,35 +71,40 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user, trigger }) {
       // On sign in, set initial role
       if (user) {
+        token.id = user.id
         token.role = (user as any).role
+        token.email = user.email
       }
       
       // Always fetch fresh user data from database to get latest role
       // This ensures role changes are reflected immediately
       if (token.sub) {
-        const dbUser = await db.user.findUnique({
-          where: { id: token.sub },
-          select: { role: true, isActive: true }
-        })
-        
-        if (dbUser) {
-          token.role = dbUser.role
-          token.isActive = dbUser.isActive
+        try {
+          const dbUser = await db.user.findUnique({
+            where: { id: token.sub },
+            select: { role: true, isActive: true, email: true }
+          })
+          
+          if (dbUser) {
+            token.role = dbUser.role
+            token.isActive = dbUser.isActive
+            token.email = dbUser.email
+          }
+        } catch (error) {
+          console.error('Error fetching user in JWT callback:', error)
         }
       }
       
       return token
     },
     async session({ session, token }) {
-      return {
-        ...session,
-        user: {
-          ...session.user,
-          id: token.sub,
-          role: token.role,
-          isActive: token.isActive,
-        },
+      if (token && session.user) {
+        session.user.id = token.sub as string
+        session.user.role = token.role as string
+        session.user.isActive = token.isActive as boolean
+        session.user.email = token.email as string
       }
+      return session
     },
   },
 }

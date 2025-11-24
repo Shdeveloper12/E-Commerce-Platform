@@ -66,21 +66,54 @@ function PaymentPageContent() {
       return;
     }
 
+    if (!order) {
+      toast.error("Order details not found");
+      return;
+    }
+
     setProcessing(true);
 
     try {
-      // Simulate payment processing
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // Handle Nagad payment
+      if (paymentMethod === "nagad") {
+        const response = await fetch("/api/payment/nagad/initialize", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            orderId: order.orderNumber,
+            amount: order.total,
+            customerName: customerName,
+            customerPhone: session?.user?.email || "",
+          }),
+        });
 
-      // Here you would integrate with actual payment gateway
-      // For now, we'll just show success and redirect
+        const data = await response.json();
 
-      toast.success("Payment processed successfully!");
-      router.push("/account/orders");
+        if (data.success && data.paymentUrl) {
+          // Redirect to Nagad payment page
+          toast.success("Redirecting to Nagad payment...");
+          window.location.href = data.paymentUrl;
+        } else {
+          throw new Error(data.error || "Failed to initialize Nagad payment");
+        }
+      } 
+      // Handle bKash payment
+      else if (paymentMethod === "bkash") {
+        toast.info("bKash integration coming soon!");
+        setProcessing(false);
+      }
+      // Handle other payment methods
+      else {
+        // Simulate payment processing for other methods
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        toast.success("Payment processed successfully!");
+        router.push("/account/orders");
+      }
     } catch (error) {
       console.error("Payment error:", error);
-      toast.error("Payment failed. Please try again.");
-    } finally {
+      toast.error(error instanceof Error ? error.message : "Payment failed. Please try again.");
       setProcessing(false);
     }
   };
