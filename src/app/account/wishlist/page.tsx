@@ -39,7 +39,7 @@ export default function WishlistPage() {
       slug: item.slug,
       price: item.price,
       discountPrice: item.discountPrice,
-      quantity: 1,
+
       imageUrl: item.imageUrl,
       stockQuantity: item.stockQuantity,
       brand: item.brand,

@@ -916,7 +916,7 @@ export default function Navber() {
       </div>
 
       {/* Category Navigation - Sticky (Outside desktop wrapper) */}
-      <div className="hidden relative lg:block bg-gray-100 border-b shadow-md sticky top-0 z-[999] backdrop-blur-sm bg-opacity-95">
+      <div className="hidden lg:block bg-gray-100 border-b shadow-md sticky top-0 z-[999] backdrop-blur-sm bg-opacity-95">
         <div className="container mx-auto max-w-[1400px] px-4">
           <ul className="flex gap-3 py-3 text-sm font-medium text-gray-700 flex-wrap justify-center">
             {categories.map((category, index) => (

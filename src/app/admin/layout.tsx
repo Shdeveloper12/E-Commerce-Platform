@@ -63,7 +63,7 @@ export default async function AdminLayout({
 
         <div className="p-4 border-t border-gray-700">
           <Link href="/api/auth/signout">
-            <Button variant="outline" className="w-full justify-start">
+            <Button variant="outline" className="w-full bg-red-500 text-black hover:cursor-pointer justify-start">
               <LogOut className="w-5 h-5 mr-3" />
               Logout
             </Button>
