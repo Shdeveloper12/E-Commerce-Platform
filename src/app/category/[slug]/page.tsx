@@ -24,6 +24,8 @@ function CategoryPageContent({ params }: CategoryPageProps) {
   const [filteredProducts, setFilteredProducts] = useState<any[]>([])
   const [selectedFilters, setSelectedFilters] = useState<Record<string, any>>({})
   const [showMobileFilters, setShowMobileFilters] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 20
 
   // Load category and products
   useEffect(() => {
@@ -95,6 +97,7 @@ function CategoryPageContent({ params }: CategoryPageProps) {
     })
 
     setFilteredProducts(filtered)
+    setCurrentPage(1) // Reset to first page when filters change
   }, [selectedFilters, products])
 
   const handleFilterChange = (filterType: string, value: any) => {
@@ -137,6 +140,54 @@ function CategoryPageContent({ params }: CategoryPageProps) {
   const activeFilterCount = Object.values(selectedFilters).filter(val => 
     Array.isArray(val) ? val.length > 0 : val !== null
   ).length
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const currentProducts = filteredProducts.slice(startIndex, endIndex)
+
+  // Generate page numbers to display
+  const getPageNumbers = () => {
+    const pages: (number | string)[] = []
+    const maxVisible = 9 // Maximum number of page buttons to show
+
+    if (totalPages <= maxVisible) {
+      // Show all pages if total is less than max
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i)
+      }
+    } else {
+      // Always show first page
+      pages.push(1)
+
+      if (currentPage > 3) {
+        pages.push('...')
+      }
+
+      // Show pages around current page
+      const start = Math.max(2, currentPage - 1)
+      const end = Math.min(totalPages - 1, currentPage + 1)
+
+      for (let i = start; i <= end; i++) {
+        pages.push(i)
+      }
+
+      if (currentPage < totalPages - 2) {
+        pages.push('...')
+      }
+
+      // Always show last page
+      pages.push(totalPages)
+    }
+
+    return pages
+  }
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -255,7 +306,65 @@ function CategoryPageContent({ params }: CategoryPageProps) {
           {/* Products */}
           <div className="flex-1">
             {filteredProducts.length > 0 ? (
-              <Product products={filteredProducts} />
+              <>
+                <Product products={currentProducts} />
+                
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className="mt-8 mb-12">
+                    <div className="flex items-center justify-center gap-2">
+                      {/* Previous Button */}
+                      <button
+                        onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className={`px-4 py-2 rounded-md font-medium transition-colors ${
+                          currentPage === 1
+                            ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                            : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                        }`}
+                      >
+                        PREV
+                      </button>
+
+                      {/* Page Numbers */}
+                      {getPageNumbers().map((page, index) => (
+                        <button
+                          key={index}
+                          onClick={() => typeof page === 'number' && handlePageChange(page)}
+                          disabled={page === '...'}
+                          className={`px-4 py-2 rounded-md font-medium transition-colors ${
+                            page === currentPage
+                              ? 'bg-orange-600 text-white'
+                              : page === '...'
+                              ? 'bg-white text-gray-400 cursor-default'
+                              : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      ))}
+
+                      {/* Next Button */}
+                      <button
+                        onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className={`px-4 py-2 rounded-md font-medium transition-colors ${
+                          currentPage === totalPages
+                            ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                            : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                        }`}
+                      >
+                        NEXT
+                      </button>
+                    </div>
+
+                    {/* Page Info */}
+                    <div className="text-center mt-4 text-sm text-gray-600">
+                      Showing {startIndex + 1} - {Math.min(endIndex, filteredProducts.length)} of {filteredProducts.length} products
+                    </div>
+                  </div>
+                )}
+              </>
             ) : (
               <div className="text-center py-16 bg-white rounded-lg">
                 <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 mb-4">

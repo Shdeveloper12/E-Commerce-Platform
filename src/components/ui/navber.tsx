@@ -98,7 +98,7 @@ export default function Navber() {
     };
   }, [searchQuery]);
 
-  // Close search results when clicking outside
+  // Close search results and category dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
@@ -106,9 +106,29 @@ export default function Navber() {
       }
     };
 
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setShowSearchResults(false);
+        setHoveredCategory(null);
+        setShowAccountDropdown(false);
+      }
+    };
+
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
   }, []);
+
+  // Close category dropdown and search results when route changes
+  useEffect(() => {
+    setHoveredCategory(null);
+    setShowAccountDropdown(false);
+    setShowSearchResults(false);
+    setSearchQuery("");
+  }, [router]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -117,6 +137,14 @@ export default function Navber() {
       setShowSearchResults(false);
       setSearchQuery("");
     }
+  };
+
+  // Close search results when input loses focus
+  const handleSearchBlur = () => {
+    // Delay to allow click on search results
+    setTimeout(() => {
+      setShowSearchResults(false);
+    }, 200);
   };
 
   const handleSearchResultClick = () => {
@@ -687,6 +715,7 @@ export default function Navber() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onFocus={() => searchResults.length > 0 && setShowSearchResults(true)}
+                    onBlur={handleSearchBlur}
                   />
                   <button 
                     type="submit"
@@ -847,6 +876,7 @@ export default function Navber() {
                           <>
                             <Link
                               href="/admin"
+                              onClick={() => setShowAccountDropdown(false)}
                               className="block px-4 py-2.5 text-sm font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 transition-colors border-l-4 border-purple-500"
                             >
                               <div className="flex items-center gap-2">
@@ -862,18 +892,21 @@ export default function Navber() {
                         
                         <Link
                           href="/account"
+                          onClick={() => setShowAccountDropdown(false)}
                           className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors"
                         >
                           My Profile
                         </Link>
                         <Link
                           href="/account/orders"
+                          onClick={() => setShowAccountDropdown(false)}
                           className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors"
                         >
                           My Orders
                         </Link>
                         <Link
                           href="/account/wishlist"
+                          onClick={() => setShowAccountDropdown(false)}
                           className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors"
                         >
                           Wish List
@@ -941,6 +974,7 @@ export default function Navber() {
                       <Link
                         key={subIndex}
                         href={sub.href}
+                        onClick={() => setHoveredCategory(null)}
                         className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors whitespace-nowrap"
                       >
                         {sub.name}
