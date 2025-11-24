@@ -948,43 +948,53 @@ export default function Navber() {
         </div>
       </div>
 
-      {/* Category Navigation - Sticky (Outside desktop wrapper) */}
-      <div className="hidden lg:block bg-gray-100 border-b shadow-md sticky top-0 z-[999] backdrop-blur-sm bg-opacity-95">
-        <div className="container mx-auto max-w-[1400px] px-4">
-          <ul className="flex gap-3 py-3 text-sm font-medium text-gray-700 flex-wrap justify-center">
-            {categories.map((category, index) => (
-              <li
-                key={index}
-                className="relative group"
-                onMouseEnter={() => setHoveredCategory(category.name)}
-                onMouseLeave={() => setHoveredCategory(null)}
-              >
-                <Link
-                  href={category.href}
-                  className="hover:text-orange-500 transition-colors whitespace-nowrap flex justify-between gap-1 py-1"
+      {/* Category Navigation - Sticky with Glass Effect */}
+      <div className="hidden lg:block sticky top-0 z-[999]">
+        <div className="relative bg-gradient-to-r from-white/80 via-white/70 to-white/80 backdrop-blur-md border-b border-white/20 shadow-lg">
+          {/* Glass effect overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-white/40 to-transparent pointer-events-none"></div>
+          
+          <div className="container mx-auto max-w-[1400px] px-4 relative">
+            <ul className="flex gap-3 py-3 text-sm font-medium text-gray-800 flex-wrap justify-center">
+              {categories.map((category, index) => (
+                <li
+                  key={index}
+                  className="relative group"
+                  onMouseEnter={() => setHoveredCategory(category.name)}
+                  onMouseLeave={() => setHoveredCategory(null)}
                 >
-                  {category.name}
-                  {category.subcategories && <BiChevronDown className="text-sm" />}
-                </Link>
+                  <Link
+                    href={category.href}
+                    className="px-3 py-2 rounded-lg hover:bg-white/60 hover:text-orange-600 hover:shadow-md transition-all duration-300 whitespace-nowrap flex items-center gap-1 backdrop-blur-sm"
+                  >
+                    {category.name}
+                    {category.subcategories && <BiChevronDown className="text-sm" />}
+                  </Link>
                 
-                {/* Dropdown Menu */}
-                {category.subcategories && hoveredCategory === category.name && (
-                  <div className="absolute top-full left-0 bg-white shadow-2xl rounded-md py-2 min-w-[220px] z-[1000] border border-gray-200 max-h-[400px] overflow-y-auto">
-                    {category.subcategories.map((sub, subIndex) => (
-                      <Link
-                        key={subIndex}
-                        href={sub.href}
-                        onClick={() => setHoveredCategory(null)}
-                        className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors whitespace-nowrap"
-                      >
-                        {sub.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </li>
-            ))}
-          </ul>
+                  {/* Dropdown Menu with Glass Effect */}
+                  {category.subcategories && hoveredCategory === category.name && (
+                    <div className="absolute top-full left-0 mt-2 bg-gradient-to-b from-white/95 to-white/85 backdrop-blur-lg shadow-2xl rounded-xl py-3 min-w-[240px] z-[1000] border border-white/40 max-h-[400px] overflow-y-auto">
+                      {/* Glass shine effect */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-transparent to-transparent rounded-xl pointer-events-none"></div>
+                      
+                      <div className="relative">
+                        {category.subcategories.map((sub, subIndex) => (
+                          <Link
+                            key={subIndex}
+                            href={sub.href}
+                            onClick={() => setHoveredCategory(null)}
+                            className="block px-5 py-3 mx-2 my-1 text-sm font-medium text-gray-800 hover:bg-white/80 hover:text-orange-600 hover:shadow-lg transition-all duration-300 whitespace-nowrap backdrop-blur-sm rounded-lg border border-transparent hover:border-white/50"
+                          >
+                            {sub.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
 
