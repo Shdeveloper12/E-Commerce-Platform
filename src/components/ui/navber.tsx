@@ -494,11 +494,6 @@ export default function Navber() {
             >
               <BsSearch className="h-6 w-6" />
             </button>
-            <Link href="/compare" className="text-white p-2 hover:bg-gray-700 rounded transition-colors block">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
-            </Link>
             <Link href={session ? "/account/wishlist" : "/login?redirect=/account/wishlist"} className="text-white relative p-2 hover:bg-gray-700 rounded transition-colors block">
               <BsHeart className="h-6 w-6" />
               {session && wishlistCount > 0 && (
@@ -699,7 +694,7 @@ export default function Navber() {
       <div className="hidden lg:block">
         {/* Top Bar */}
         <div className="bg-[#1a2332] text-white">
-          <div className="container mx-auto max-w-[1400px] px-4">
+          <div className="container mx-auto max-w-[1900px] px-4">
             <div className="flex justify-between items-center py-4 gap-6">
               {/* Logo */}
               <Link href="/" className="flex-shrink-0">
@@ -978,7 +973,7 @@ export default function Navber() {
                 
                   {/* Dropdown Menu with Glass Effect */}
                   {category.subcategories && hoveredCategory === category.name && (
-                    <div className="absolute top-full left-0 mt-2 bg-gradient-to-b from-white/95 to-white/85 backdrop-blur-lg shadow-2xl rounded-xl py-3 min-w-[240px] z-[1000] border border-white/40 max-h-[400px] overflow-y-auto">
+                    <div className="absolute top-full mt-1 left-0 bg-gradient-to-b from-white/95 to-white/85 backdrop-blur-lg shadow-2xl rounded-xl py-3 min-w-[240px] z-[1000] border border-white/40 max-h-[400px] overflow-y-auto">
                       {/* Glass shine effect */}
                       <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-transparent to-transparent rounded-xl pointer-events-none"></div>
                       
@@ -1040,17 +1035,6 @@ export default function Navber() {
             </svg>
             <span className="text-[10px] font-medium">Compare</span>
             <span className="absolute top-1 right-2 bg-orange-500 text-white text-[9px] rounded-full h-4 w-4 flex items-center justify-center font-bold">0</span>
-          </Link>
-
-          {/* Wishlist */}
-          <Link href={session ? "/account/wishlist" : "/login?redirect=/account/wishlist"} className="flex flex-col items-center py-2 px-3 hover:text-orange-400 transition-colors relative">
-            <BsHeart className="text-2xl mb-1" />
-            <span className="text-[10px] font-medium">Wishlist</span>
-            {session && wishlistCount > 0 && (
-              <span className="absolute top-1 right-2 bg-red-500 text-white text-[9px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
-                {wishlistCount}
-              </span>
-            )}
           </Link>
 
           {/* Account */}
