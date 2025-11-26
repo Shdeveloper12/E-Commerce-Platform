@@ -450,7 +450,7 @@ export default function Navber() {
   return (
     <>
       {/* Mobile Top Bar */}
-      <div className="lg:hidden bg-[#1a2332] text-white relative z-50">
+      <div className="lg:hidden sticky top-0 bg-[#1a2332] text-white relative z-50">
         <div className="flex items-center justify-between px-4 py-3">
           {/* Mobile Menu Button */}
           <button 
@@ -520,7 +520,7 @@ export default function Navber() {
           initial={{ x: "-100%" }}
           animate={{ x: mobileMenuOpen ? 0 : "-100%" }}
           transition={{ type: "tween", duration: 0.3 }}
-          className="fixed top-0 left-0 h-full w-[280px] bg-white shadow-2xl z-50 overflow-y-auto"
+          className="fixed top-0 left-0 h-full w-[280px] bg-gradient-to-r from-white/80 via-white/70 to-white/80 backdrop-blur-md border-b border-white/20 shadow-lg z-50 overflow-y-auto"
         >
           <div className="p-4">
             {/* Close Button */}
@@ -528,7 +528,7 @@ export default function Navber() {
               <h2 className="text-xl font-bold text-gray-800">Categories</h2>
               <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-gray-600 hover:text-red-500 p-2"
+                className="text-gray-600 hover:cursor-pointer hover:text-red-500 p-2"
               >
                 <BsX className="h-7 w-7" />
               </button>
@@ -624,7 +624,7 @@ export default function Navber() {
             )}
 
             {/* Category List */}
-            <nav className="space-y-1 sticky top-0 bg-white z-50">
+            <nav className="space-y-1 rounded-lg sticky top-0 bg-gradient-to-r from-white/80 via-white/70 to-white/80 backdrop-blur-md border-b border-white/20 shadow-lg z-50">
               {categories.map((category, index) => (
                 <div key={index}>
                   <div
