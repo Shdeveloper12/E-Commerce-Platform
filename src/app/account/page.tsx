@@ -115,7 +115,7 @@ export default function AccountPage() {
         </div>
 
         {/* Profile Card & Stats */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Profile Info */}
           <div className="lg:col-span-2 bg-white rounded-lg shadow-md p-8">
             <div className="flex items-center gap-6">
@@ -144,12 +144,12 @@ export default function AccountPage() {
           </div>
 
           {/* Star Points & Store Credit */}
-          <div className="space-y-4">
-            <div className="bg-white rounded-lg shadow-md p-6 text-center">
+          <div className="space-y-4 w-full grid grid-cols-2 lg:grid-cols-2 lg:space-y-0 lg:gap-4 bg-white rounded-lg shadow-md p-6 text-center">
+            <div className="">
               <h3 className="text-gray-600 text-sm mb-2">Star Points</h3>
               <p className="text-4xl font-bold text-orange-500">0</p>
             </div>
-            <div className="bg-white rounded-lg shadow-md p-6 text-center">
+            <div className="">
               <h3 className="text-gray-600 text-sm mb-2">Store Credit</h3>
               <p className="text-4xl font-bold text-orange-500">0</p>
             </div>
@@ -157,7 +157,7 @@ export default function AccountPage() {
         </div>
 
         {/* Action Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
           {actionCards.map((card, index) => (
             <Link
               key={index}

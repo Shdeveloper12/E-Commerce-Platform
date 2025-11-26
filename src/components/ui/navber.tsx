@@ -165,7 +165,46 @@ export default function Navber() {
 
   const [showMobileSearch, setShowMobileSearch] = useState(false);
 
-  const categories = [
+  // Dynamic categories from database
+  interface SubCategory {
+    name: string;
+    href: string;
+    slug?: string;
+  }
+  
+  interface Category {
+    name: string;
+    href: string;
+    slug?: string;
+    subcategories?: SubCategory[];
+  }
+
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
+
+  // Fetch categories from API
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const response = await fetch('/api/categories');
+        const data = await response.json();
+        if (Array.isArray(data)) {
+          setCategories(data);
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+        // Fallback to empty array
+        setCategories([]);
+      } finally {
+        setCategoriesLoading(false);
+      }
+    }
+
+    fetchCategories();
+  }, []);
+
+  // Fallback static categories (old data kept as backup)
+  const staticCategories = [
     { 
       name: "Desktop", 
       href: "/category/desktop",
@@ -446,6 +485,9 @@ export default function Navber() {
       ]
     },
   ];
+
+  // Use dynamic categories if loaded, otherwise use static fallback
+  const displayCategories = categories.length > 0 ? categories : staticCategories;
   
   return (
     <>
@@ -625,7 +667,7 @@ export default function Navber() {
 
             {/* Category List */}
             <nav className="space-y-1 rounded-lg sticky top-0 bg-gradient-to-r from-white/80 via-white/70 to-white/80 backdrop-blur-md border-b border-white/20 shadow-lg z-50">
-              {categories.map((category, index) => (
+              {displayCategories.map((category, index) => (
                 <div key={index}>
                   <div
                     className="flex items-center justify-between px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 rounded-md transition-colors font-medium cursor-pointer"
@@ -959,7 +1001,7 @@ export default function Navber() {
           
           <div className="container mx-auto max-w-[1400px] px-4 relative">
             <ul className="flex gap-3 py-3 text-sm font-medium text-gray-800 flex-wrap justify-center">
-              {categories.map((category, index) => (
+              {displayCategories.map((category, index) => (
                 <li
                   key={index}
                   className="relative group"
