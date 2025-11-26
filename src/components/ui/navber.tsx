@@ -188,6 +188,8 @@ export default function Navber() {
       try {
         const response = await fetch('/api/categories');
         const data = await response.json();
+        console.log('Fetched categories from API:', data);
+        console.log('First category subcategories:', data[0]?.subcategories);
         if (Array.isArray(data)) {
           setCategories(data);
         }
@@ -488,6 +490,11 @@ export default function Navber() {
 
   // Use dynamic categories if loaded, otherwise use static fallback
   const displayCategories = categories.length > 0 ? categories : staticCategories;
+  console.log('Display categories count:', displayCategories.length);
+  console.log('Using:', categories.length > 0 ? 'API categories' : 'Static fallback');
+  if (displayCategories.length > 0) {
+    console.log('First category:', displayCategories[0].name, 'Subcategories:', displayCategories[0].subcategories?.length || 0);
+  }
   
   return (
     <>
@@ -1005,7 +1012,11 @@ export default function Navber() {
                 <li
                   key={index}
                   className="relative group"
-                  onMouseEnter={() => setHoveredCategory(category.name)}
+                  onMouseEnter={() => {
+                    if (category.subcategories && category.subcategories.length > 0) {
+                      setHoveredCategory(category.name);
+                    }
+                  }}
                   onMouseLeave={() => setHoveredCategory(null)}
                 >
                   <Link
@@ -1013,12 +1024,16 @@ export default function Navber() {
                     className="px-3 py-2 rounded-lg hover:bg-white/60 hover:text-orange-600 hover:shadow-md transition-all duration-300 whitespace-nowrap flex items-center gap-1 backdrop-blur-sm"
                   >
                     {category.name}
-                    {category.subcategories && <BiChevronDown className="text-sm" />}
+                    {category.subcategories && category.subcategories.length > 0 && <BiChevronDown className="text-sm" />}
                   </Link>
                 
                   {/* Dropdown Menu with Glass Effect */}
-                  {category.subcategories && hoveredCategory === category.name && (
-                    <div className="absolute top-full mt-1 left-0 bg-gradient-to-b from-white/95 to-white/85 backdrop-blur-lg shadow-2xl rounded-xl py-3 min-w-[240px] z-[1000] border border-white/40 max-h-[400px] overflow-y-auto">
+                  {category.subcategories && category.subcategories.length > 0 && hoveredCategory === category.name && (
+                    <div 
+                      className="absolute top-full mt-1 left-0 bg-gradient-to-b from-white/95 to-white/85 backdrop-blur-lg shadow-2xl rounded-xl py-3 min-w-[240px] z-[1000] border border-white/40 max-h-[400px] overflow-y-auto"
+                      onMouseEnter={() => setHoveredCategory(category.name)}
+                      onMouseLeave={() => setHoveredCategory(null)}
+                    >
                       {/* Glass shine effect */}
                       <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-transparent to-transparent rounded-xl pointer-events-none"></div>
                       
