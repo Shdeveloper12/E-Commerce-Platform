@@ -32,7 +32,7 @@ export default function Category() {
         <p className="">Explore our wide range of categories tailored to your needs.</p>
       </div>
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {featuredCategories.map((category) => (
             <Link 
               key={category.slug} 

@@ -55,10 +55,17 @@ export default function AdminSidebar({ userEmail, userRole }: AdminSidebarProps)
   return (
     <>
       {/* Mobile Header with Hamburger */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-gray-900 text-white p-4 flex items-center justify-between border-b border-gray-700">
-        <div>
-          <h1 className="text-lg font-bold">Admin Panel</h1>
-          <p className="text-xs text-gray-400">{userRole}</p>
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-[100] bg-gray-900 text-white p-4 flex items-center justify-between border-b border-gray-700 shadow-lg">
+        <div className="flex items-center gap-3">
+          <Link href="/" className="hover:bg-gray-800 p-2 rounded transition-colors" title="Go to Home">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+          </Link>
+          <div>
+            <h1 className="text-lg font-bold">Admin Panel</h1>
+            <p className="text-xs text-gray-400">{userRole}</p>
+          </div>
         </div>
         <Button
           variant="ghost"
@@ -77,7 +84,7 @@ export default function AdminSidebar({ userEmail, userRole }: AdminSidebarProps)
       {/* Mobile Overlay */}
       {isMobileMenuOpen && (
         <div
-          className="lg:hidden fixed inset-0 bg-black/50 z-40 mt-16"
+          className="lg:hidden fixed inset-0 bg-black/50 z-[90] mt-16"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
@@ -85,7 +92,7 @@ export default function AdminSidebar({ userEmail, userRole }: AdminSidebarProps)
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed lg:sticky top-0 left-0 h-screen bg-gray-900 text-white flex flex-col z-50 transition-transform duration-300 ease-in-out",
+          "fixed lg:sticky top-0 left-0 h-screen bg-gray-900 text-white flex flex-col z-[95] transition-transform duration-300 ease-in-out",
           "w-64 lg:w-64",
           // Mobile: slide in from left
           isMobileMenuOpen ? "translate-x-0 mt-16 lg:mt-0" : "-translate-x-full lg:translate-x-0"

@@ -10,7 +10,7 @@ export default function Service() {
       <h1 className="text-2xl text-center font-bold mb-6">Welcome to Our Service</h1>
 
       {/* Your home page content goes here */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
         <div className="flex bg-white gap-4 items-center p-6 border rounded-lg justify-between">
           <div className="text-blue-600">
             <MdLaptopChromebook size={48} />

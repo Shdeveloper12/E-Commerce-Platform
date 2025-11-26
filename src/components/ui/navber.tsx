@@ -450,7 +450,7 @@ export default function Navber() {
   return (
     <>
       {/* Mobile Top Bar */}
-      <div className="lg:hidden sticky top-0 bg-[#1a2332] text-white relative z-50">
+      <div className="lg:hidden fixed top-0 left-0 right-0 bg-[#1a2332] text-white z-50 shadow-md">
         <div className="flex items-center justify-between px-4 py-3">
           {/* Mobile Menu Button */}
           <button 
@@ -520,7 +520,7 @@ export default function Navber() {
           initial={{ x: "-100%" }}
           animate={{ x: mobileMenuOpen ? 0 : "-100%" }}
           transition={{ type: "tween", duration: 0.3 }}
-          className="fixed top-0 left-0 h-full w-[280px] bg-gradient-to-r from-white/80 via-white/70 to-white/80 backdrop-blur-md border-b border-white/20 shadow-lg z-50 overflow-y-auto"
+          className="fixed top-0 left-0 h-full w-[280px] bg-gradient-to-r from-white/80 via-white/70 to-white/80 backdrop-blur-md border-b border-white/20 shadow-lg z-[60] overflow-y-auto"
         >
           <div className="p-4">
             {/* Close Button */}
@@ -685,10 +685,13 @@ export default function Navber() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setMobileMenuOpen(false)}
-            className="fixed inset-0 z-40"
+            className="fixed inset-0 bg-black/50 z-[55]"
           />
         )}
       </div>
+
+      {/* Spacer for fixed mobile navbar */}
+      <div className="lg:hidden h-[60px]"></div>
 
       {/* Desktop Navigation */}
       <div className="hidden lg:block">
