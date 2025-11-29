@@ -78,6 +78,10 @@ model Product {
   stockQuantity   Int              @default(0) @map("stock_quantity")
   isActive        Boolean          @default(true) @map("is_active")
   isFeatured      Boolean          @default(false) @map("is_featured")
+  isOfferProduct  Boolean          @default(false) @map("is_offer_product")
+  offerType       OfferType?       @map("offer_type")
+  offerStartDate  DateTime?        @map("offer_start_date")
+  offerEndDate    DateTime?        @map("offer_end_date")
   metaTitle       String?          @map("meta_title")
   metaDescription String?          @map("meta_description")
   createdAt       DateTime         @default(now()) @map("created_at")
@@ -94,6 +98,14 @@ model Product {
   pcBuildComponents PCBuildComponent[]
 
   @@map("products")
+}
+
+enum OfferType {
+  REGULAR_OFFER
+  HAPPY_HOUR
+  FLASH_SALE
+  SEASONAL_SALE
+  CLEARANCE
 }
 
 // Product Images

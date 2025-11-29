@@ -91,7 +91,7 @@ export default async function Home() {
       </div>
 
       {/* Services */}
-      <Service />
+      
 
       {/* Categories */}
       <Category />

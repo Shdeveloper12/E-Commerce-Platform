@@ -12,7 +12,8 @@ import {
   Settings,
   LogOut,
   Menu,
-  X
+  X,
+  Tag
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -31,6 +32,7 @@ export default function AdminSidebar({ userEmail, userRole }: AdminSidebarProps)
     { href: '/admin/products', label: 'Products', icon: Package },
     { href: '/admin/categories', label: 'Categories', icon: FolderTree },
     { href: '/admin/orders', label: 'Orders', icon: ShoppingCart },
+    { href: '/admin/offers', label: 'Offers', icon: Tag },
     { href: '/admin/users', label: 'Users', icon: Users },
     { href: '/admin/settings', label: 'Settings', icon: Settings },
   ]

@@ -539,7 +539,7 @@ export default function Navber() {
           <div className="flex gap-3 items-center">
             <button 
               onClick={() => setShowMobileSearch(true)}
-              className="text-white p-2 hover:bg-gray-700 rounded transition-colors"
+              className="text-white p-2 rounded transition-colors"
             >
               <BsSearch className="h-6 w-6" />
             </button>
