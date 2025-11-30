@@ -291,8 +291,9 @@ export default function PCBuilderPage() {
               <div className="space-y-3">
                 <button
                   onClick={handleAddAllToCart}
+                  disabled
                   className="w-full bg-orange-500 text-white py-3 rounded-lg hover:bg-orange-600 transition-colors font-semibold"
-                  disabled={components.filter(c => c.selected).length === 0}
+                //   disabled={components.filter(c => c.selected).length === 0}
                 >
                   Add All to Cart
                 </button>

@@ -76,7 +76,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: 'google19c4cb8233c169fd',
+    google: 'MVf22Yo3mo_5taf3iugXVxFnlo0S55WBW63qwX6jr_o',
   },
 };
 
@@ -87,9 +87,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        
-      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
