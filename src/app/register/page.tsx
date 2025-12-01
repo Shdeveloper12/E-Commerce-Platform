@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
-import { IoHome } from "react-icons/io5";
+import { IoHome, IoMail, IoLockClosed, IoPerson, IoCheckmarkCircle } from "react-icons/io5";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ export default function RegisterPage() {
     password: "",
     
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -64,107 +66,175 @@ export default function RegisterPage() {
     }
   };
   return (
-    <div>
-      <h1 className="max-w-7xl mx-auto mt-5">
-        <Link href="/">
-          <IoHome />
-        </Link>
-      </h1>
-      <div className=" my-20 mx-auto max-w-md p-5">
-        <h1 className="text-2xl font-bold mb-5">Register Account</h1>
-        <form onSubmit={handleSubmit} className="">
-             {error && (
-              <Alert variant="destructive">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+      <Link href="/" className="absolute top-6 left-6 flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors group">
+        <IoHome className="text-2xl group-hover:scale-110 transition-transform" />
+        <span className="font-medium">Home</span>
+      </Link>
+      
+      <div className="max-w-md mx-auto">
+        {/* Logo/Brand Section */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl shadow-lg mb-4 animate-pulse">
+            <IoCheckmarkCircle className="text-white text-3xl" />
+          </div>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+            Join TechBazar
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">Create your account and start shopping</p>
+        </div>
+
+        {/* Register Card */}
+        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-gray-200 dark:border-gray-700">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {error && (
+              <Alert variant="destructive" className="animate-shake">
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
             {success && (
-              <Alert className="border-green-200 bg-green-50 text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-200">
-                <AlertDescription>{success}</AlertDescription>
+              <Alert className="border-green-200 bg-green-50 text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-200 animate-slide-down">
+                <AlertDescription className="flex items-center gap-2">
+                  <IoCheckmarkCircle className="text-xl" />
+                  {success}
+                </AlertDescription>
               </Alert>
             )}
-          <div className="flex gap-4 mb-5">
-            <div>
-              <label className="text-md font-bold mb-5" htmlFor="firstName">
-                First Name:
-              </label>
-              <input
-                className="border-gray-400 border-1 p-2"
-                placeholder="First Name"
-                type="text"
-                id="firstName"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                required
-              />
+
+            {/* Name Inputs */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2" htmlFor="firstName">
+                  <IoPerson className="text-purple-500" />
+                  First Name
+                </label>
+                <div className="relative">
+                  <input
+                    className="w-full px-4 py-3 pl-10 bg-gray-50 dark:bg-gray-900/50 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 outline-none"
+                    placeholder="John"
+                    type="text"
+                    id="firstName"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    required
+                  />
+                  <IoPerson className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2" htmlFor="lastName">
+                  <IoPerson className="text-purple-500" />
+                  Last Name
+                </label>
+                <div className="relative">
+                  <input
+                    className="w-full px-4 py-3 pl-10 bg-gray-50 dark:bg-gray-900/50 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 outline-none"
+                    placeholder="Doe"
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    required
+                  />
+                  <IoPerson className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                </div>
+              </div>
             </div>
-            <div>
-              <label className="text-md font-bold mb-5" htmlFor="lastName">
-                Last Name:
+
+            {/* Email Input */}
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2" htmlFor="email">
+                <IoMail className="text-purple-500" />
+                Email Address
               </label>
-              <input
-                className="border-gray-400 border-1 p-2 w-full rounded"
-                placeholder="Last Name"
-                type="text"
-                id="lastName"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                required
-              />
+              <div className="relative">
+                <input
+                  className="w-full px-4 py-3 pl-10 bg-gray-50 dark:bg-gray-900/50 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 outline-none"
+                  placeholder="you@example.com"
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+                <IoMail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              </div>
             </div>
-          </div>
-          <div className="mb-5">
-            <label className="text-md font-bold  block" htmlFor="email">
-              Email:
-            </label>
-            <input
-              className="border-gray-400 border-1 p-2 w-full rounded"
-              placeholder="Email"
-              type="email"
-              id="email"
-              name="email"
-              required
-                value={formData.email}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="mb-5">
-            <label className="text-md font-bold block" htmlFor="password">
-              Password:
-            </label>
-            <input
-              className="border-gray-400 border-1 p-2 w-full rounded"
-              placeholder="Password"
-              type="password"
-              id="password"
-              name="password"
-                value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <button
-            className="bg-blue-500 mb-2 hover:bg-blue-600 w-full text-white p-2 rounded"
-            type="submit" disabled={isLoading}
-          >
-            {isLoading ? (
+
+            {/* Password Input */}
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2" htmlFor="password">
+                <IoLockClosed className="text-purple-500" />
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  className="w-full px-4 py-3 pl-10 pr-12 bg-gray-50 dark:bg-gray-900/50 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 outline-none"
+                  placeholder="••••••••"
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                />
+                <IoLockClosed className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                >
+                  {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+                </button>
+              </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Must be at least 8 characters long</p>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-3 px-4 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+              type="submit" 
+              disabled={isLoading}
+            >
+              {isLoading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin inline-block" />
-                  Registering...
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  Creating Account...
                 </>
               ) : (
-                "Register"
+                "Create Account"
               )}
-          </button>
-        </form>
-        <div>
-          Already have an account?{" "}
-          <a href="/login" className="text-blue-500 text-center">
-            Login Now
-          </a>
+            </button>
+          </form>
+
+          {/* Divider */}
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-4 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">Already have an account?</span>
+            </div>
+          </div>
+
+          {/* Login Link */}
+          <div className="text-center">
+            <Link
+              href="/login"
+              className="inline-flex items-center justify-center w-full px-4 py-3 border-2 border-purple-600 dark:border-purple-500 text-purple-600 dark:text-purple-400 font-semibold rounded-xl hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all duration-200"
+            >
+              Sign In Instead
+            </Link>
+          </div>
         </div>
+
+        {/* Footer Text */}
+        <p className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
+          By creating an account, you agree to our Terms of Service
+        </p>
       </div>
     </div>
   );
