@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -106,6 +106,52 @@ export default function ProductDetailsClient({
     : 0
 
   const isProductInCompare = isInCompare(product.id)
+  const [visibleRelatedProducts, setVisibleRelatedProducts] = useState<Set<string>>(new Set())
+  const relatedObserverRef = useRef<IntersectionObserver | null>(null)
+
+  // Setup Intersection Observer for related products scroll animations
+  useEffect(() => {
+    relatedObserverRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const cardId = entry.target.getAttribute('data-related-id')
+            if (cardId) {
+              setVisibleRelatedProducts((prev) => new Set(prev).add(cardId))
+            }
+          }
+        })
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '50px',
+      }
+    )
+
+    return () => {
+      if (relatedObserverRef.current) {
+        relatedObserverRef.current.disconnect()
+      }
+    }
+  }, [])
+
+  // Observe related product cards
+  useEffect(() => {
+    const cards = document.querySelectorAll('[data-related-id]')
+    cards.forEach((card) => {
+      if (relatedObserverRef.current) {
+        relatedObserverRef.current.observe(card)
+      }
+    })
+
+    return () => {
+      cards.forEach((card) => {
+        if (relatedObserverRef.current) {
+          relatedObserverRef.current.unobserve(card)
+        }
+      })
+    }
+  }, [relatedProducts])
 
   const handleQuantityChange = (type: "increment" | "decrement") => {
     if (type === "increment" && quantity < product.stockQuantity) {
@@ -572,13 +618,14 @@ export default function ProductDetailsClient({
         <div>
           <h2 className="text-2xl font-bold mb-6">Related Products</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {relatedProducts.map((relatedProduct) => {
+            {relatedProducts.map((relatedProduct, index) => {
               const relatedDiscount = relatedProduct.discountPrice
                 ? Math.round(
                     ((relatedProduct.price - relatedProduct.discountPrice) / relatedProduct.price) * 100
                   )
                 : 0
               const relatedFinalPrice = relatedProduct.discountPrice || relatedProduct.price
+              const isVisible = visibleRelatedProducts.has(relatedProduct.id)
 
               return (
                 <Link
@@ -586,7 +633,15 @@ export default function ProductDetailsClient({
                   href={`/products/${relatedProduct.slug}`}
                   className="group"
                 >
-                  <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+                  <Card 
+                    data-related-id={relatedProduct.id}
+                    className={`overflow-hidden hover:shadow-lg transition-all duration-700 ${
+                      isVisible ? 'animate-slide-up-fade' : 'opacity-0 translate-y-10'
+                    }`}
+                    style={{
+                      animationDelay: `${(index % 4) * 150}ms`,
+                    }}
+                  >
                     <div className="relative aspect-square bg-gray-100">
                       <Image
                         src={relatedProduct.imageUrl}

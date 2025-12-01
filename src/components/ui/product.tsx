@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { BsCart3, BsHeart, BsHeartFill, BsStar, BsStarFill, BsEye, BsX } from 'react-icons/bs'
@@ -20,6 +20,8 @@ export default function Product({ products }: ProductProps) {
   const [quickViewProduct, setQuickViewProduct] = useState<any>(null)
   const [isZoomed, setIsZoomed] = useState(false)
   const [addedToCart, setAddedToCart] = useState(false)
+  const [visibleCards, setVisibleCards] = useState<Set<string>>(new Set())
+  const observerRef = useRef<IntersectionObserver | null>(null)
 
   const { addItem: addToCartStore } = useCartStore()
   const { addItem: addToCompare, isInCompare, items: compareItems } = useCompareStore()
@@ -27,6 +29,50 @@ export default function Product({ products }: ProductProps) {
 
   // Use only real products from database
   const displayProducts = products || []
+
+  // Setup Intersection Observer for scroll animations
+  useEffect(() => {
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const cardId = entry.target.getAttribute('data-card-id')
+            if (cardId) {
+              setVisibleCards((prev) => new Set(prev).add(cardId))
+            }
+          }
+        })
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '50px',
+      }
+    )
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect()
+      }
+    }
+  }, [])
+
+  // Observe product cards
+  useEffect(() => {
+    const cards = document.querySelectorAll('[data-card-id]')
+    cards.forEach((card) => {
+      if (observerRef.current) {
+        observerRef.current.observe(card)
+      }
+    })
+
+    return () => {
+      cards.forEach((card) => {
+        if (observerRef.current) {
+          observerRef.current.unobserve(card)
+        }
+      })
+    }
+  }, [displayProducts])
 
   const toggleWishlist = (product: any, e: React.MouseEvent) => {
     e.preventDefault()
@@ -178,18 +224,23 @@ export default function Product({ products }: ProductProps) {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {displayProducts.map((product) => {
+          {displayProducts.map((product, index) => {
           const discount = product.discountPrice 
             ? Math.round(((product.price - product.discountPrice) / product.price) * 100)
             : 0
+          
+          const isVisible = visibleCards.has(product.id)
 
           return (
-            <motion.div
+            <div
               key={product.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="group relative bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+              data-card-id={product.id}
+              className={`group relative bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-xl transition-all duration-700 ${
+                isVisible ? 'animate-slide-up-fade' : 'opacity-0 translate-y-10'
+              }`}
+              style={{
+                animationDelay: `${(index % 4) * 150}ms`,
+              }}
             >
               {/* Discount Badge */}
               {discount > 0 && (
@@ -284,7 +335,7 @@ export default function Product({ products }: ProductProps) {
                   )}
                 </div>
               </div>
-            </motion.div>
+            </div>
           )
         })}
         </div>
