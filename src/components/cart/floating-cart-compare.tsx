@@ -59,7 +59,7 @@ export default function FloatingCartCompare() {
   return (
     <>
       {/* Floating Buttons */}
-      <div className="fixed right-4 bottom-20 z-50 flex flex-col gap-3">
+      <div className="fixed right-4 bottom-35 z-50 flex flex-col gap-3">
         {/* Compare Button */}
         <button
           onClick={() => setIsCompareOpen(!isCompareOpen)}

@@ -248,7 +248,7 @@ export default function Footer() {
       {/* Scroll to Top Button */}
       <button
         onClick={scrollToTop}
-        className="fixed bottom-8 right-8 w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 z-50 group"
+        className="fixed bottom-20 right-4 w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 z-50 group"
         aria-label="Scroll to top"
       >
         <IoChevronUp className="text-2xl text-white group-hover:animate-bounce" />
