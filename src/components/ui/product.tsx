@@ -21,11 +21,12 @@ export default function Product({ products }: ProductProps) {
   const [isZoomed, setIsZoomed] = useState(false)
   const [addedToCart, setAddedToCart] = useState(false)
   const [visibleCards, setVisibleCards] = useState<Set<string>>(new Set())
+  const [wishlistUpdating, setWishlistUpdating] = useState<string | null>(null)
   const observerRef = useRef<IntersectionObserver | null>(null)
 
   const { addItem: addToCartStore } = useCartStore()
   const { addItem: addToCompare, isInCompare, items: compareItems } = useCompareStore()
-  const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlistStore()
+  const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist, items: wishlistItems } = useWishlistStore()
 
   // Use only real products from database
   const displayProducts = products || []
@@ -74,26 +75,42 @@ export default function Product({ products }: ProductProps) {
     }
   }, [displayProducts])
 
-  const toggleWishlist = (product: any, e: React.MouseEvent) => {
+  const toggleWishlist = async (product: any, e: React.MouseEvent | React.TouchEvent) => {
     e.preventDefault()
     e.stopPropagation()
     
-    if (isInWishlist(product.id)) {
-      removeFromWishlist(product.id)
-      toast.success('Removed from wishlist')
-    } else {
-      addToWishlist({
-        id: product.id,
-        name: product.name,
-        slug: product.slug,
-        price: product.price,
-        discountPrice: product.discountPrice,
-        imageUrl: product.imageUrl,
-        brand: product.brand || 'No Brand',
-        category: product.category,
-        stockQuantity: product.stockQuantity,
-      })
-      toast.success('Added to wishlist')
+    // Prevent multiple rapid clicks
+    if (wishlistUpdating === product.id) {
+      return
+    }
+    
+    setWishlistUpdating(product.id)
+    
+    try {
+      const isCurrentlyInWishlist = isInWishlist(product.id)
+      
+      if (isCurrentlyInWishlist) {
+        removeFromWishlist(product.id)
+        toast.success('Removed from wishlist')
+      } else {
+        addToWishlist({
+          id: product.id,
+          name: product.name,
+          slug: product.slug,
+          price: product.price,
+          discountPrice: product.discountPrice,
+          imageUrl: product.imageUrl,
+          brand: product.brand || 'No Brand',
+          category: product.category,
+          stockQuantity: product.stockQuantity,
+        })
+        toast.success('Added to wishlist')
+      }
+      
+      // Force a small delay to ensure state propagation
+      await new Promise(resolve => setTimeout(resolve, 50))
+    } finally {
+      setWishlistUpdating(null)
     }
   }
 
@@ -252,10 +269,17 @@ export default function Product({ products }: ProductProps) {
               {/* Wishlist Button */}
               <button
                 onClick={(e) => toggleWishlist(product, e)}
-                className="absolute hover:cursor-pointer top-2 right-2 z-10 bg-white p-2 rounded-full shadow-md hover:bg-orange-50 transition-colors"
+                onTouchEnd={(e) => {
+                  e.preventDefault()
+                  toggleWishlist(product, e as any)
+                }}
+                disabled={wishlistUpdating === product.id}
+                className={`absolute hover:cursor-pointer top-2 right-2 z-10 bg-white p-2 rounded-full shadow-md hover:bg-orange-50 transition-all duration-200 ${
+                  wishlistUpdating === product.id ? 'scale-110 opacity-80' : ''
+                }`}
               >
                 {isInWishlist(product.id) ? (
-                  <BsHeartFill className="text-red-500" size={18} />
+                  <BsHeartFill className="text-red-500 animate-pulse" size={18} />
                 ) : (
                   <BsHeart className="text-gray-600" size={18} />
                 )}
@@ -474,14 +498,19 @@ export default function Product({ products }: ProductProps) {
                   </button>
                   <button
                     onClick={(e) => toggleWishlist(quickViewProduct, e)}
-                    className={`px-4 py-3 rounded-md border-2 transition-colors ${
+                    onTouchEnd={(e) => {
+                      e.preventDefault()
+                      toggleWishlist(quickViewProduct, e as any)
+                    }}
+                    disabled={wishlistUpdating === quickViewProduct.id}
+                    className={`px-4 py-3 rounded-md border-2 transition-all duration-200 ${
                       isInWishlist(quickViewProduct.id)
                         ? 'border-red-500 bg-red-50'
                         : 'border-gray-300 hover:border-red-500 hover:bg-red-50'
-                    }`}
+                    } ${wishlistUpdating === quickViewProduct.id ? 'scale-110 opacity-80' : ''}`}
                   >
                     {isInWishlist(quickViewProduct.id) ? (
-                      <BsHeartFill className="text-red-500" size={22} />
+                      <BsHeartFill className="text-red-500 animate-pulse" size={22} />
                     ) : (
                       <BsHeart className="text-gray-600" size={22} />
                     )}

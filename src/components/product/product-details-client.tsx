@@ -26,6 +26,8 @@ import { FiMinus, FiPlus } from "react-icons/fi"
 import Swal from "sweetalert2"
 import { useCartStore } from "@/store/cart-store"
 import { useCompareStore } from "@/store/compare-store"
+import { useWishlistStore } from "@/store/wishlist-store"
+import { toast } from "sonner"
 
 interface Product {
   id: string
@@ -91,10 +93,11 @@ export default function ProductDetailsClient({
     
   const [selectedImage, setSelectedImage] = useState(defaultImage)
   const [quantity, setQuantity] = useState(1)
-  const [isWishlisted, setIsWishlisted] = useState(false)
+  const [wishlistUpdating, setWishlistUpdating] = useState(false)
   
   const { addItem: addToCartStore } = useCartStore()
   const { addItem: addToCompare, isInCompare, removeItem: removeFromCompare, items: compareItems } = useCompareStore()
+  const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlistStore()
 
   const discount = product.discountPrice
     ? Math.round(((product.price - product.discountPrice) / product.price) * 100)
@@ -234,14 +237,37 @@ export default function ProductDetailsClient({
     }
   }
 
-  const handleWishlist = () => {
-    setIsWishlisted(!isWishlisted)
-    Swal.fire({
-      icon: "success",
-      title: isWishlisted ? "Removed from Wishlist" : "Added to Wishlist",
-      showConfirmButton: false,
-      timer: 1000,
-    })
+  const handleWishlist = async () => {
+    if (wishlistUpdating) return
+    
+    setWishlistUpdating(true)
+    
+    try {
+      const isCurrentlyInWishlist = isInWishlist(product.id)
+      
+      if (isCurrentlyInWishlist) {
+        removeFromWishlist(product.id)
+        toast.success("Removed from wishlist")
+      } else {
+        addToWishlist({
+          id: product.id,
+          name: product.name,
+          slug: product.slug,
+          price: product.price,
+          discountPrice: product.discountPrice,
+          imageUrl: defaultImage,
+          brand: product.brand,
+          category: product.category.name,
+          stockQuantity: product.stockQuantity,
+        })
+        toast.success("Added to wishlist")
+      }
+      
+      // Force a small delay to ensure state propagation
+      await new Promise(resolve => setTimeout(resolve, 50))
+    } finally {
+      setWishlistUpdating(false)
+    }
   }
 
   const handleShare = async () => {
@@ -450,11 +476,18 @@ export default function ProductDetailsClient({
           <div className="flex gap-2">
             <Button
               onClick={handleWishlist}
+              onTouchEnd={(e) => {
+                e.preventDefault()
+                handleWishlist()
+              }}
+              disabled={wishlistUpdating}
               variant="outline"
-              className="flex-1"
+              className={`flex-1 transition-all duration-200 ${
+                wishlistUpdating ? 'scale-110 opacity-80' : ''
+              }`}
             >
-              {isWishlisted ? (
-                <BsHeartFill className="mr-2 text-red-500" />
+              {isInWishlist(product.id) ? (
+                <BsHeartFill className="mr-2 text-red-500 animate-pulse" />
               ) : (
                 <BsHeart className="mr-2" />
               )}
