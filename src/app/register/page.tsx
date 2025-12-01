@@ -70,7 +70,7 @@ export default function RegisterPage() {
           <IoHome />
         </Link>
       </h1>
-      <div className=" my-20 mx-auto max-w-md">
+      <div className=" my-20 mx-auto max-w-md p-5">
         <h1 className="text-2xl font-bold mb-5">Register Account</h1>
         <form onSubmit={handleSubmit} className="">
              {error && (

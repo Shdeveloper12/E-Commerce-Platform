@@ -47,7 +47,7 @@ function LoginContent() {
           <IoHome />
         </Link>
       </h1>
-      <div className=" my-30 mx-auto max-w-md ">
+      <div className=" my-30 mx-auto max-w-md p-5">
         <h1 className="text-2xl font-bold mb-5">Login to Your Account</h1>
         <form onSubmit={handleSubmit} className="">
              {error && (
