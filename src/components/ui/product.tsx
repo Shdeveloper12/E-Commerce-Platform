@@ -213,10 +213,14 @@ export default function Product({ products }: ProductProps) {
               {/* Product Image */}
               <div className="relative hover:cursor-pointer h-56 bg-gray-100 overflow-hidden">
                 <Link href={`/products/${product.slug}`}>
-                  <img
+                  <Image
                     src={product.imageUrl}
                     alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    loading="lazy"
+                    quality={75}
                   />
                 </Link>
                 
@@ -224,7 +228,7 @@ export default function Product({ products }: ProductProps) {
                 <div className="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
                   <button 
                     onClick={(e) => openQuickView(e, product)}
-                    className="opacity-0 hover:cursor-pointer group-hover:opacity-100 transition-opacity bg-white hover:bg-orange-500 hover:text-white px-6 py-3 rounded-md flex items-center gap-2 font-medium shadow-lg"
+                    className="opacity-0 hover:cursor-pointer group-hover:opacity-100 transition-opacity bg-white hover:bg-orange-500 hover:text-white px-4 py-2 rounded-md flex items-center gap-2 font-medium shadow-lg"
                   >
                     <BsEye size={20} /> Quick View
                   </button>

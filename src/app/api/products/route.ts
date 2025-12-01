@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { z } from 'zod'
 
+// Revalidate every 60 seconds
+export const revalidate = 60
+
 // Query parameters validation schema
 const querySchema = z.object({
   page: z.string().optional().default('1').transform(Number),
@@ -119,6 +122,10 @@ export async function GET(request: NextRequest) {
         filters: {
           brands: brands.map((b) => b.brand).filter(Boolean),
         },
+      },
+    }, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=120',
       },
     })
   } catch (error) {

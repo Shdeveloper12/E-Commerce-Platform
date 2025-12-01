@@ -13,16 +13,16 @@ import { BsLightningCharge } from "react-icons/bs";
 
 export default function Category() {
   const featuredCategories = [
-    { name: "Drones", slug: "drones", icon: <GiDeliveryDrone /> },
-    { name: "Televisions", slug: "televisions", icon: <IoMdTv /> },
-    { name: "Smartphones", slug: "smartphones", icon: <CiMobile2 /> },
-    { name: "Smart Watches", slug: "smart-watches", icon: <IoWatchOutline /> },
-    { name: "Digital Cameras", slug: "digital-cameras", icon: <CiCamera /> },
-    { name: "Gaming Consoles", slug: "gaming-consoles", icon: <GiConsoleController /> },
-    { name: "Wireless Earbuds", slug: "wireless-earbuds", icon: <SlEarphones /> },
-    { name: "Portable SSDs", slug: "portable-ssds", icon: <BsDeviceSsd /> },
-    { name: "Portable Speakers", slug: "portable-speakers", icon: <GiBoombox /> },
-    { name: "Portable Chargers", slug: "portable-chargers", icon: <BsLightningCharge /> },
+    { name: "Laptop", slug: "laptop", icon: <CiMobile2 /> },
+    { name: "Desktop", slug: "desktop", icon: <IoMdTv /> },
+    { name: "Component", slug: "component", icon: <BsDeviceSsd /> },
+    { name: "Monitor", slug: "monitor", icon: <IoMdTv /> },
+    { name: "Phone", slug: "phone", icon: <CiMobile2 /> },
+    { name: "Gaming", slug: "gaming", icon: <GiConsoleController /> },
+    { name: "Camera", slug: "camera", icon: <CiCamera /> },
+    { name: "Accessories", slug: "accessories", icon: <SlEarphones /> },
+    { name: "Gadget", slug: "gadget", icon: <IoWatchOutline /> },
+    { name: "Networking", slug: "networking", icon: <BsLightningCharge /> },
   ];
 
   return (

@@ -27,7 +27,7 @@ export default function Carousel() {
   const prevSlide = () => setCurrent((current - 1 + length) % length);
 
   return (
-    <div className="w-full mx-auto my-4 md:my-8">
+    <div className="w-full mx-auto mt-2 mb-4 md:my-8">
       <div className="container mx-auto px-2 sm:px-4">
         <div className="relative w-full max-w-7xl mx-auto rounded-md shadow-md shadow-blue-300 hover:shadow-lg transition-shadow duration-300 overflow-hidden">
           <div className="relative h-[200px] sm:h-[250px] md:h-[400px] lg:h-[500px] w-full">

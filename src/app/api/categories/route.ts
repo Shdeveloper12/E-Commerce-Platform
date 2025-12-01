@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 
+// Revalidate every 5 minutes
+export const revalidate = 300
+
 export async function GET() {
   try {
     const categories = await db.category.findMany({
@@ -37,7 +40,11 @@ export async function GET() {
         })),
     }))
 
-    return NextResponse.json(organizedCategories)
+    return NextResponse.json(organizedCategories, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+      },
+    })
   } catch (error) {
     console.error('Error fetching categories:', error)
     return NextResponse.json({ error: 'Failed to fetch categories' }, { status: 500 })

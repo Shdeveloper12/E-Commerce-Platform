@@ -4,18 +4,25 @@ import Product from "@/components/ui/product";
 import Service from "@/components/ui/service";
 import { db } from "@/lib/db";
 
-// Disable caching to always fetch fresh data
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+// Enable ISR with revalidation for better performance
+export const revalidate = 60 // Revalidate every 60 seconds
 
 export default async function Home() {
-  // Fetch featured products from database
+  // Fetch featured products from database with optimized query
   let featuredProducts = await db.product.findMany({
     where: {
       isFeatured: true,
       isActive: true,
     },
-    include: {
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+      price: true,
+      discountPrice: true,
+      brand: true,
+      stockQuantity: true,
+      isFeatured: true,
       category: {
         select: {
           name: true,
@@ -23,8 +30,11 @@ export default async function Home() {
         },
       },
       images: {
-        orderBy: {
-          sortOrder: 'asc',
+        select: {
+          imageUrl: true,
+        },
+        where: {
+          isPrimary: true,
         },
         take: 1,
       },
@@ -41,7 +51,15 @@ export default async function Home() {
       where: {
         isActive: true,
       },
-      include: {
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        price: true,
+        discountPrice: true,
+        brand: true,
+        stockQuantity: true,
+        isFeatured: true,
         category: {
           select: {
             name: true,
@@ -49,8 +67,11 @@ export default async function Home() {
           },
         },
         images: {
-          orderBy: {
-            sortOrder: 'asc',
+          select: {
+            imageUrl: true,
+          },
+          where: {
+            isPrimary: true,
           },
           take: 1,
         },
