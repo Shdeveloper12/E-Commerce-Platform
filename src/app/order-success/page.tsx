@@ -94,8 +94,8 @@ function OrderSuccessPageContent() {
             Your order <span className="font-bold text-[#ef4a23]">#{orderDetails.orderNumber}</span> has
             been placed successfully. Should you have any questions about your order, feel free to call
             us on{" "}
-            <a href="tel:09678002003" className="text-[#ef4a23] font-semibold">
-              09678002003
+            <a href="tel:01862693538" className="text-[#ef4a23] font-semibold">
+            01862693538
             </a>{" "}
             (10 AM - 5 PM).
           </p>
