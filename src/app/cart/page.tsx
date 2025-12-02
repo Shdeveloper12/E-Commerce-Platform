@@ -117,78 +117,80 @@ export default function CartPage() {
           <span className="text-gray-900 font-medium">Shopping Cart</span>
         </nav>
 
-        <h1 className="text-3xl font-bold mb-8">Shopping Cart</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">Shopping Cart</h1>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           {/* Cart Items */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="lg:col-span-2 space-y-3 sm:space-y-4">
             {cartItems.map((item) => (
               <div
                 key={item.id}
-                className="bg-white rounded-lg shadow p-4 flex gap-4"
+                className="bg-white rounded-lg shadow p-3 sm:p-4 flex flex-col sm:flex-row gap-3 sm:gap-4"
               >
-                {/* Product Image */}
-                <div className="w-24 h-24 flex-shrink-0 bg-gray-100 rounded overflow-hidden">
-                  {item.imageUrl ? (
-                    <Image
-                      src={item.imageUrl}
-                      alt={item.name}
-                      width={96}
-                      height={96}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-400">
-                      No Image
-                    </div>
-                  )}
-                </div>
+                <div className="flex gap-3 sm:gap-4 flex-1">
+                  {/* Product Image */}
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex-shrink-0 bg-gray-100 rounded overflow-hidden">
+                    {item.imageUrl ? (
+                      <Image
+                        src={item.imageUrl}
+                        alt={item.name}
+                        width={96}
+                        height={96}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
+                        No Image
+                      </div>
+                    )}
+                  </div>
 
-                {/* Product Details */}
-                <div className="flex-1">
-                  <Link
-                    href={`/products/${item.slug}`}
-                    className="font-semibold hover:text-[#ef4a23] line-clamp-2"
-                  >
-                    {item.name}
-                  </Link>
-                  <p className="text-[#ef4a23] font-bold mt-2">
-                    {((item.discountPrice || item.price) || 0).toLocaleString()}৳
-                  </p>
-
-                  {/* Quantity Controls */}
-                  <div className="flex items-center gap-4 mt-3">
-                <div className="flex items-center border border-gray-300 rounded">
-                      <button
-                        onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
-                        className="px-3 py-1 hover:bg-gray-100 transition"
-                      >
-                        -
-                      </button>
-                      <span className="px-4 py-1 border-x border-gray-300">
-                        {item.quantity}
-                      </span>
-                      <button
-                        onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
-                        className="px-3 py-1 hover:bg-gray-100 transition"
-                      >
-                        +
-                      </button>
-                    </div>
-
-                    <button
-                      onClick={() => handleRemoveItem(item.id)}
-                      className="text-red-500 hover:text-red-700 transition flex items-center gap-1"
+                  {/* Product Details */}
+                  <div className="flex-1 min-w-0">
+                    <Link
+                      href={`/products/${item.slug}`}
+                      className="font-semibold text-sm sm:text-base hover:text-[#ef4a23] line-clamp-2 block"
                     >
-                      <BsTrash />
-                      Remove
-                    </button>
+                      {item.name}
+                    </Link>
+                    <p className="text-[#ef4a23] font-bold mt-1 sm:mt-2 text-sm sm:text-base">
+                      {((item.discountPrice || item.price) || 0).toLocaleString()}৳
+                    </p>
+
+                    {/* Quantity Controls - Mobile */}
+                    <div className="flex items-center gap-3 sm:gap-4 mt-2 sm:mt-3 flex-wrap">
+                      <div className="flex items-center border border-gray-300 rounded">
+                        <button
+                          onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
+                          className="px-3 sm:px-3 py-1 sm:py-1 hover:bg-gray-100 transition text-sm sm:text-base min-w-[32px] sm:min-w-auto"
+                        >
+                          -
+                        </button>
+                        <span className="px-3 sm:px-4 py-1 border-x border-gray-300 text-sm sm:text-base min-w-[40px] text-center">
+                          {item.quantity}
+                        </span>
+                        <button
+                          onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
+                          className="px-3 sm:px-3 py-1 sm:py-1 hover:bg-gray-100 transition text-sm sm:text-base min-w-[32px] sm:min-w-auto"
+                        >
+                          +
+                        </button>
+                      </div>
+
+                      <button
+                        onClick={() => handleRemoveItem(item.id)}
+                        className="text-red-500 hover:text-red-700 transition flex items-center gap-1 text-xs sm:text-sm"
+                      >
+                        <BsTrash />
+                        <span className="hidden xs:inline">Remove</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
 
                 {/* Item Total */}
-                <div className="text-right">
-                  <p className="font-bold text-lg">
+                <div className="text-right sm:text-right ml-auto sm:ml-0">
+                  <p className="font-bold text-base sm:text-lg text-[#ef4a23]">
                     {(((item.discountPrice || item.price) || 0) * item.quantity).toLocaleString()}৳
                   </p>
                 </div>
@@ -198,7 +200,7 @@ export default function CartPage() {
             {/* Clear Cart Button */}
             <button
               onClick={handleClearCart}
-              className="text-red-500 hover:text-red-700 transition text-sm"
+              className="text-red-500 hover:text-red-700 transition text-xs sm:text-sm"
             >
               Clear All Items
             </button>
@@ -206,7 +208,7 @@ export default function CartPage() {
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow p-6 sticky top-4">
+            <div className="bg-white rounded-lg shadow p-4 sm:p-6 lg:sticky lg:top-4">
               <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
 
               <div className="space-y-3 border-t pt-4">

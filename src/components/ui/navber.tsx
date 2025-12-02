@@ -29,7 +29,7 @@ export default function Navber() {
   const router = useRouter();
   const { data: session, status } = useSession();
   const { getTotalItems, setUserId: setCartUserId } = useCartStore();
-  const { getTotalItems: getWishlistCount } = useWishlistStore();
+  const { getTotalItems: getWishlistCount, items: wishlistItems } = useWishlistStore();
   const { setUserId: setCompareUserId } = useCompareStore();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
@@ -54,16 +54,20 @@ export default function Navber() {
     setCompareUserId(userId);
   }, [session, setCartUserId, setCompareUserId]);
 
-  // Update cart and wishlist count on client side to prevent hydration mismatch
+  // Update cart count on client side to prevent hydration mismatch
   useEffect(() => {
     setCartCount(getTotalItems());
+  }, [getTotalItems]);
+
+  // Update wishlist count reactively when wishlist items change
+  useEffect(() => {
     // Only show wishlist count when user is logged in
     if (session?.user) {
-      setWishlistCount(getWishlistCount());
+      setWishlistCount(wishlistItems.length);
     } else {
       setWishlistCount(0);
     }
-  }, [getTotalItems, getWishlistCount, session]);
+  }, [wishlistItems, session]);
 
   // Search functionality with debounce
   useEffect(() => {

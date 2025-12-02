@@ -282,22 +282,22 @@ export default function CheckoutPage() {
           কার্যদিবস সকাল ১১টার মধ্যে পণ্য অর্ডার করলে, ঢাকা সিটির ভিতরে আজই পৌছাঁবে অন্যথায় পরবর্তী কার্যদিবস পৌছাঁবে সারাদেশে।
         </div>
 
-        <h1 className="text-3xl font-bold mb-8">Checkout</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">Checkout</h1>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           {/* Left Column - Forms */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
             {/* 1. Customer Information */}
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <span className="bg-[#ef4a23] text-white w-8 h-8 rounded-full flex items-center justify-center text-sm">
+            <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+              <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 flex items-center gap-2">
+                <span className="bg-[#ef4a23] text-white w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm">
                   1
                 </span>
-                Customer Information
+                <span className="text-base sm:text-xl">Customer Information</span>
               </h2>
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-1">
+                  <label className="block text-xs sm:text-sm font-medium mb-1">
                     First Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -305,12 +305,12 @@ export default function CheckoutPage() {
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#ef4a23]"
+                    className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded focus:outline-none focus:border-[#ef4a23]"
                     placeholder="First Name"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">
+                  <label className="block text-xs sm:text-sm font-medium mb-1">
                     Last Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -318,12 +318,12 @@ export default function CheckoutPage() {
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#ef4a23]"
+                    className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded focus:outline-none focus:border-[#ef4a23]"
                     placeholder="Last Name"
                   />
                 </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium mb-1">
+                <div className="sm:col-span-2">
+                  <label className="block text-xs sm:text-sm font-medium mb-1">
                     Address <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -331,12 +331,12 @@ export default function CheckoutPage() {
                     name="address"
                     value={formData.address}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#ef4a23]"
+                    className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded focus:outline-none focus:border-[#ef4a23]"
                     placeholder="Address"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">
+                  <label className="block text-xs sm:text-sm font-medium mb-1">
                     Mobile <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -344,12 +344,12 @@ export default function CheckoutPage() {
                     name="mobile"
                     value={formData.mobile}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#ef4a23]"
+                    className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded focus:outline-none focus:border-[#ef4a23]"
                     placeholder="01707019394"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">
+                  <label className="block text-xs sm:text-sm font-medium mb-1">
                     Email <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -357,28 +357,28 @@ export default function CheckoutPage() {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#ef4a23]"
+                    className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded focus:outline-none focus:border-[#ef4a23]"
                     placeholder="email@example.com"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Upazilla/Thana</label>
+                  <label className="block text-xs sm:text-sm font-medium mb-1">Upazilla/Thana</label>
                   <input
                     type="text"
                     name="upazillaThana"
                     value={formData.upazillaThana}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#ef4a23]"
+                    className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded focus:outline-none focus:border-[#ef4a23]"
                     placeholder="Upazilla/Thana"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">District</label>
+                  <label className="block text-xs sm:text-sm font-medium mb-1">District</label>
                   <select
                     name="district"
                     value={formData.district}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#ef4a23]"
+                    className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded focus:outline-none focus:border-[#ef4a23]"
                   >
                     <option>Dhaka - City</option>
                     <option>Dhaka - Suburb</option>
@@ -391,14 +391,14 @@ export default function CheckoutPage() {
                     <option>Mymensingh</option>
                   </select>
                 </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium mb-1">Comment</label>
+                <div className="sm:col-span-2">
+                  <label className="block text-xs sm:text-sm font-medium mb-1">Comment</label>
                   <textarea
                     name="comment"
                     value={formData.comment}
                     onChange={handleInputChange}
                     rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#ef4a23]"
+                    className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded focus:outline-none focus:border-[#ef4a23]"
                     placeholder="Any special instructions..."
                   />
                 </div>
@@ -406,16 +406,16 @@ export default function CheckoutPage() {
             </div>
 
             {/* 2. Payment Method */}
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <span className="bg-[#ef4a23] text-white w-8 h-8 rounded-full flex items-center justify-center text-sm">
+            <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+              <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 flex items-center gap-2">
+                <span className="bg-[#ef4a23] text-white w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm">
                   2
                 </span>
-                Payment Method
+                <span className="text-base sm:text-xl">Payment Method</span>
               </h2>
-              <p className="text-sm text-gray-600 mb-4">Select a payment method</p>
-              <div className="space-y-3">
-                <label className="flex items-center gap-3 cursor-pointer">
+              <p className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">Select a payment method</p>
+              <div className="space-y-2 sm:space-y-3">
+                <label className="flex items-center gap-2 sm:gap-3 cursor-pointer">
                   <input
                     type="radio"
                     name="payment"
@@ -424,9 +424,9 @@ export default function CheckoutPage() {
                     onChange={(e) => setPaymentMethod(e.target.value)}
                     className="w-4 h-4 text-[#ef4a23]"
                   />
-                  <span className="font-medium">Cash on Delivery</span>
+                  <span className="font-medium text-sm sm:text-base">Cash on Delivery</span>
                 </label>
-                <label className="flex items-center gap-3 cursor-pointer">
+                <label className="flex items-center gap-2 sm:gap-3 cursor-pointer">
                   <input
                     type="radio"
                     name="payment"
@@ -435,9 +435,9 @@ export default function CheckoutPage() {
                     onChange={(e) => setPaymentMethod(e.target.value)}
                     className="w-4 h-4 text-[#ef4a23]"
                   />
-                  <span className="font-medium">Online Payment</span>
+                  <span className="font-medium text-sm sm:text-base">Online Payment</span>
                 </label>
-                <label className="flex items-center gap-3 cursor-pointer">
+                <label className="flex items-center gap-2 sm:gap-3 cursor-pointer">
                   <input
                     type="radio"
                     name="payment"
@@ -446,7 +446,7 @@ export default function CheckoutPage() {
                     onChange={(e) => setPaymentMethod(e.target.value)}
                     className="w-4 h-4 text-[#ef4a23]"
                   />
-                  <span className="font-medium">POS on Delivery</span>
+                  <span className="font-medium text-sm sm:text-base">POS on Delivery</span>
                 </label>
               </div>
 
@@ -464,31 +464,31 @@ export default function CheckoutPage() {
               </div>
 
               {/* Vouchers */}
-              <div className="grid md:grid-cols-2 gap-4 mt-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-3 sm:mt-4">
                 <div>
-                  <div className="flex gap-2">
+                  <div className="flex flex-col xs:flex-row gap-2">
                     <input
                       type="text"
                       value={giftVoucher}
                       onChange={(e) => setGiftVoucher(e.target.value)}
                       placeholder="Gift Voucher"
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#ef4a23]"
+                      className="flex-1 px-3 py-2 text-sm sm:text-base border border-gray-300 rounded focus:outline-none focus:border-[#ef4a23]"
                     />
-                    <button className="px-4 py-2 bg-[#ef4a23] text-white rounded hover:bg-[#d43f1e] transition">
+                    <button className="px-3 sm:px-4 py-2 bg-[#ef4a23] text-white text-xs sm:text-sm rounded hover:bg-[#d43f1e] transition whitespace-nowrap">
                       Apply Voucher
                     </button>
                   </div>
                 </div>
                 <div>
-                  <div className="flex gap-2">
+                  <div className="flex flex-col xs:flex-row gap-2">
                     <input
                       type="text"
                       value={promoCoupon}
                       onChange={(e) => setPromoCoupon(e.target.value)}
                       placeholder="Promo / Coupon Code"
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#ef4a23]"
+                      className="flex-1 px-3 py-2 text-sm sm:text-base border border-gray-300 rounded focus:outline-none focus:border-[#ef4a23]"
                     />
-                    <button className="px-4 py-2 bg-[#ef4a23] text-white rounded hover:bg-[#d43f1e] transition">
+                    <button className="px-3 sm:px-4 py-2 bg-[#ef4a23] text-white text-xs sm:text-sm rounded hover:bg-[#d43f1e] transition whitespace-nowrap">
                       Apply Coupon
                     </button>
                   </div>
@@ -496,16 +496,16 @@ export default function CheckoutPage() {
               </div>
 
               {/* Star Points */}
-              <div className="mt-4">
-                <div className="flex gap-2">
+              <div className="mt-3 sm:mt-4">
+                <div className="flex flex-col xs:flex-row gap-2">
                   <input
                     type="number"
                     value={starPoints}
                     onChange={(e) => setStarPoints(Number(e.target.value))}
                     placeholder="Points to use (Max 0)"
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#ef4a23]"
+                    className="flex-1 px-3 py-2 text-sm sm:text-base border border-gray-300 rounded focus:outline-none focus:border-[#ef4a23]"
                   />
-                  <button className="px-4 py-2 bg-[#ef4a23] text-white rounded hover:bg-[#d43f1e] transition">
+                  <button className="px-3 sm:px-4 py-2 bg-[#ef4a23] text-white text-xs sm:text-sm rounded hover:bg-[#d43f1e] transition whitespace-nowrap">
                     Apply Points
                   </button>
                 </div>
@@ -513,16 +513,16 @@ export default function CheckoutPage() {
             </div>
 
             {/* 3. Delivery Method */}
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <span className="bg-[#ef4a23] text-white w-8 h-8 rounded-full flex items-center justify-center text-sm">
+            <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+              <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 flex items-center gap-2">
+                <span className="bg-[#ef4a23] text-white w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm">
                   3
                 </span>
-                Delivery Method
+                <span className="text-base sm:text-xl">Delivery Method</span>
               </h2>
-              <p className="text-sm text-gray-600 mb-4">Select a delivery method</p>
-              <div className="space-y-3">
-                <label className="flex items-center gap-3 cursor-pointer">
+              <p className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">Select a delivery method</p>
+              <div className="space-y-2 sm:space-y-3">
+                <label className="flex items-center gap-2 sm:gap-3 cursor-pointer">
                   <input
                     type="radio"
                     name="delivery"
@@ -531,9 +531,9 @@ export default function CheckoutPage() {
                     onChange={(e) => setDeliveryMethod(e.target.value)}
                     className="w-4 h-4 text-[#ef4a23]"
                   />
-                  <span className="font-medium">Home Delivery - 60৳</span>
+                  <span className="font-medium text-sm sm:text-base">Home Delivery - 60৳</span>
                 </label>
-                <label className="flex items-center gap-3 cursor-pointer">
+                <label className="flex items-center gap-2 sm:gap-3 cursor-pointer">
                   <input
                     type="radio"
                     name="delivery"
@@ -542,9 +542,9 @@ export default function CheckoutPage() {
                     onChange={(e) => setDeliveryMethod(e.target.value)}
                     className="w-4 h-4 text-[#ef4a23]"
                   />
-                  <span className="font-medium">Store Pickup - 0৳</span>
+                  <span className="font-medium text-sm sm:text-base">Store Pickup - 0৳</span>
                 </label>
-                <label className="flex items-center gap-3 cursor-pointer">
+                <label className="flex items-center gap-2 sm:gap-3 cursor-pointer">
                   <input
                     type="radio"
                     name="delivery"
@@ -553,7 +553,7 @@ export default function CheckoutPage() {
                     onChange={(e) => setDeliveryMethod(e.target.value)}
                     className="w-4 h-4 text-[#ef4a23]"
                   />
-                  <span className="font-medium">Request Express - 300৳</span>
+                  <span className="font-medium text-sm sm:text-base">Request Express - 300৳</span>
                 </label>
               </div>
             </div>
@@ -561,30 +561,30 @@ export default function CheckoutPage() {
 
           {/* Right Column - Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow p-6 sticky top-4">
-              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <span className="bg-[#ef4a23] text-white w-8 h-8 rounded-full flex items-center justify-center text-sm">
+            <div className="bg-white rounded-lg shadow p-4 sm:p-6 lg:sticky lg:top-4">
+              <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 flex items-center gap-2">
+                <span className="bg-[#ef4a23] text-white w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm">
                   4
                 </span>
-                Order Overview
+                <span className="text-base sm:text-xl">Order Overview</span>
               </h2>
 
               {/* Product List */}
-              <div className="space-y-4 mb-4 max-h-64 overflow-y-auto">
+              <div className="space-y-3 sm:space-y-4 mb-3 sm:mb-4 max-h-48 sm:max-h-64 overflow-y-auto">
                 {cartItems.map((item) => (
-                  <div key={item.id} className="flex justify-between items-start text-sm">
-                    <div className="flex-1">
-                      <p className="font-medium">{item.name}</p>
+                  <div key={item.id} className="flex justify-between items-start text-xs sm:text-sm gap-2">
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium line-clamp-2">{item.name}</p>
                       <p className="text-gray-500 text-xs">Qty: {item.quantity}</p>
                     </div>
-                    <p className="font-semibold">
+                    <p className="font-semibold whitespace-nowrap text-xs sm:text-sm">
                       {(((item.discountPrice || item.price) || 0) * item.quantity).toLocaleString()}৳
                     </p>
                   </div>
                 ))}
               </div>
 
-              <div className="border-t pt-4 space-y-2 text-sm">
+              <div className="border-t pt-3 sm:pt-4 space-y-2 text-xs sm:text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Sub-Total:</span>
                   <span className="font-semibold text-[#ef4a23]">
@@ -597,7 +597,7 @@ export default function CheckoutPage() {
                     {deliveryCharges[deliveryMethod as keyof typeof deliveryCharges]}৳
                   </span>
                 </div>
-                <div className="border-t pt-2 flex justify-between text-base font-bold">
+                <div className="border-t pt-2 flex justify-between text-sm sm:text-base font-bold">
                   <span>Total:</span>
                   <span className="text-[#ef4a23]">
                     {calculateTotal().toLocaleString()}৳
@@ -609,15 +609,15 @@ export default function CheckoutPage() {
         </div>
 
         {/* Terms and Confirm Button */}
-        <div className="mt-8 bg-white rounded-lg shadow p-6">
-          <label className="flex items-start gap-3 cursor-pointer mb-6">
+        <div className="mt-6 sm:mt-8 bg-white rounded-lg shadow p-4 sm:p-6">
+          <label className="flex items-start gap-2 sm:gap-3 cursor-pointer mb-4 sm:mb-6">
             <input
               type="checkbox"
               checked={agreeTerms}
               onChange={(e) => setAgreeTerms(e.target.checked)}
-              className="mt-1 w-4 h-4 text-[#ef4a23]"
+              className="mt-1 w-4 h-4 text-[#ef4a23] flex-shrink-0"
             />
-            <span className="text-sm">
+            <span className="text-xs sm:text-sm">
               I have read and agree to the{" "}
               <Link href="/terms" className="text-[#ef4a23] hover:underline">
                 Terms and Conditions
@@ -636,7 +636,7 @@ export default function CheckoutPage() {
           <button
             onClick={handleConfirmOrder}
             disabled={loading || !agreeTerms}
-            className="w-full md:w-auto px-8 py-3 bg-[#ef4a23] text-white font-semibold rounded hover:bg-[#d43f1e] transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+            className="w-full sm:w-auto px-6 sm:px-8 py-2.5 sm:py-3 bg-[#ef4a23] text-white text-sm sm:text-base font-semibold rounded hover:bg-[#d43f1e] transition disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
             {loading ? "Processing..." : "Confirm Order"}
           </button>

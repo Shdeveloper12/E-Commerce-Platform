@@ -133,28 +133,28 @@ export default function OrdersPage() {
         </Link>
 
         {/* Page Header */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">My Orders</h1>
-          <p className="text-gray-600 mt-2">View and track your order history</p>
+        <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-4 sm:mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">My Orders</h1>
+          <p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2">View and track your order history</p>
         </div>
 
         {/* Orders List */}
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {orders.length > 0 ? (
             orders.map((order) => (
               <div 
                 key={order.id} 
-                className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+                className="bg-white rounded-lg shadow-md p-4 sm:p-6 hover:shadow-lg transition-shadow"
               >
                 {/* Order Header */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 pb-4 border-b">
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-900">Order# {order.orderNumber}</h3>
-                    <p className="text-sm text-gray-600">Date Added: {formatDate(order.createdAt)}</p>
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3 sm:mb-4 pb-3 sm:pb-4 border-b gap-2">
+                  <div className="flex-1">
+                    <h3 className="text-lg sm:text-xl font-bold text-gray-900">Order# {order.orderNumber}</h3>
+                    <p className="text-xs sm:text-sm text-gray-600 mt-0.5">Date Added: {formatDate(order.createdAt)}</p>
                   </div>
-                  <div className="flex items-center gap-2 mt-2 sm:mt-0">
-                    <BsCheckCircleFill className="text-green-500" />
-                    <span className={`font-semibold ${getStatusColor(order.status)}`}>
+                  <div className="flex items-center gap-2">
+                    <BsCheckCircleFill className="text-green-500 text-sm sm:text-base" />
+                    <span className={`font-semibold text-sm sm:text-base ${getStatusColor(order.status)}`}>
                       {order.status.charAt(0) + order.status.slice(1).toLowerCase()}
                     </span>
                   </div>
@@ -166,29 +166,29 @@ export default function OrdersPage() {
                     {order.orderItems.map((item) => (
                       <div 
                         key={item.id} 
-                        className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 py-3"
+                        className="flex flex-col gap-3 py-2 sm:py-3"
                       >
-                        <div className="flex items-center gap-4 flex-1">
-                          <div className="w-16 h-16 bg-gray-100 rounded flex items-center justify-center flex-shrink-0">
-                            <BsBoxSeam className="text-gray-400 text-2xl" />
+                        <div className="flex items-start gap-3 sm:gap-4 flex-1">
+                          <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-100 rounded flex items-center justify-center shrink-0">
+                            <BsBoxSeam className="text-gray-400 text-lg sm:text-2xl" />
                           </div>
-                          <div className="flex-1">
+                          <div className="flex-1 min-w-0">
                             <Link
                               href={`/products/${item.productSlug}`}
-                              className="text-gray-900 hover:text-[#ef4a23] font-medium line-clamp-2"
+                              className="text-sm sm:text-base text-gray-900 hover:text-[#ef4a23] font-medium line-clamp-2 block"
                             >
                               {item.productName}
                             </Link>
-                            <p className="text-sm text-gray-500 mt-1">Quantity: {item.quantity}</p>
+                            <p className="text-xs sm:text-sm text-gray-500 mt-1">Quantity: {item.quantity}</p>
                           </div>
                         </div>
-                        <div className="flex items-center gap-4 sm:ml-auto">
-                          <span className="text-xl font-bold text-[#ef4a23]">
+                        <div className="flex items-center justify-between gap-3 sm:gap-4">
+                          <span className="text-base sm:text-xl font-bold text-[#ef4a23]">
                             {item.total.toLocaleString()}৳
                           </span>
                           <Link
                             href={`/account/orders/${order.id}`}
-                            className="bg-[#4a5fc4] hover:bg-[#3d4fb3] text-white px-6 py-2 rounded font-semibold transition-colors"
+                            className="bg-[#4a5fc4] hover:bg-[#3d4fb3] text-white px-4 sm:px-6 py-1.5 sm:py-2 text-sm sm:text-base rounded font-semibold transition-colors whitespace-nowrap"
                           >
                             View
                           </Link>
@@ -200,13 +200,13 @@ export default function OrdersPage() {
               </div>
             ))
           ) : (
-            <div className="bg-white rounded-lg shadow-md p-12 text-center">
-              <BsBoxSeam className="mx-auto text-6xl text-gray-300 mb-4" />
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">No Orders Yet</h3>
-              <p className="text-gray-500 mb-6">You haven't placed any orders yet.</p>
+            <div className="bg-white rounded-lg shadow-md p-8 sm:p-12 text-center">
+              <BsBoxSeam className="mx-auto text-5xl sm:text-6xl text-gray-300 mb-3 sm:mb-4" />
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-700 mb-2">No Orders Yet</h3>
+              <p className="text-sm sm:text-base text-gray-500 mb-4 sm:mb-6">You haven't placed any orders yet.</p>
               <Link
                 href="/"
-                className="inline-block bg-[#ef4a23] hover:bg-[#d43f1e] text-white px-6 py-3 rounded-md font-medium transition-colors"
+                className="inline-block bg-[#ef4a23] hover:bg-[#d43f1e] text-white px-5 sm:px-6 py-2 sm:py-3 text-sm sm:text-base rounded-md font-medium transition-colors"
               >
                 Start Shopping
               </Link>

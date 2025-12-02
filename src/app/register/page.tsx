@@ -5,7 +5,13 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
-import { IoHome, IoMail, IoLockClosed, IoPerson, IoCheckmarkCircle } from "react-icons/io5";
+import {
+  IoHome,
+  IoMail,
+  IoLockClosed,
+  IoPerson,
+  IoCheckmarkCircle,
+} from "react-icons/io5";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
 export default function RegisterPage() {
@@ -14,7 +20,6 @@ export default function RegisterPage() {
     lastName: "",
     email: "",
     password: "",
-    
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -66,13 +71,18 @@ export default function RegisterPage() {
     }
   };
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-      <Link href="/" className="absolute top-6 left-6 flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors group">
-        <IoHome className="text-2xl group-hover:scale-110 transition-transform" />
-        <span className="font-medium">Home</span>
-      </Link>
-      
-      <div className="max-w-md mx-auto">
+    <div
+      className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8"
+      suppressHydrationWarning
+    >
+      <div className="max-w-md mx-auto relative">
+        <Link
+          href="/"
+          className="absolute -top-4 left-0 sm:left-0 flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors group z-10"
+        >
+          <IoHome className="text-xl sm:text-2xl group-hover:scale-110 transition-transform" />
+          <span className="font-medium text-sm sm:text-base">Home</span>
+        </Link>
         {/* Logo/Brand Section */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl shadow-lg mb-4 animate-pulse">
@@ -81,7 +91,9 @@ export default function RegisterPage() {
           <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
             Join TechBazar
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">Create your account and start shopping</p>
+          <p className="text-gray-600 dark:text-gray-400">
+            Create your account and start shopping
+          </p>
         </div>
 
         {/* Register Card */}
@@ -104,7 +116,10 @@ export default function RegisterPage() {
             {/* Name Inputs */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2" htmlFor="firstName">
+                <label
+                  className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2"
+                  htmlFor="firstName"
+                >
                   <IoPerson className="text-purple-500" />
                   First Name
                 </label>
@@ -123,7 +138,10 @@ export default function RegisterPage() {
                 </div>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2" htmlFor="lastName">
+                <label
+                  className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2"
+                  htmlFor="lastName"
+                >
                   <IoPerson className="text-purple-500" />
                   Last Name
                 </label>
@@ -145,7 +163,10 @@ export default function RegisterPage() {
 
             {/* Email Input */}
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2" htmlFor="email">
+              <label
+                className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2"
+                htmlFor="email"
+              >
                 <IoMail className="text-purple-500" />
                 Email Address
               </label>
@@ -166,7 +187,10 @@ export default function RegisterPage() {
 
             {/* Password Input */}
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2" htmlFor="password">
+              <label
+                className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2"
+                htmlFor="password"
+              >
                 <IoLockClosed className="text-purple-500" />
                 Password
               </label>
@@ -190,13 +214,15 @@ export default function RegisterPage() {
                   {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
                 </button>
               </div>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Must be at least 8 characters long</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                Must be at least 8 characters long
+              </p>
             </div>
 
             {/* Submit Button */}
             <button
               className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-3 px-4 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
-              type="submit" 
+              type="submit"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -216,7 +242,9 @@ export default function RegisterPage() {
               <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">Already have an account?</span>
+              <span className="px-4 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+                Already have an account?
+              </span>
             </div>
           </div>
 

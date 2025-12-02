@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   icons: {
-    icon: "../assets/images.png",
+    icon: '/favicon.ico',
   },
   openGraph: {
     title: "TechBazar - Best Tech Products in Bangladesh",

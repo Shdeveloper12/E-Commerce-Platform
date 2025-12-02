@@ -5,7 +5,12 @@ import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { IoHome, IoMail, IoLockClosed, IoCheckmarkCircle } from "react-icons/io5";
+import {
+  IoHome,
+  IoMail,
+  IoLockClosed,
+  IoCheckmarkCircle,
+} from "react-icons/io5";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { Loader2 } from "lucide-react";
 
@@ -44,13 +49,15 @@ function LoginContent() {
     }
   };
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-      <Link href="/" className="absolute top-6 left-6 flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors group">
-        <IoHome className="text-2xl group-hover:scale-110 transition-transform" />
-        <span className="font-medium">Home</span>
-      </Link>
-      
-      <div className="max-w-md mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8" suppressHydrationWarning>
+      <div className="max-w-md mx-auto relative">
+        <Link
+          href="/"
+          className="absolute -top-4 left-0 sm:left-0 flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors group z-10"
+        >
+          <IoHome className="text-xl sm:text-2xl group-hover:scale-110 transition-transform" />
+          <span className="font-medium text-sm sm:text-base">Home</span>
+        </Link>
         {/* Logo/Brand Section */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl shadow-lg mb-4 animate-pulse">
@@ -59,7 +66,9 @@ function LoginContent() {
           <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
             Welcome Back
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">Sign in to continue to TechBazar</p>
+          <p className="text-gray-600 dark:text-gray-400">
+            Sign in to continue to TechBazar
+          </p>
         </div>
 
         {/* Login Card */}
@@ -73,7 +82,10 @@ function LoginContent() {
 
             {/* Email Input */}
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2" htmlFor="email">
+              <label
+                className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2"
+                htmlFor="email"
+              >
                 <IoMail className="text-blue-500" />
                 Email Address
               </label>
@@ -94,7 +106,10 @@ function LoginContent() {
 
             {/* Password Input */}
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2" htmlFor="password">
+              <label
+                className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2"
+                htmlFor="password"
+              >
                 <IoLockClosed className="text-blue-500" />
                 Password
               </label>
@@ -122,7 +137,10 @@ function LoginContent() {
 
             {/* Forgot Password Link */}
             <div className="flex items-center justify-end">
-              <Link href="#" className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
+              <Link
+                href="#"
+                className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
+              >
                 Forgot password?
               </Link>
             </div>
@@ -150,7 +168,9 @@ function LoginContent() {
               <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">New to TechBazar?</span>
+              <span className="px-4 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+                New to TechBazar?
+              </span>
             </div>
           </div>
 
@@ -176,7 +196,13 @@ function LoginContent() {
 
 export default function Login() {
   return (
-    <Suspense fallback={<div className="flex justify-center items-center h-screen">Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center h-screen">
+          Loading...
+        </div>
+      }
+    >
       <LoginContent />
     </Suspense>
   );

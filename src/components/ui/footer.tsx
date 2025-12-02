@@ -41,7 +41,7 @@ export default function Footer() {
       <div className="absolute inset-0 bg-grid-white/[0.02] pointer-events-none"></div>
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
       
-      <div className="max-w-7xl mx-auto px-4 py-12 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 py-14 relative z-10">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 mb-12">
           {/* Company Info - Larger Section */}
@@ -248,7 +248,7 @@ export default function Footer() {
       {/* Scroll to Top Button */}
       <button
         onClick={scrollToTop}
-        className="fixed bottom-20 right-4 w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 z-50 group"
+        className="fixed bottom-20 right-5 lg:bottom-10 w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 z-50 group"
         aria-label="Scroll to top"
       >
         <IoChevronUp className="text-2xl text-white group-hover:animate-bounce" />

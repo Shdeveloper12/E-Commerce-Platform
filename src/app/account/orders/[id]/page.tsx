@@ -213,9 +213,12 @@ export default function OrderDetailsPage() {
             <div className="bg-white rounded-lg shadow-md p-6 mb-6">
               {/* Order Header */}
               <div className="text-center mb-6 pb-6 border-b">
-                <h1 className="text-2xl font-bold text-gray-900 mb-2">
-                  Order Information #{order.orderNumber}
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+                  Order Information
                 </h1>
+                <p className="text-lg sm:text-xl font-bold text-gray-900 mb-3">
+                  #{order.orderNumber}
+                </p>
                 <span
                   className={`inline-block px-4 py-1 rounded text-white text-sm font-semibold ${getStatusBadgeColor(
                     order.status
