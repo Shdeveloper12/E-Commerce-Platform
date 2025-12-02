@@ -1,7 +1,6 @@
 import { db } from "@/lib/db"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { UserCog } from "lucide-react"
+import { UserActions } from "@/components/admin/user-actions"
 
 export default async function UsersPage() {
   const users = await db.user.findMany({
@@ -83,9 +82,12 @@ export default async function UsersPage() {
                         {new Date(user.createdAt).toLocaleDateString()}
                       </td>
                       <td className="py-3 px-4">
-                        <Button variant="outline" size="sm">
-                          <UserCog className="w-4 h-4" />
-                        </Button>
+                        <UserActions 
+                          userId={user.id}
+                          currentRole={user.role}
+                          isActive={user.isActive}
+                          userEmail={user.email}
+                        />
                       </td>
                     </tr>
                   ))

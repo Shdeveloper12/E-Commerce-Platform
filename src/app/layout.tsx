@@ -50,6 +50,8 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/icon.png',
   },
   openGraph: {
     title: "TechBazar - Best Tech Products in Bangladesh",

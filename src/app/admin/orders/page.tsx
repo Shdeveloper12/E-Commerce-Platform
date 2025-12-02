@@ -1,8 +1,6 @@
 import { db } from "@/lib/db"
-import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Eye } from "lucide-react"
+import { OrderActions } from "@/components/admin/order-actions"
 
 export default async function OrdersPage() {
   const orders = await db.order.findMany({
@@ -104,11 +102,11 @@ export default async function OrdersPage() {
                         {new Date(order.createdAt).toLocaleDateString()}
                       </td>
                       <td className="py-3 px-4">
-                        <Link href={`/admin/orders/${order.id}`}>
-                          <Button variant="outline" size="sm">
-                            <Eye className="w-4 h-4" />
-                          </Button>
-                        </Link>
+                        <OrderActions 
+                          orderId={order.id}
+                          currentStatus={order.status}
+                          currentPaymentStatus={order.paymentStatus}
+                        />
                       </td>
                     </tr>
                   ))
