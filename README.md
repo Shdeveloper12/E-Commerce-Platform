@@ -373,7 +373,7 @@ pnpm start
 
 ### Database Deployment
 - Use Supabase for PostgreSQL hosting
-- Run migrations: `pnpm prisma migrate deploy`
+- Run migrations: `pnpm prisma migrate deploy.`
 - Generate client: `pnpm prisma generate`
 
 ## 📊 Performance
@@ -404,16 +404,6 @@ pnpm type-check
 # Linting
 pnpm lint
 ```
-
-## 📚 Documentation
-
-Additional documentation available:
-- [Admin Setup Guide](ADMIN_SETUP_GUIDE.md)
-- [Checkout System](CHECKOUT_SYSTEM_README.md)
-- [Category System](CATEGORY_SYSTEM_README.md)
-- [Search Functionality](SEARCH_FUNCTIONALITY_README.md)
-- [Deployment Guide](DEPLOYMENT_GUIDE.md)
-- [ImgBB Setup](IMGBB_SETUP_GUIDE.md)
 
 ## 🤝 Contributing
 
