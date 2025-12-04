@@ -5,8 +5,8 @@
 
 ## 🌟 Live Demo
 
-- **Frontend**: [TechBazar Store](https://techbazar.vercel.app)
-- **Admin Panel**: [Admin Dashboard](https://techbazar.vercel.app/admin)
+- **Frontend**: [TechBazar Store](https://tech-bazar-swart.vercel.app)
+- **Admin Panel**: [Admin Dashboard](https://tech-bazar-swart.vercel.app/admin)
 
 ## ✨ Key Features
 
