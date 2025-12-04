@@ -20,7 +20,11 @@ export default async function EditProductPage({ params }: { params: { id: string
 
   const categories = await db.category.findMany({
     where: { isActive: true },
-    orderBy: { name: "asc" },
+    orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+    include: {
+      parent: true,
+      children: true,
+    },
   })
 
   return (

@@ -23,10 +23,14 @@ export async function middleware(request: NextRequest) {
     })
   }
 
-  // Redirect to login if accessing admin routes without authentication
-  if (isAdminRoute && !token) {
+  const isCheckoutRoute = request.nextUrl.pathname.startsWith('/checkout')
+  const isPaymentRoute = request.nextUrl.pathname.startsWith('/payment')
+  const isAccountRoute = request.nextUrl.pathname.startsWith('/account')
+
+  // Redirect to login if accessing protected routes without authentication
+  if ((isAdminRoute || isCheckoutRoute || isPaymentRoute || isAccountRoute) && !token) {
     const loginUrl = new URL('/login', request.url)
-    loginUrl.searchParams.set('callbackUrl', request.nextUrl.pathname)
+    loginUrl.searchParams.set('redirect', request.nextUrl.pathname + request.nextUrl.search)
     return NextResponse.redirect(loginUrl)
   }
 
@@ -49,5 +53,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/login', '/register', '/account/:path*']
+  matcher: ['/admin/:path*', '/login', '/register', '/account/:path*', '/checkout', '/payment']
 }

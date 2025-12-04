@@ -7,7 +7,11 @@ import { ArrowLeft } from "lucide-react"
 export default async function NewProductPage() {
   const categories = await db.category.findMany({
     where: { isActive: true },
-    orderBy: { name: "asc" },
+    orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+    include: {
+      parent: true,
+      children: true,
+    },
   })
 
   // If no categories exist, show message to create categories first

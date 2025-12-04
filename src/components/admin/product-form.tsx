@@ -15,6 +15,13 @@ import Swal from "sweetalert2"
 interface Category {
   id: string
   name: string
+  slug: string
+  parentId: string | null
+  parent?: {
+    id: string
+    name: string
+  } | null
+  children?: Category[]
 }
 
 interface ProductFormProps {
@@ -32,6 +39,10 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>(product?.categoryId || "")
   const [isActive, setIsActive] = useState<boolean>(product?.isActive !== false)
   const [isFeatured, setIsFeatured] = useState<boolean>(product?.isFeatured || false)
+
+  // Organize categories hierarchically
+  const parentCategories = categories.filter(cat => !cat.parentId)
+  const childCategories = categories.filter(cat => cat.parentId)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -515,14 +526,48 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
                 <SelectTrigger>
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
-                <SelectContent>
-                  {categories.map((category) => (
-                    <SelectItem key={category.id} value={category.id}>
-                      {category.name}
+                <SelectContent className="max-h-[400px]">
+                  {parentCategories.map((parent) => (
+                    <div key={parent.id}>
+                      {/* Parent Category */}
+                      <SelectItem value={parent.id} className="font-semibold">
+                        {parent.name}
+                      </SelectItem>
+                      
+                      {/* Child Categories */}
+                      {childCategories
+                        .filter(child => child.parentId === parent.id)
+                        .map((child) => (
+                          <SelectItem 
+                            key={child.id} 
+                            value={child.id}
+                            className="pl-8"
+                          >
+                            ↳ {child.name}
+                          </SelectItem>
+                        ))
+                      }
+                    </div>
+                  ))}
+                  
+                  {/* Orphan categories (no parent) */}
+                  {categories.filter(cat => cat.parentId && !categories.find(p => p.id === cat.parentId)).map((orphan) => (
+                    <SelectItem key={orphan.id} value={orphan.id}>
+                      {orphan.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
+              <p className="text-sm text-gray-500 mt-1">
+                {selectedCategory && (() => {
+                  const selected = categories.find(c => c.id === selectedCategory)
+                  if (selected?.parentId) {
+                    const parent = categories.find(c => c.id === selected.parentId)
+                    return parent ? `${parent.name} → ${selected.name}` : selected.name
+                  }
+                  return selected?.name || ''
+                })()}
+              </p>
               {!selectedCategory && (
                 <p className="text-xs text-red-500 mt-1">Please select a category</p>
               )}

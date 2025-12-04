@@ -177,7 +177,7 @@ function LoginContent() {
           {/* Register Link */}
           <div className="text-center">
             <Link
-              href="/register"
+              href={redirect !== "/" ? `/register?redirect=${encodeURIComponent(redirect)}` : "/register"}
               className="inline-flex items-center justify-center w-full px-4 py-3 border-2 border-blue-600 dark:border-blue-500 text-blue-600 dark:text-blue-400 font-semibold rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200"
             >
               Create an Account

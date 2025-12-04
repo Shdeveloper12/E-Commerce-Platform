@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
@@ -14,7 +14,7 @@ import {
 } from "react-icons/io5";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
-export default function RegisterPage() {
+function RegisterContent() {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -26,6 +26,8 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect") || "/";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -59,7 +61,7 @@ export default function RegisterPage() {
       if (response.ok) {
         setSuccess("Registration successful! Please sign in.");
         setTimeout(() => {
-          router.push("/login");
+          router.push(`/login?redirect=${encodeURIComponent(redirect)}`);
         }, 2000);
       } else {
         setError(data.error || "Registration failed");
@@ -251,7 +253,7 @@ export default function RegisterPage() {
           {/* Login Link */}
           <div className="text-center">
             <Link
-              href="/login"
+              href={redirect !== "/" ? `/login?redirect=${encodeURIComponent(redirect)}` : "/login"}
               className="inline-flex items-center justify-center w-full px-4 py-3 border-2 border-purple-600 dark:border-purple-500 text-purple-600 dark:text-purple-400 font-semibold rounded-xl hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all duration-200"
             >
               Sign In Instead
@@ -265,5 +267,17 @@ export default function RegisterPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-purple-600" />
+      </div>
+    }>
+      <RegisterContent />
+    </Suspense>
   );
 }

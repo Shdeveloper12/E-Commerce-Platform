@@ -30,7 +30,8 @@ function PaymentPageContent() {
 
   useEffect(() => {
     if (status === "unauthenticated") {
-      router.push("/login");
+      const currentPath = `/payment${window.location.search}`;
+      router.push(`/login?redirect=${encodeURIComponent(currentPath)}`);
     }
   }, [status, router]);
 
