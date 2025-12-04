@@ -26,20 +26,6 @@ ON CONFLICT (slug) DO NOTHING;
 -- Verify insertion
 SELECT id, name, slug, "is_active" FROM categories ORDER BY "sort_order";
 
--- Alternative: Simpler version with fewer categories
--- Use this if the above fails
-
-/*
-INSERT INTO categories (id, name, slug, "is_active", "created_at", "updated_at")
-VALUES
-  (gen_random_uuid(), 'Desktop', 'desktop', true, NOW(), NOW()),
-  (gen_random_uuid(), 'Laptop', 'laptop', true, NOW(), NOW()),
-  (gen_random_uuid(), 'Component', 'component', true, NOW(), NOW()),
-  (gen_random_uuid(), 'Phone', 'phone', true, NOW(), NOW()),
-  (gen_random_uuid(), 'Accessories', 'accessories', true, NOW(), NOW())
-ON CONFLICT (slug) DO NOTHING;
-*/
-
 -- Check how many categories exist
 SELECT COUNT(*) as total_categories FROM categories;
 
