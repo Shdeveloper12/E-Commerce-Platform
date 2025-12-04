@@ -52,20 +52,7 @@ A modern E-commerce website.
 - **🚀 Production Ready** - Optimized build and deployment settings
 - **🤖 AI-Friendly** - Structured codebase perfect for AI assistance
 
-## 🚀 Quick Start
 
-```bash
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Start production server
-npm start
 
 ## 📁 Project Structure
 
@@ -91,7 +78,7 @@ This scaffold includes a comprehensive set of modern web development tools:
 - **Data Display**: Badge, Avatar, Calendar
 
 ### 📊 Advanced Data Features
-- **Tables**: Powerful data tables with sorting, filtering, pagination (TanStack Table)
+- **Tables**: Powerful data tables with sorting, filtering, and pagination (TanStack Table)
 - **Charts**: Beautiful visualizations with Recharts
 - **Forms**: Type-safe forms with React Hook Form + Zod validation
 
@@ -112,9 +99,3 @@ This scaffold includes a comprehensive set of modern web development tools:
 - **Type Safety**: End-to-end TypeScript with Zod validation
 - **Essential Hooks**: 100+ useful React hooks with ReactUse for common patterns
 
-## 🤝 Get Started with Z.ai
-
-1. **Clone this scaffold** to jumpstart your project
-2. **Visit [chat.z.ai](https://chat.z.ai)** to access your AI coding assistant
-3. **Start building** with intelligent code generation and assistance
-4. **Deploy with confidence** using the production-ready setup.
